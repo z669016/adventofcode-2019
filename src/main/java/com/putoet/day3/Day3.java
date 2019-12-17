@@ -41,8 +41,12 @@ public class Day3 {
                 "R996,D10,R104,U654,R346,D458,R219,U247,L841,D731,R115,U400,L731,D904,L487,U430,R612,U437,L865,D618," +
                 "R747,U522,R309,U302,R9,U609,L201");
 
-        System.out.println("Closest intersection distance is: " +
-                route1.intersect(route2).stream().min(Comparator.comparing(Coordinate::manhattanDistance)).get().manhattanDistance());
+        final long start = System.currentTimeMillis();
+        final List<Coordinate> coordinates = route1.intersect(route2);
+        System.out.printf("Found %d intersections\n", coordinates.size());
+        System.out.printf("Closest intersection distance is %d\n",
+                coordinates.stream().min(Comparator.comparing(Coordinate::manhattanDistance)).get().manhattanDistance());
+        System.out.printf("Solving the puzzle took %dms\n", System.currentTimeMillis() - start);
     }
 }
 
