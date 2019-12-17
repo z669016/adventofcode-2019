@@ -133,6 +133,8 @@ public class Day3Test {
         route = new Route("U1,R2, D1, L2 ");
         assertEquals("[(0,1), (1,1), (2,1), (2,0), (1,0), (0,0)]", route.toString());
 
+        assertEquals(4, route.stepsTo(Coordinate.of(2, 0)));
+
         Route route1 = new Route("R8,U5,L5,D3");
         Route route2 = new Route("U7,R6,D4,L4");
         assertEquals(6, route1.intersect(route2).stream().min(Comparator.comparing(Coordinate::manhattanDistance)).get().manhattanDistance());

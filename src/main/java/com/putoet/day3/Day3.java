@@ -1,9 +1,6 @@
 package com.putoet.day3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Day3 {
@@ -43,10 +40,38 @@ public class Day3 {
 
         final long start = System.currentTimeMillis();
         final List<Coordinate> coordinates = route1.intersect(route2);
+        System.out.printf("Route 1 contains %d steps and route 2 contains %d steps\n", route1.length(), route2.length());
         System.out.printf("Found %d intersections\n", coordinates.size());
         System.out.printf("Closest intersection distance is %d\n",
                 coordinates.stream().min(Comparator.comparing(Coordinate::manhattanDistance)).get().manhattanDistance());
-        System.out.printf("Solving the puzzle took %dms\n", System.currentTimeMillis() - start);
+        System.out.printf("Solving the puzzle 3 took %dms\n", System.currentTimeMillis() - start);
+
+        final List<Tuple<Coordinate, Integer>> tuples = coordinates.stream().map(c -> new Tuple<>(c, route1.stepsTo(c) + route2.stepsTo(c))).collect(Collectors.toList());
+        // System.out.println(tuples);
+        final Optional<Tuple<Coordinate, Integer>> closest = tuples.stream().min(Comparator.comparing(Tuple::y));
+        System.out.printf("Closest intersection is %s at %d steps distance\n", closest.get().x(), closest.get().y());
+
+    }
+}
+
+class Tuple<X, Y> {
+    private final X x;
+    private final Y y;
+    public Tuple(X x, Y y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public X x() {
+        return x;
+    }
+
+    public Y y() {
+        return y;
+    }
+
+    public String toString() {
+        return "(" + x + "," + y + ")";
     }
 }
 
@@ -161,7 +186,7 @@ class Path {
 }
 
 class Route {
-    private List<Coordinate> route = new ArrayList<>();
+    private List<Coordinate> route = new ArrayList<>(175_000);
 
     public Route() {}
 
@@ -200,6 +225,14 @@ class Route {
 
     public List<Coordinate> intersect(Route other) {
         return route.stream().filter(other.route::contains).collect(Collectors.toList());
+    }
+
+    public int stepsTo(Coordinate coordinate) {
+        final int idx = route.indexOf(coordinate);
+        if (idx == -1)
+            throw new IllegalArgumentException("Coordinate not on route");
+
+        return idx + 1;
     }
 
     @Override
