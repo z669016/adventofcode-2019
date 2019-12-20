@@ -22,7 +22,7 @@ public abstract class Instruction {
         return operation;
     }
 
-    public abstract void execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]);
+    public abstract boolean execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]);
 
     public void report(int value, Integer operants[]) {
         switch (operants.length) {
@@ -71,10 +71,12 @@ class InputInstruction extends Instruction {
     }
 
     @Override
-    public void execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public boolean execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
         Integer value = inputDevice.get();
         memory.poke(Address.of(operants[0]), value);
         report(value, operants);
+
+        return true;
     }
 }
 
@@ -84,10 +86,11 @@ class OutputInstruction extends Instruction {
     }
 
     @Override
-    public void execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public boolean execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
         Integer value = memory.peek(Address.of(operants[0]));
         outputDevice.put(value);
         report(value, operants);
+        return true;
     }
 }
 
@@ -97,13 +100,14 @@ class SumInstruction extends Instruction {
     }
 
     @Override
-    public void execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public boolean execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
         final int operant1 = modes[0].peek(memory, operants[0]);
         final int operant2 = modes[1].peek(memory, operants[1]);
         final int value = operant1 + operant2;
 
         memory.poke(Address.of(operants[2]), value);
         report(value, operants);
+        return true;
     }
 }
 
@@ -113,13 +117,14 @@ class ProductInstruction extends Instruction {
     }
 
     @Override
-    public void execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public boolean execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
         final int operant1 = modes[0].peek(memory, operants[0]);
         final int operant2 = modes[1].peek(memory, operants[1]);
         final int value = operant1 * operant2;
 
         memory.poke(Address.of(operants[2]), value);
         report(value, operants);
+        return true;
     }
 }
 
@@ -129,6 +134,7 @@ class ExitInstruction extends Instruction {
     }
 
     @Override
-    public void execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public boolean execute(Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+        return false;
     }
 }

@@ -20,9 +20,11 @@ public class Processor {
         try {
             Instruction instruction = InstructionFactory.of(memory.peek(ip));
             while (instruction.operation() != Operation.EXIT) {
-                instruction.execute(memory, inputDevice, outputDevice, operantsForInstruction(instruction, ip));
+                boolean increaseIP = instruction.execute(memory, inputDevice, outputDevice, operantsForInstruction(instruction, ip));
 
-                ip = ip.increase(instruction.size());
+                if (increaseIP)
+                    ip = ip.increase(instruction.size());
+
                 instruction = InstructionFactory.of(memory.peek(ip));
             }
         } catch (IllegalArgumentException exc) {
