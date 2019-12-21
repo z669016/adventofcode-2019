@@ -1,5 +1,7 @@
 package com.putoet.day5;
 
+import java.util.Objects;
+
 public class Address {
     static final Address START_ADDRESS = Address.of(0);
 
@@ -25,5 +27,18 @@ public class Address {
     @Override
     public String toString() {
         return String.valueOf(address);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Address)) return false;
+        Address address1 = (Address) o;
+        return address == address1.address;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(address);
     }
 }

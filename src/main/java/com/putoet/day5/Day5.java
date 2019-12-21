@@ -40,17 +40,30 @@ public class Day5 {
                 223, 1005, 224, 644, 101, 1, 223, 223, 1107, 226, 226, 224, 1002, 223, 2, 223, 1005, 224, 659, 1001, 223, 1, 223, 108, 226,
                 226, 224, 1002, 223, 2, 223, 1005, 224, 674, 101, 1, 223, 223, 4, 223, 99, 226);
 
-        final InputDevice inputDevice = new InputDevice(List.of(1));
-        final OutputDevice outputDevice = new OutputDevice();
+        InputDevice inputDevice = new InputDevice(List.of(1));
+        OutputDevice outputDevice = new OutputDevice();
 
         // Part one
         Memory memory = Memory.of(list);
         Processor processor = new Processor(memory, inputDevice, outputDevice);
         processor.run();
 
-        System.out.println("Available input is " + inputDevice);
-        System.out.println("Available output is " + outputDevice);
+        System.out.println("Available input for 5a is " + inputDevice);
+        System.out.println("Available output for 5a is " + outputDevice);
         System.out.println(processor.memory().dump());
+
+        inputDevice = new InputDevice(List.of(5));
+        outputDevice = new OutputDevice();
+
+        // Part one
+        memory = Memory.of(list);
+        processor = new Processor(memory, inputDevice, outputDevice);
+        processor.run();
+
+        System.out.println("Available input for 5b is " + inputDevice);
+        System.out.println("Available output for 5b is " + outputDevice);
+        System.out.println(processor.memory().dump());
+
     }
 }
 

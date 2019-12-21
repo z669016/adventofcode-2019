@@ -20,11 +20,7 @@ public class Processor {
         try {
             Instruction instruction = InstructionFactory.of(memory.peek(ip));
             while (instruction.operation() != Operation.EXIT) {
-                boolean increaseIP = instruction.execute(memory, inputDevice, outputDevice, operantsForInstruction(instruction, ip));
-
-                if (increaseIP)
-                    ip = ip.increase(instruction.size());
-
+                ip = instruction.execute(ip, memory, inputDevice, outputDevice, operantsForInstruction(instruction, ip));
                 instruction = InstructionFactory.of(memory.peek(ip));
             }
         } catch (IllegalArgumentException exc) {
@@ -47,5 +43,9 @@ public class Processor {
 
     public Memory memory() {
         return memory;
+    }
+
+    public OutputDevice outputDevice() {
+        return outputDevice;
     }
 }
