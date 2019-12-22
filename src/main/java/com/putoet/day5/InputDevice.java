@@ -3,7 +3,7 @@ package com.putoet.day5;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class InputDevice {
+public class InputDevice implements Dump{
     private final List<Integer> inputValues;
     private int idx = 0;
 
@@ -22,7 +22,12 @@ public class InputDevice {
 
     @Override
     public String toString() {
-        return inputValues.stream().skip(idx).collect(Collectors.toList()).toString();
+        return dump().toString();
+    }
+
+    @Override
+    public List<Integer> dump() {
+        return inputValues.stream().skip(idx).collect(Collectors.toUnmodifiableList());
     }
 }
 

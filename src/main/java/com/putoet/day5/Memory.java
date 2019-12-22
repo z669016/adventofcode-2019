@@ -1,10 +1,11 @@
 package com.putoet.day5;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Memory {
+public class Memory implements Dump {
     private final List<Integer> memory;
 
     private Memory(List<Integer> memory) {
@@ -12,7 +13,7 @@ public class Memory {
         this.memory.addAll(memory);
     }
 
-    static Memory of(List<Integer> memory) {
+    public static Memory of(List<Integer> memory) {
         if ((memory == null) || memory.size() == 0) throw new IllegalArgumentException("No memory");
         return new Memory(memory);
     }
@@ -33,8 +34,14 @@ public class Memory {
         return memory.size();
     }
 
-    public String dump() {
-        return memory.stream().map(i -> String.valueOf(i)).collect(Collectors.joining(","));
+    @Override
+    public String toString() {
+        return dump().stream().map(i -> String.valueOf(i)).collect(Collectors.joining(","));
+    }
+
+    @Override
+    public List<Integer> dump() {
+        return Collections.unmodifiableList(memory);
     }
 
     private void checkAddress(Address address) {
