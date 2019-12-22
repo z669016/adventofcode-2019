@@ -33,12 +33,7 @@ public class Memory implements Dump {
     public int size() {
         return memory.size();
     }
-
-    @Override
-    public String toString() {
-        return dump().stream().map(i -> String.valueOf(i)).collect(Collectors.joining(","));
-    }
-
+    
     @Override
     public List<Integer> dump() {
         return Collections.unmodifiableList(memory);
