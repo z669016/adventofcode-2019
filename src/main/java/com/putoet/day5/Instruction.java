@@ -5,6 +5,14 @@ public abstract class Instruction {
     public static final int SECOND_OPERANT_INDEX = FIRST_OPERANT_INDEX + 1;
     public static final int THIRD_OPERANT_INDEX = SECOND_OPERANT_INDEX + 1;
 
+    private static Boolean logEnabled = false;
+    public static final void enableLog() {
+        logEnabled = true;
+    }
+    public static final void disableLog() {
+        logEnabled = false;
+    }
+
     private final Operation operation;
 
     protected Instruction(Operation operation) {
@@ -36,6 +44,12 @@ public abstract class Instruction {
 
         return sb.toString();
     }
+
+    public void log(String line) {
+        if(logEnabled)
+            System.out.println(line);
+    }
+
 }
 
 abstract class ModedInstruction extends Instruction {
@@ -102,7 +116,7 @@ class SumInstruction extends ModedInstruction {
         final Integer result = firstOperantValue + secondOperantValue;
 
         memory.poke(Address.of(thirdOperantValue), result);
-        System.out.println(toString(result, operants));;
+        log(toString(result, operants));;
 
         return ip.increase(size());
     }
@@ -121,7 +135,7 @@ class ProductInstruction extends ModedInstruction {
         final Integer result = firstOperantValue * secondOperantValue;
 
         memory.poke(Address.of(thirdOperantValue), result);
-        System.out.println(toString(result, operants));;
+        log(toString(result, operants));;
 
         return ip.increase(size());
     }
@@ -149,7 +163,7 @@ class InputInstruction extends Instruction {
         Integer result = inputDevice.get();
 
         memory.poke(Address.of(firstOperantValue), result);
-        System.out.println(toString(result, operants));;
+        log(toString(result, operants));;
 
         return ip.increase(size());
     }
@@ -165,7 +179,7 @@ class OutputInstruction extends ModedInstruction {
         final Integer result = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
 
         outputDevice.put(result);
-        System.out.println(toString(result, operants));;
+        log(toString(result, operants));;
 
         return ip.increase(size());
     }
@@ -181,7 +195,7 @@ class JumpIfTrueInstruction extends ModedInstruction {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
 
-        System.out.println(toString(operants));;
+        log(toString(operants));;
 
         return (firstOperantValue == 0 ? ip.increase(size()) : Address.of(secondOperantValue));
     }
@@ -197,7 +211,7 @@ class JumpIfFalseInstruction extends ModedInstruction {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
 
-        System.out.println(toString(operants));;
+        log(toString(operants));;
 
         return (firstOperantValue != 0 ? ip.increase(size()) : Address.of(secondOperantValue));
     }
@@ -216,7 +230,7 @@ class LessThanInstruction extends ModedInstruction {
         final Integer result = firstOperantValue < secondOperantValue ? 1 : 0;
 
         memory.poke(Address.of(thirdOperantValue), result);
-        System.out.println(toString(result, operants));;
+        log(toString(result, operants));;
 
         return ip.increase(size());
     }
@@ -235,7 +249,7 @@ class EqualInstruction extends ModedInstruction {
         final Integer result = firstOperantValue == secondOperantValue ? 1 : 0;
 
         memory.poke(Address.of(thirdOperantValue), result);
-        System.out.println(toString(result, operants));;
+        log(toString(result, operants));;
 
         return ip.increase(size());
     }

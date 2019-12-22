@@ -48,4 +48,11 @@ public class Processor {
     public OutputDevice outputDevice() {
         return outputDevice;
     }
+
+    public static final void enableLog() {
+        Instruction.enableLog();
+    }
+    public static final void disableLog() {
+        Instruction.disableLog();
+    }
 }

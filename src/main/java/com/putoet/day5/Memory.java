@@ -33,7 +33,7 @@ public class Memory implements Dump {
     public int size() {
         return memory.size();
     }
-    
+
     @Override
     public List<Integer> dump() {
         return Collections.unmodifiableList(memory);
