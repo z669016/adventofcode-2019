@@ -43,4 +43,40 @@ public class Computer {
     public static final void disableLog() {
         Processor.disableLog();
     }
+
+    public static final ComputerBuilder builder() { return new ComputerBuilder(); }
+    static class ComputerBuilder {
+        private InputDevice inputDevice;
+        private Memory memory;
+
+        public ComputerBuilder() {
+            inputDevice = null;
+            memory = null;
+        }
+
+        public final ComputerBuilder input(List<Integer> input) {
+            if (this.inputDevice != null)
+                throw new IllegalStateException("Input device already set");
+            this.inputDevice =  new InputDevice(input);
+
+            return this;
+        }
+
+        public final ComputerBuilder memory(List<Integer> memory) {
+            if (this.memory != null)
+                throw new IllegalStateException("Memory already set");
+            this.memory = Memory.of(memory);
+
+            return this;
+        }
+
+        public final Computer build() {
+            if (inputDevice == null)
+                throw new IllegalStateException("No input device  set");
+            if (memory == null)
+                throw new IllegalStateException("No memory set");
+
+            return new Computer(inputDevice, memory);
+        }
+    }
 }
