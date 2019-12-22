@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 
 public class Day2 {
     public static void main(String[] args) throws IOException {
-        final List<Integer> list = List.of(1,12,2,3,1,1,2,3,1,3,4,3,1,5,0,3,2,10,1,19,1,19,6,23,2,13,23,27,1,27,13,31,
+        final List<Integer> intCode = List.of(1,12,2,3,1,1,2,3,1,3,4,3,1,5,0,3,2,10,1,19,1,19,6,23,2,13,23,27,1,27,13,31,
                 1,9,31,35,1,35,9,39,1,39,5,43,2,6,43,47,1,47,6,51,2,51,9,55,2,55,13,59,1,59,6,63,1,10,63,67,2,67,9,71,
                 2,6,71,75,1,75,5,79,2,79,10,83,1,5,83,87,2,9,87,91,1,5,91,95,2,13,95,99,1,99,10,103,1,103,2,107,1,107,
                 6,0,99,2,14,0,0);
 
         // Part one
-        Memory memory = Memory.of(list);
+        Memory memory = Memory.of(intCode);
         Processor processor = new Processor(memory);
         processor.run();
         System.out.println(processor.memory().dump());
@@ -22,9 +22,9 @@ public class Day2 {
         // Brute force solution on part two
         final Address nounAddress = Address.of(1);
         final Address verbAddress = Address.of(2);
-        for (int noun = 0; noun < list.size(); noun++) {
-            for (int verb = 0; verb < list.size(); verb++) {
-                memory = Memory.of(list);
+        for (int noun = 0; noun < intCode.size(); noun++) {
+            for (int verb = 0; verb < intCode.size(); verb++) {
+                memory = Memory.of(intCode);
                 memory.poke(nounAddress, noun);
                 memory.poke(verbAddress, verb);
 
