@@ -16,6 +16,11 @@ public class OutputDevice  implements IDump, IOutputDevice {
     }
 
     @Override
+    public Integer get() {
+        return outputValues.get(outputValues.size() - 1);
+    }
+
+    @Override
     public String toString() {
         return dump().toString();
     }

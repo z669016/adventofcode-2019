@@ -2,7 +2,7 @@ package com.putoet.day7;
 
 import java.util.List;
 
-public final class AmplifierArray {
+public class AmplifierArray {
     public static final int ARRAY_SIZE = 5;
 
     private static Boolean logEnabled = false;
@@ -13,11 +13,11 @@ public final class AmplifierArray {
         logEnabled = false;
     }
 
-    private final int inputSignal;
-    private final List<Integer> sequence;
-    private final List<Integer> intCode;
+    protected final int inputSignal;
+    protected final List<Integer> sequence;
+    protected final List<Integer> intCode;
 
-    private AmplifierArray(List<Integer> sequence, List<Integer> intCode, Integer inputSignal) {
+    protected AmplifierArray(List<Integer> sequence, List<Integer> intCode, Integer inputSignal) {
         this.sequence = sequence;
         this.intCode = intCode;
         this.inputSignal = inputSignal;
@@ -45,7 +45,7 @@ public final class AmplifierArray {
         return result;
     }
 
-    private void log(String line) {
+    protected void log(String line) {
         if (logEnabled)
             System.out.println(line);
     }
@@ -55,9 +55,9 @@ public final class AmplifierArray {
     }
 
     static class AmplifierArrayBuilder {
-        private List<Integer> sequence;
-        private List<Integer> intCode;
-        private Integer inputSignal;
+        protected List<Integer> sequence;
+        protected List<Integer> intCode;
+        protected Integer inputSignal;
 
         public AmplifierArrayBuilder sequence(List<Integer> sequence) {
             if (this.sequence != null)

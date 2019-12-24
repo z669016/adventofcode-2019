@@ -21,6 +21,15 @@ public class Computer {
         processor.run();
     }
 
+    public Processor.State state() {
+        return processor.state();
+    }
+
+    public void provideInpute(Integer value) {
+        inputDevice.put(value);
+    }
+    public Integer lastOutput() { return outputDevice.get(); }
+
     public List<Integer> inputDump() {
         return inputDevice.dump();
     }
