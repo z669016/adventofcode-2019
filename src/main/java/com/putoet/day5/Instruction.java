@@ -162,10 +162,12 @@ class InputInstruction extends Instruction {
     @Override
     public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = operants[FIRST_OPERANT_INDEX];
-        int result = inputDevice.get();
+        Optional<Integer> result = inputDevice.get();
+        if (result.isEmpty())
+            return Optional.empty();
 
-        memory.poke(Address.of(firstOperantValue), result);
-        log(toString(result, operants));
+        memory.poke(Address.of(firstOperantValue), result.get());
+        log(toString(result.get(), operants));
 
         return Optional.of(ip.increase(size()));
     }

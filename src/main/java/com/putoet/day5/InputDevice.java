@@ -1,6 +1,7 @@
 package com.putoet.day5;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InputDevice implements IDump, IInputDevice {
@@ -14,11 +15,11 @@ public class InputDevice implements IDump, IInputDevice {
     }
 
     @Override
-    public Integer get() {
+    public Optional<Integer> get() {
         if (idx >= inputValues.size())
             throw new IllegalStateException("No input available");
 
-        return inputValues.get(idx++);
+        return Optional.of(inputValues.get(idx++));
     }
 
     @Override
