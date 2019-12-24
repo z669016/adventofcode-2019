@@ -1,15 +1,17 @@
 package com.putoet.day5;
 
-public abstract class Instruction {
+import java.util.Optional;
+
+public abstract class Instruction implements IInstruction {
     public static final int FIRST_OPERANT_INDEX = 0;
     public static final int SECOND_OPERANT_INDEX = FIRST_OPERANT_INDEX + 1;
     public static final int THIRD_OPERANT_INDEX = SECOND_OPERANT_INDEX + 1;
 
     private static Boolean logEnabled = false;
-    public static final void enableLog() {
+    public static void enableLog() {
         logEnabled = true;
     }
-    public static final void disableLog() {
+    public static void disableLog() {
         logEnabled = false;
     }
 
@@ -19,26 +21,26 @@ public abstract class Instruction {
         this.operation = operation;
     }
 
+    @Override
     public int size() {
         return operation.size();
     }
 
+    @Override
     public Operation operation() {
         return operation;
     }
 
-    public abstract Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]);
-
-    public String toString(Integer operants[]) {
+    public String toString(Integer[] operants) {
         StringBuilder sb = new StringBuilder().append(operation());
         for (int idx = 0; idx < operants.length; idx++) {
-            sb.append(idx == operants.length ? " --> " : " <-- ").append(operants[idx]);
+            sb.append(idx == (operants.length - 1) ? " --> " : " <-- ").append(operants[idx]);
         }
 
         return sb.toString();
     }
 
-    public String toString(int value, Integer operants[]) {
+    public String toString(int value, Integer[] operants) {
         StringBuilder sb = new StringBuilder().append(toString(operants));
         sb.append(" (= ").append(value).append(")");
 
@@ -68,7 +70,7 @@ abstract class ModedInstruction extends Instruction {
     }
 
     @Override
-    public String toString(int value, Integer operants[]) {
+    public String toString(int value, Integer[] operants) {
         StringBuilder sb = new StringBuilder().append(operation());
         for (int idx = 0; idx < operants.length; idx++) {
             if (idx < operants.length - 1) {
@@ -109,16 +111,16 @@ class SumInstruction extends ModedInstruction {
     }
 
     @Override
-    public Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
         final int thirdOperantValue = operants[THIRD_OPERANT_INDEX];
-        final Integer result = firstOperantValue + secondOperantValue;
+        final int result = firstOperantValue + secondOperantValue;
 
         memory.poke(Address.of(thirdOperantValue), result);
-        log(toString(result, operants));;
+        log(toString(result, operants));
 
-        return ip.increase(size());
+        return Optional.of(ip.increase(size()));
     }
 }
 
@@ -128,16 +130,16 @@ class ProductInstruction extends ModedInstruction {
     }
 
     @Override
-    public Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
         final int thirdOperantValue = operants[THIRD_OPERANT_INDEX];
-        final Integer result = firstOperantValue * secondOperantValue;
+        final int result = firstOperantValue * secondOperantValue;
 
         memory.poke(Address.of(thirdOperantValue), result);
-        log(toString(result, operants));;
+        log(toString(result, operants));
 
-        return ip.increase(size());
+        return Optional.of(ip.increase(size()));
     }
 }
 
@@ -147,8 +149,8 @@ class ExitInstruction extends Instruction {
     }
 
     @Override
-    public Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
-        return ip;
+    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+        return Optional.of(ip);
     }
 }
 
@@ -158,14 +160,14 @@ class InputInstruction extends Instruction {
     }
 
     @Override
-    public Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = operants[FIRST_OPERANT_INDEX];
-        Integer result = inputDevice.get();
+        int result = inputDevice.get();
 
         memory.poke(Address.of(firstOperantValue), result);
-        log(toString(result, operants));;
+        log(toString(result, operants));
 
-        return ip.increase(size());
+        return Optional.of(ip.increase(size()));
     }
 }
 
@@ -175,13 +177,13 @@ class OutputInstruction extends ModedInstruction {
     }
 
     @Override
-    public Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
-        final Integer result = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
+    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+        final int result = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
 
         outputDevice.put(result);
-        log(toString(result, operants));;
+        log(toString(result, operants));
 
-        return ip.increase(size());
+        return Optional.of(ip.increase(size()));
     }
 }
 
@@ -191,13 +193,13 @@ class JumpIfTrueInstruction extends ModedInstruction {
     }
 
     @Override
-    public Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
 
-        log(toString(operants));;
+        log(toString(operants));
 
-        return (firstOperantValue == 0 ? ip.increase(size()) : Address.of(secondOperantValue));
+        return Optional.of(firstOperantValue == 0 ? ip.increase(size()) : Address.of(secondOperantValue));
     }
 }
 
@@ -207,13 +209,13 @@ class JumpIfFalseInstruction extends ModedInstruction {
     }
 
     @Override
-    public Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
 
-        log(toString(operants));;
+        log(toString(operants));
 
-        return (firstOperantValue != 0 ? ip.increase(size()) : Address.of(secondOperantValue));
+        return Optional.of(firstOperantValue != 0 ? ip.increase(size()) : Address.of(secondOperantValue));
     }
 }
 
@@ -223,16 +225,16 @@ class LessThanInstruction extends ModedInstruction {
     }
 
     @Override
-    public Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
         final int thirdOperantValue = operants[THIRD_OPERANT_INDEX];
-        final Integer result = firstOperantValue < secondOperantValue ? 1 : 0;
+        final int result = firstOperantValue < secondOperantValue ? 1 : 0;
 
         memory.poke(Address.of(thirdOperantValue), result);
-        log(toString(result, operants));;
+        log(toString(result, operants));
 
-        return ip.increase(size());
+        return Optional.of(ip.increase(size()));
     }
 }
 
@@ -242,15 +244,15 @@ class EqualInstruction extends ModedInstruction {
     }
 
     @Override
-    public Address execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer operants[]) {
+    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
         final int thirdOperantValue = operants[THIRD_OPERANT_INDEX];
-        final Integer result = firstOperantValue == secondOperantValue ? 1 : 0;
+        final int result = firstOperantValue == secondOperantValue ? 1 : 0;
 
         memory.poke(Address.of(thirdOperantValue), result);
-        log(toString(result, operants));;
+        log(toString(result, operants));
 
-        return ip.increase(size());
+        return Optional.of(ip.increase(size()));
     }
 }

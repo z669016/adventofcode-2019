@@ -5,63 +5,52 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SpaceMapLoader {
-    private static final List<String> comCenteredSpaceObjects = new ArrayList<>();
+    private static boolean logEnabled = false;
+    public static void enableLog() { logEnabled = true; }
+    public static void disableLog() { logEnabled = false; }
 
-    public static void loadMap(String fileName) {
+    public static SpaceMap loadMap(String fileName) {
+        final SpaceMap map = new SpaceMap();
+        final List<String> comCenteredSpaceObjects = new ArrayList<>();
+
         try {
-            Files.lines(Paths.get(fileName)).forEach(line -> createSpaceObjects(line));
+            Files.lines(Paths.get(fileName)).forEach(notation -> createSpaceObjects(map, notation));
         } catch (IOException exc) {
             throw new IllegalArgumentException("Unable to load map from " + fileName, exc);
         }
 
-        checkUncenteredSpaceObjects();
+        return map;
     }
 
-    public static void loadMap(List<String> mapNotations) {
-        mapNotations.forEach(mapNotation -> createSpaceObjects(mapNotation));
+    public static SpaceMap loadMap(List<String> mapNotations) {
+        SpaceMap map = new SpaceMap();
 
-        checkUncenteredSpaceObjects();
+        mapNotations.forEach(notation -> createSpaceObjects(map, notation));
+
+        return map;
     }
 
-    private static void createSpaceObjects(String mapNotation) {
+    private static void createSpaceObjects(SpaceMap map, String mapNotation) {
         validateNotation(mapNotation);
 
         final String centerName = mapNotation.substring(0, 3);
         final String spaceObjectName = mapNotation.substring(4);
 
-        registerComCenteredSpaceObjects(centerName, spaceObjectName);
-
-        final SpaceObject center = getOrCreateCenter(centerName);
-        SpaceMap.MAP.add(spaceObjectName, center);
+        final SpaceObject center = getOrCreateCenter(map, centerName);
+        log("Created " + centerName + ")" + spaceObjectName + " for " + mapNotation);
+        map.add(spaceObjectName, center);
     }
 
-    private static void checkUncenteredSpaceObjects() {
-        final List<String> unCenteredSpaceObjects = SpaceMap.MAP.objects().entrySet().stream()
-                .filter(entry -> entry.getValue() != SpaceObject.COM())
-                .filter(entry -> entry.getValue().center() == SpaceObject.COM())
-                .filter(entry -> !comCenteredSpaceObjects.contains(entry.getKey()))
-                .map(entry -> entry.getKey())
-                .collect(Collectors.toList());
-
-        if (unCenteredSpaceObjects.size() > 0) {
-            System.out.println("Uncentered space objects are " + unCenteredSpaceObjects.toString());
+    private static SpaceObject getOrCreateCenter(SpaceMap map, String centerName) {
+        SpaceObject center = map.get(centerName);
+        if (center == null) {
+            log("Create " + centerName + " temporarily orbiting around COM");
+            map.add(centerName, SpaceObject.COM());
         }
-    }
-
-    private static SpaceObject getOrCreateCenter(String centerName) {
-        SpaceObject center = SpaceMap.MAP.get(centerName);
-        if (center == null)
-            SpaceMap.MAP.add(centerName, SpaceObject.COM());
-        center = SpaceMap.MAP.get(centerName);
+        center = map.get(centerName);
         return center;
-    }
-
-    private static void registerComCenteredSpaceObjects(String centerName, String spaceObjectName) {
-        if ("COM".equals(centerName))
-            comCenteredSpaceObjects.add(spaceObjectName);
     }
 
     private static void validateNotation(String mapNotation) {
@@ -69,4 +58,8 @@ public class SpaceMapLoader {
             throw new IllegalArgumentException("Invalid map notation " + mapNotation);
     }
 
+    private static void log(String line) {
+        if (logEnabled)
+            System.out.println(line);
+    }
 }

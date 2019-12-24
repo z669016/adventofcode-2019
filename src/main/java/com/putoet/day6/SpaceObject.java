@@ -41,7 +41,7 @@ public class SpaceObject {
             throw new IllegalArgumentException("Cannot recenter to null for " + this.name);
 
         if (this.center != COM)
-            throw new IllegalStateException("Can only recenter from COM for " + this.name);
+            throw new IllegalStateException("Can only recenter from COM for " + this.name + " (current center is " + this.center.name + ")");
 
         this.center = center;
     }

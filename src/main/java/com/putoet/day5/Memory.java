@@ -3,13 +3,12 @@ package com.putoet.day5;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class Memory implements Dump {
+public class Memory implements IDump, IMemory {
     private final List<Integer> memory;
 
     private Memory(List<Integer> memory) {
-        this.memory = new ArrayList<Integer>();
+        this.memory = new ArrayList<>();
         this.memory.addAll(memory);
     }
 
@@ -18,11 +17,13 @@ public class Memory implements Dump {
         return new Memory(memory);
     }
 
+    @Override
     public Integer peek(Address address) {
         checkAddress(address);
         return memory.get(address.toInt());
     }
 
+   @Override
    public void poke(Address address, Integer value) {
         if (value == null) throw new IllegalArgumentException("Invalid memory write (null)");
 
@@ -30,6 +31,7 @@ public class Memory implements Dump {
         memory.set(address.toInt(), value);
     }
 
+    @Override
     public int size() {
         return memory.size();
     }

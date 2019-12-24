@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.putoet.day7.ExceptionTester.ia;
+import static com.putoet.day7.ExceptionTester.is;
 import static org.junit.Assert.*;
 
 public class SpaceObjectTest {
@@ -51,24 +53,14 @@ public class SpaceObjectTest {
         assertEquals(AAA, BBB.center());
 
         // Cannot recenter to null
-        IllegalArgumentException exc = null;
-        try {
-            AAA.reCenter(null);
-        } catch (IllegalArgumentException ia) {
-            exc = ia;
-        }
-        assertNotNull(exc);
-        assertEquals("Cannot recenter to null for AAA", exc.getMessage());
+        final IllegalArgumentException ia = ia(() -> {AAA.reCenter(null); return 1;} );
+        assertNotNull(ia);
+        assertEquals("Cannot recenter to null for AAA", ia.getMessage());
 
         // Cannot recenter if center isn't COM
-        IllegalStateException isExc = null;
-        try {
-            CCC.reCenter(AAA);
-        } catch (IllegalStateException ia) {
-            isExc = ia;
-        }
-        assertNotNull(isExc);
-        assertEquals("Can only recenter from COM for CCC", isExc.getMessage());
+        final IllegalStateException is = is(() -> {CCC.reCenter(AAA); return 1;});
+        assertNotNull(is);
+        assertEquals("Can only recenter from COM for CCC (current center is BBB)", is.getMessage());
     }
 
     @Test
@@ -114,9 +106,9 @@ public class SpaceObjectTest {
         final SpaceObject DDD = new SpaceObject(DDD_NAME, BBB);
         final SpaceObject EEE = new SpaceObject(EEE_NAME, DDD);
 
-        assertEquals(List.of(DDD, BBB, AAA), SpaceObject.route(EEE));
-        assertEquals(List.of(BBB, AAA), SpaceObject.route(CCC));
-        assertEquals(List.of(), SpaceObject.route(AAA));
+        assertEquals(List.of(EEE, DDD, BBB, AAA), SpaceObject.route(EEE));
+        assertEquals(List.of(CCC, BBB, AAA), SpaceObject.route(CCC));
+        assertEquals(List.of(AAA), SpaceObject.route(AAA));
         assertEquals(List.of(), SpaceObject.route(SpaceObject.COM()));
     }
 }

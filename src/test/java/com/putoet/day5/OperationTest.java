@@ -10,10 +10,20 @@ public class OperationTest {
     @Test
     public void testCreateOperation() {
         assertEquals(Operation.SUM, Operation.of(1));
+        assertEquals(Operation.SUM, Operation.of(1001));
         assertEquals(Operation.PRODUCT, Operation.of(2));
+        assertEquals(Operation.PRODUCT, Operation.of(102));
         assertEquals(Operation.EXIT, Operation.of(99));
         assertEquals(Operation.INPUT, Operation.of(3));
         assertEquals(Operation.OUTPUT, Operation.of(4));
+        assertEquals(Operation.JUMP_IF_TRUE, Operation.of(5));
+        assertEquals(Operation.JUMP_IF_TRUE, Operation.of(1005));
+        assertEquals(Operation.JUMP_IF_FALSE, Operation.of(6));
+        assertEquals(Operation.JUMP_IF_FALSE, Operation.of(106));
+        assertEquals(Operation.LESS_THAN, Operation.of(7));
+        assertEquals(Operation.LESS_THAN, Operation.of(1007));
+        assertEquals(Operation.EQUAL, Operation.of(8));
+        assertEquals(Operation.EQUAL, Operation.of(1008));
 
         try {
             Operation.of(-1);

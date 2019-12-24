@@ -14,7 +14,7 @@ public enum Operation {
     private final int opcode;
     private final int size;
 
-    private Operation(final int opcode, final int size) {
+    Operation(final int opcode, final int size) {
         this.opcode = opcode;
         this.size = size;
     }

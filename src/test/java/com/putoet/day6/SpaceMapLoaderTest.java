@@ -13,10 +13,11 @@ public class SpaceMapLoaderTest {
                 "BBB)CCC", "CCC)DDD", "DDD)EEE", "EEE)FFF", "BBB)GGG",
                 "GGG)HHH", "DDD)III", "EEE)JJJ", "JJJ)KKK", "KKK)LLL");
 
-        SpaceMapLoader.loadMap(mapNotations);
+//        SpaceMapLoader.enableLog();
+        SpaceMap map = SpaceMapLoader.loadMap(mapNotations);
 
-        assertEquals(12, SpaceMap.MAP.objects().size());
-        assertEquals(42, SpaceMap.MAP.orbits());
-        System.out.println(SpaceMap.MAP.objects());
+        assertEquals(12, map.objects().size());
+        assertEquals(42, map.orbits());
+//        System.out.println(map.objects());
     }
 }

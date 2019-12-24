@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class OutputDevice  implements Dump{
+public class OutputDevice  implements IDump, IOutputDevice {
     private final List<Integer> outputValues = new ArrayList<>();
 
     public OutputDevice() {
     }
 
+    @Override
     public void put(Integer value) {
         outputValues.add(value);
     }

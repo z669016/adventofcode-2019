@@ -3,7 +3,9 @@ package com.putoet.day5;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Optional;
 
+import static com.putoet.day7.ExceptionTester.ia;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
@@ -13,13 +15,7 @@ public class InstructionTest {
         assertEquals(InstructionMode.POSITION_MODE, InstructionMode.of(0));
         assertEquals(InstructionMode.IMMEDIATE_MODE, InstructionMode.of(1));
 
-        IllegalArgumentException ia = null;
-        try {
-            InstructionMode.of(2);
-            fail("Mode of 2 should not be accepted");
-        } catch (IllegalArgumentException exc) {
-            ia = exc;
-        }
+        IllegalArgumentException ia = ia(() -> InstructionMode.of(2));
         assertNotNull(ia);
         assertEquals("Invalid mode '2'", ia.getMessage());
     }
@@ -49,11 +45,11 @@ public class InstructionTest {
         final Memory memory = Memory.of(List.of(99));
         final InputDevice inputDevice = new InputDevice(List.of());
         final OutputDevice outputDevice = new OutputDevice();
-        final Integer operants[] = new Integer[] {};
+        final Integer[] operants = new Integer[] {};
 
-        assertEquals(Operation.EXIT, instruction.operation());
-        assertEquals(ip, instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[]", outputDevice.toString());
+        final Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(ip, address);
+        verifyEmptyOutput(outputDevice);
     }
 
     private Instruction instruction;
@@ -61,7 +57,7 @@ public class InstructionTest {
     private Memory memory;
     private InputDevice inputDevice;
     private OutputDevice outputDevice;
-    private Integer operants[];
+    private Integer[] operants;
 
     private void setup(List<Integer> m, List<Integer> id) {
         instruction = InstructionFactory.of(m.get(0));
@@ -72,183 +68,200 @@ public class InstructionTest {
         operants = m.subList(1, instruction.size()).toArray(new Integer[instruction.size() - 1]);
     }
 
+    private void verifyAddress(Address ip, Optional<Address> address) {
+        assertFalse(address.isEmpty());
+        assertEquals(ip, address.get());
+    }
+
+    private void verifyEmptyOutput(OutputDevice outputDevice) {
+        assertEquals(List.of(), outputDevice.dump());
+    }
+
+    private void verifyEmptyOutput() {
+        verifyEmptyOutput(outputDevice);
+    }
+
+    private void verifyMemoryValue(Integer value, Integer address) {
+        assertEquals(value, memory.peek(Address.of(address)));
+    }
+
     @Test
     public void testSumImmediateInstruction() {
         setup(List.of(1101, 3, 5, 5, 99, 0), List.of());
 
-        assertEquals(Operation.SUM, instruction.operation());
-        assertEquals(ip.increase(Operation.SUM.size()), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(8), memory.peek(Address.of(5)));
-        assertEquals("[]", outputDevice.toString());
+        final Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(ip.increase(Operation.SUM.size()), address);
+        verifyMemoryValue(8, 5);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testSumPositionInstruction() {
         setup(List.of(1, 5, 6, 7, 99, 3, 5, 0), List.of());
 
-        assertEquals(Operation.SUM, instruction.operation());
-        assertEquals(ip.increase(Operation.SUM.size()), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(8), memory.peek(Address.of(7)));
-        assertEquals("[]", outputDevice.toString());
+        final Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(ip.increase(Operation.SUM.size()), address);
+        verifyMemoryValue(8, 7);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testProductImmediateInstruction() {
         setup(List.of(1102, 3, 5, 5, 99, 0), List.of());
 
-        assertEquals(Operation.PRODUCT, instruction.operation());
-        assertEquals(ip.increase(Operation.PRODUCT.size()), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(15), memory.peek(Address.of(5)));
-        assertEquals("[]", outputDevice.toString());
+        final Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(ip.increase(Operation.PRODUCT.size()), address);
+        verifyMemoryValue(15, 5);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testProductPositionInstruction() {
         setup(List.of(2, 5, 6, 7, 99, 3, 5, 0), List.of());
 
-        assertEquals(Operation.PRODUCT, instruction.operation());
-        assertEquals(ip.increase(Operation.PRODUCT.size()), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(15), memory.peek(Address.of(7)));
-        assertEquals("[]", outputDevice.toString());
+        final Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(ip.increase(Operation.PRODUCT.size()), address);
+        verifyMemoryValue(15, 7);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testInputInstruction() {
         setup(List.of(3, 3, 99, 0), List.of(7));
 
-        assertEquals(Operation.INPUT, instruction.operation());
-        assertEquals(ip.increase(Operation.INPUT.size()), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(7), memory.peek(Address.of(3)));
-        assertEquals("[]", outputDevice.toString());
+        final Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(ip.increase(Operation.INPUT.size()), address);
+        verifyMemoryValue(7, 3);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testOutputImmediateInstruction() {
         setup(List.of(104, 3, 99), List.of());
 
-        assertEquals(Operation.OUTPUT, instruction.operation());
-        assertEquals(ip.increase(Operation.OUTPUT.size()), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[3]", outputDevice.toString());
+        final Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(ip.increase(Operation.OUTPUT.size()), address);
+        assertEquals(List.of(3), outputDevice.dump());
     }
 
     @Test
     public void testOutputPositionInstruction() {
         setup(List.of(4, 3, 99, 4, 7), List.of());
 
-        assertEquals(Operation.OUTPUT, instruction.operation());
-        assertEquals(ip.increase(Operation.OUTPUT.size()), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[4]", outputDevice.toString());
+        final Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(ip.increase(Operation.OUTPUT.size()), address);
+        assertEquals(List.of(4), outputDevice.dump());
     }
 
     @Test
     public void testJumpIfTrueImmediateInstruction() {
         setup(List.of(1105, 1, 6, 99, 99, 99, 99), List.of());
-        assertEquals(Operation.JUMP_IF_TRUE, instruction.operation());
-        assertEquals(Address.of(6), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[]", outputDevice.toString());
+        Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(6), address);
+        verifyEmptyOutput();
 
         setup(List.of(1105, 0, 6, 99, 99, 99, 99), List.of());
-        assertEquals(Operation.JUMP_IF_TRUE, instruction.operation());
-        assertEquals(Address.of(3), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[]", outputDevice.toString());
+        address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(3), address);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testJumpIfTruePositionInstruction() {
         setup(List.of(5, 4, 5, 99, 1, 6, 99), List.of());
-        assertEquals(Operation.JUMP_IF_TRUE, instruction.operation());
-        assertEquals(Address.of(6), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[]", outputDevice.toString());
+        Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(6), address);
+        verifyEmptyOutput();
 
         setup(List.of(5, 4, 5, 99, 0, 6, 99), List.of());
-        assertEquals(Operation.JUMP_IF_TRUE, instruction.operation());
-        assertEquals(Address.of(3), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[]", outputDevice.toString());
+        address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(3), address);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testJumpIfFalseImmediateInstruction() {
         setup(List.of(1106, 0, 6, 99, 99, 99, 99), List.of());
-        assertEquals(Operation.JUMP_IF_FALSE, instruction.operation());
-        assertEquals(Address.of(6), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[]", outputDevice.toString());
+        Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(6), address);
+        verifyEmptyOutput();
 
         setup(List.of(1106, 1, 6, 99, 99, 99, 99), List.of());
-        assertEquals(Operation.JUMP_IF_FALSE, instruction.operation());
-        assertEquals(Address.of(3), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[]", outputDevice.toString());
+        address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(3), address);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testJumpIFalsePositionInstruction() {
         setup(List.of(6, 4, 5, 99, 0, 6, 99), List.of());
-        assertEquals(Operation.JUMP_IF_FALSE, instruction.operation());
-        assertEquals(Address.of(6), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[]", outputDevice.toString());
+        Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(6), address);
+        verifyEmptyOutput();
 
         setup(List.of(6, 4, 5, 99, 1, 6, 99), List.of());
-        assertEquals(Operation.JUMP_IF_FALSE, instruction.operation());
-        assertEquals(Address.of(3), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals("[]", outputDevice.toString());
+        address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(3), address);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testLessThanImmediateInstruction() {
         setup(List.of(1107, 0, 1, 5, 99, 99), List.of());
-        assertEquals(Operation.LESS_THAN, instruction.operation());
-        assertEquals(Address.of(4), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(1), memory.peek(Address.of(5)));
-        assertEquals("[]", outputDevice.toString());
+        Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(4), address);
+        verifyMemoryValue(1, 5);
+        verifyEmptyOutput();
 
         setup(List.of(1107, 0, 0, 5, 99, 99), List.of());
-        assertEquals(Operation.LESS_THAN, instruction.operation());
-        assertEquals(Address.of(4), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(0), memory.peek(Address.of(5)));
-        assertEquals("[]", outputDevice.toString());
+        address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(4), address);
+        verifyMemoryValue(0, 5);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testLessThanPositionInstruction() {
         setup(List.of(7, 5, 6, 7, 99, 0, 1, 99), List.of());
-        assertEquals(Operation.LESS_THAN, instruction.operation());
-        assertEquals(Address.of(4), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(1), memory.peek(Address.of(7)));
-        assertEquals("[]", outputDevice.toString());
+        Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(4), address);
+        verifyMemoryValue(1, 7);
+        verifyEmptyOutput();
 
         setup(List.of(7, 5, 6, 7, 99, 0, 0, 99), List.of());
-        assertEquals(Operation.LESS_THAN, instruction.operation());
-        assertEquals(Address.of(4), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(0), memory.peek(Address.of(7)));
-        assertEquals("[]", outputDevice.toString());
+        address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(4), address);
+        verifyMemoryValue(0, 7);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testEqualImmediateInstruction() {
         setup(List.of(1108, 0, 0, 5, 99, 99), List.of());
-        assertEquals(Operation.EQUAL, instruction.operation());
-        assertEquals(Address.of(4), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(1), memory.peek(Address.of(5)));
-        assertEquals("[]", outputDevice.toString());
+        Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(4), address);
+        verifyMemoryValue(1, 5);
+        verifyEmptyOutput();
 
         setup(List.of(1108, 0, 1, 5, 99, 99), List.of());
-        assertEquals(Operation.EQUAL, instruction.operation());
-        assertEquals(Address.of(4), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(0), memory.peek(Address.of(5)));
-        assertEquals("[]", outputDevice.toString());
+        address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(4), address);
+        verifyMemoryValue(0, 5);
+        verifyEmptyOutput();
     }
 
     @Test
     public void testEqualPositionInstruction() {
         setup(List.of(8, 5, 6, 7, 99, 0, 0, 99), List.of());
-        assertEquals(Operation.EQUAL, instruction.operation());
-        assertEquals(Address.of(4), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(1), memory.peek(Address.of(7)));
-        assertEquals("[]", outputDevice.toString());
+        Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(4), address);
+        verifyMemoryValue(1, 7);
+        verifyEmptyOutput();
 
         setup(List.of(8, 5, 6, 7, 99, 0, 1, 99), List.of());
-        assertEquals(Operation.EQUAL, instruction.operation());
-        assertEquals(Address.of(4), instruction.execute(ip, memory, inputDevice, outputDevice, operants));
-        assertEquals(Integer.valueOf(0), memory.peek(Address.of(7)));
-        assertEquals("[]", outputDevice.toString());
+        address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
+        verifyAddress(Address.of(4), address);
+        verifyMemoryValue(0, 7);
+        verifyEmptyOutput();
     }
 }

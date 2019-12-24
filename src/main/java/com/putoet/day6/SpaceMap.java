@@ -3,11 +3,9 @@ package com.putoet.day6;
 import java.util.*;
 
 public class SpaceMap {
-    private Map<String,SpaceObject> spaceObjects = new HashMap<>();
+    private Map<String, SpaceObject> spaceObjects = new HashMap<>();
 
-    public static final SpaceMap MAP = new SpaceMap();
-
-    private SpaceMap() {
+    public SpaceMap() {
         spaceObjects.put(SpaceObject.COM().name(), SpaceObject.COM());
     }
 
@@ -16,9 +14,9 @@ public class SpaceMap {
     }
 
     public void add(String spaceObjectName, SpaceObject center) {
-        if (spaceObjects.containsKey(spaceObjectName))
+        if (spaceObjects.containsKey(spaceObjectName)) {
             spaceObjects.get(spaceObjectName).reCenter(center);
-        else
+        } else
             spaceObjects.put(spaceObjectName, new SpaceObject(spaceObjectName, center));
     }
 

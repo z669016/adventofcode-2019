@@ -4,23 +4,22 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static com.putoet.day7.ExceptionTester.ae;
+import static com.putoet.day7.ExceptionTester.is;
+import static org.junit.Assert.*;
 
 public class InputDeviceTest {
     @Test
     public void testInputDevice() {
-        try {
-            new InputDevice(null);
-            fail("Inputdevice cannot be created from an empty list");
-        } catch (AssertionError as) {}
+        AssertionError ae = ae(() -> new InputDevice(null));
+        assertNotNull(ae);
 
-        try {
+        IllegalStateException is = is (() -> {
             final InputDevice id = new InputDevice(List.of());
-            id.get();
-        } catch (IllegalStateException exc) {
-            assertEquals("No input available", exc.getMessage());
-        }
+            return id.get();
+        });
+        assertNotNull(is);
+        assertEquals("No input available", is.getMessage());
 
         final InputDevice id = new InputDevice(List.of(1, 2, 3));
         assertEquals("[1, 2, 3]", id.toString());
@@ -29,11 +28,8 @@ public class InputDeviceTest {
         assertEquals(Integer.valueOf(2), id.get());
         assertEquals(Integer.valueOf(3), id.get());
 
-        try {
-            id.get();
-        } catch (IllegalStateException exc) {
-            assertEquals("No input available", exc.getMessage());
-        }
+        is = is(() -> id.get());
+        assertEquals("No input available", is.getMessage());
 
         assertEquals("[]", id.toString());
     }

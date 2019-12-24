@@ -13,8 +13,7 @@ public class Day6Test {
                 "COM)BBB", "BBB)CCC", "CCC)DDD", "DDD)EEE", "EEE)FFF", "BBB)GGG", "GGG)HHH",
                 "DDD)III", "EEE)JJJ", "JJJ)KKK", "KKK)LLL", "KKK)YOU", "III)SAN");
 
-        SpaceMapLoader.loadMap(mapNotations);
-
-        assertEquals(4, SpaceMap.MAP.distance(SpaceMap.MAP.get("YOU"), SpaceMap.MAP.get("SAN")));
+        SpaceMap map = SpaceMapLoader.loadMap(mapNotations);
+        assertEquals(4, map.distance(map.get("YOU"), map.get("SAN")));
     }
 }

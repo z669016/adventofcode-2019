@@ -2,6 +2,6 @@ package com.putoet.day5;
 
 import java.util.List;
 
-public interface Dump {
+public interface IDump {
     List<Integer> dump();
 }

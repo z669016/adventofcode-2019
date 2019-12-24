@@ -2,6 +2,7 @@ package com.putoet.day5;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Processor {
     private final Memory memory;
@@ -20,12 +21,16 @@ public class Processor {
         try {
             Instruction instruction = InstructionFactory.of(memory.peek(ip));
             while (instruction.operation() != Operation.EXIT) {
-                ip = instruction.execute(ip, memory, inputDevice, outputDevice, operantsForInstruction(instruction, ip));
+                Optional<Address> address =  instruction.execute(ip, memory, inputDevice, outputDevice, operantsForInstruction(instruction, ip));
+                if(address.isEmpty())
+                    return;
+
+                ip = address.get();
                 instruction = InstructionFactory.of(memory.peek(ip));
             }
         } catch (IllegalArgumentException exc) {
             System.out.println("Execution failed at instruction " + ip + " (" + memory.peek(ip) + ")");
-            System.out.println(exc);
+            System.out.println(exc.getMessage());
             exc.printStackTrace();
         }
     }
@@ -49,10 +54,10 @@ public class Processor {
         return outputDevice;
     }
 
-    public static final void enableLog() {
+    public static void enableLog() {
         Instruction.enableLog();
     }
-    public static final void disableLog() {
+    public static void disableLog() {
         Instruction.disableLog();
     }
 }
