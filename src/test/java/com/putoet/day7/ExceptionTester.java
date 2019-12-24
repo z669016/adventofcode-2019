@@ -22,4 +22,14 @@ public class ExceptionTester {
         }
         return is;
     }
+
+    public static final AssertionError ae(Supplier supplier) {
+        AssertionError ae = null;
+        try {
+            supplier.get();
+        } catch (AssertionError exc) {
+            ae = exc;
+        }
+        return ae;
+    }
 }
