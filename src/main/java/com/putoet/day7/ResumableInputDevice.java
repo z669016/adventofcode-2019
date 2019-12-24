@@ -2,18 +2,19 @@ package com.putoet.day7;
 
 import com.putoet.day5.IInputDevice;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ResumableInputDevice implements IInputDevice {
-    private final List<Integer> inputValues;
+    private final List<Integer> inputValues = new ArrayList<>();
     private int idx = 0;
 
     public ResumableInputDevice(List<Integer> inputValues) {
         assert (inputValues != null);
 
-        this.inputValues = inputValues;
+        this.inputValues.addAll(inputValues);
     }
 
     @Override
@@ -22,6 +23,11 @@ public class ResumableInputDevice implements IInputDevice {
             return Optional.empty();
 
         return Optional.of(inputValues.get(idx++));
+    }
+
+    @Override
+    public void put(Integer value) {
+        inputValues.add(value);
     }
 
     @Override

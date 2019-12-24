@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public interface IInputDevice {
     Optional<Integer> get();
+    void put(Integer value);
 
     List<Integer> dump();
 }

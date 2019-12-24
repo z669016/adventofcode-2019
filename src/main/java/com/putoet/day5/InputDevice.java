@@ -1,5 +1,6 @@
 package com.putoet.day5;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +21,11 @@ public class InputDevice implements IDump, IInputDevice {
             throw new IllegalStateException("No input available");
 
         return Optional.of(inputValues.get(idx++));
+    }
+
+    @Override
+    public void put(Integer value) {
+        throw new IllegalStateException("Cannot put into a normal input device");
     }
 
     @Override
