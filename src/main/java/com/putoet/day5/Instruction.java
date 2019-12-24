@@ -111,7 +111,7 @@ class SumInstruction extends ModedInstruction {
     }
 
     @Override
-    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+    public Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
         final int thirdOperantValue = operants[THIRD_OPERANT_INDEX];
@@ -130,7 +130,7 @@ class ProductInstruction extends ModedInstruction {
     }
 
     @Override
-    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+    public Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
         final int thirdOperantValue = operants[THIRD_OPERANT_INDEX];
@@ -149,7 +149,7 @@ class ExitInstruction extends Instruction {
     }
 
     @Override
-    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+    public Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         return Optional.of(ip);
     }
 }
@@ -160,7 +160,7 @@ class InputInstruction extends Instruction {
     }
 
     @Override
-    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+    public Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = operants[FIRST_OPERANT_INDEX];
         Optional<Integer> result = inputDevice.get();
         if (result.isEmpty())
@@ -179,7 +179,7 @@ class OutputInstruction extends ModedInstruction {
     }
 
     @Override
-    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+    public Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int result = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
 
         outputDevice.put(result);
@@ -195,7 +195,7 @@ class JumpIfTrueInstruction extends ModedInstruction {
     }
 
     @Override
-    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+    public Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
 
@@ -211,7 +211,7 @@ class JumpIfFalseInstruction extends ModedInstruction {
     }
 
     @Override
-    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+    public Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
 
@@ -227,7 +227,7 @@ class LessThanInstruction extends ModedInstruction {
     }
 
     @Override
-    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+    public Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
         final int thirdOperantValue = operants[THIRD_OPERANT_INDEX];
@@ -246,7 +246,7 @@ class EqualInstruction extends ModedInstruction {
     }
 
     @Override
-    public Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
+    public Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants) {
         final int firstOperantValue = instructionMode(FIRST_OPERANT_INDEX).peek(memory, operants[FIRST_OPERANT_INDEX]);
         final int secondOperantValue = instructionMode(SECOND_OPERANT_INDEX).peek(memory, operants[SECOND_OPERANT_INDEX]);
         final int thirdOperantValue = operants[THIRD_OPERANT_INDEX];

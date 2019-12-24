@@ -7,5 +7,5 @@ public interface IInstruction {
 
     Operation operation();
 
-    Optional<Address> execute(Address ip, Memory memory, InputDevice inputDevice, OutputDevice outputDevice, Integer[] operants);
+    Optional<Address> execute(Address ip, Memory memory, IInputDevice inputDevice, OutputDevice outputDevice, Integer[] operants);
 }

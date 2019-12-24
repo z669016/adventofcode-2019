@@ -5,12 +5,12 @@ import com.putoet.day5.*;
 import java.util.List;
 
 public class Computer {
-    private InputDevice inputDevice;
+    private IInputDevice inputDevice;
     private OutputDevice outputDevice;
     private Memory memory;
     private Processor processor;
 
-    public Computer(InputDevice inputDevice, Memory memory) {
+    public Computer(IInputDevice inputDevice, Memory memory) {
         this.inputDevice = inputDevice;
         this.outputDevice = new OutputDevice();
         this.memory = memory;
@@ -18,7 +18,7 @@ public class Computer {
     }
 
     public void run() {
-        processor.run();;
+        processor.run();
     }
 
     public List<Integer> inputDump() {
@@ -37,24 +37,26 @@ public class Computer {
         return memory.toString();
     }
 
-    public static final void enableLog() {
+    public static void enableLog() {
         Processor.enableLog();
     }
-    public static final void disableLog() {
+    public static void disableLog() {
         Processor.disableLog();
     }
 
-    public static final ComputerBuilder builder() { return new ComputerBuilder(); }
+    public static ComputerBuilder builder() { return new ComputerBuilder(); }
+    public static ComputerBuilder resumableBuilder() { return new ResumableComputerBuilder(); }
+
     static class ComputerBuilder {
-        private InputDevice inputDevice;
-        private Memory memory;
+        protected IInputDevice inputDevice;
+        protected Memory memory;
 
         public ComputerBuilder() {
             inputDevice = null;
             memory = null;
         }
 
-        public final ComputerBuilder input(List<Integer> input) {
+        public ComputerBuilder input(List<Integer> input) {
             if (this.inputDevice != null)
                 throw new IllegalStateException("Input device already set");
             this.inputDevice =  new InputDevice(input);
@@ -77,6 +79,18 @@ public class Computer {
                 throw new IllegalStateException("No memory set");
 
             return new Computer(inputDevice, memory);
+        }
+    }
+
+    static class ResumableComputerBuilder extends ComputerBuilder {
+        @Override
+        public ComputerBuilder input(List<Integer> input) {
+            if (this.inputDevice != null)
+                throw new IllegalStateException("Input device already set");
+
+            this.inputDevice =  new ResumableInputDevice(input);
+
+            return this;
         }
     }
 }

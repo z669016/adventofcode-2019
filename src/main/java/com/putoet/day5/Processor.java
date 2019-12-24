@@ -6,12 +6,12 @@ import java.util.Optional;
 
 public class Processor {
     private final Memory memory;
-    private final InputDevice inputDevice;
+    private final IInputDevice inputDevice;
     private final OutputDevice outputDevice;
 
     private Address ip = Address.START_ADDRESS;
 
-    public Processor(Memory memory, InputDevice inputDevice, OutputDevice outputDevice) {
+    public Processor(Memory memory, IInputDevice inputDevice, OutputDevice outputDevice) {
         this.memory = memory;
         this.inputDevice = inputDevice;
         this.outputDevice = outputDevice;

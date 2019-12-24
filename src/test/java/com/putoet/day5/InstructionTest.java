@@ -43,7 +43,7 @@ public class InstructionTest {
 
         final Address ip = Address.START_ADDRESS;
         final Memory memory = Memory.of(List.of(99));
-        final InputDevice inputDevice = new InputDevice(List.of());
+        final IInputDevice inputDevice = new InputDevice(List.of());
         final OutputDevice outputDevice = new OutputDevice();
         final Integer[] operants = new Integer[] {};
 
@@ -55,7 +55,7 @@ public class InstructionTest {
     private Instruction instruction;
     private Address ip;
     private Memory memory;
-    private InputDevice inputDevice;
+    private IInputDevice inputDevice;
     private OutputDevice outputDevice;
     private Integer[] operants;
 
