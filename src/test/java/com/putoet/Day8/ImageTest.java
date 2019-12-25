@@ -38,4 +38,12 @@ public class ImageTest {
         assertFalse(layer.isEmpty());
         assertEquals(List.of(1, 2, 1, 2, 0, 1), layer.get().pixels());
     }
+
+    @Test
+    public void testDecode() {
+        final Dimension dimension = Dimension.of(2, 2);
+        final Image image = Image.of(dimension, List.of(0,2,2,2,1,1,2,2,2,2,1,2,0,0,0,0));
+        final Layer decodedLayer = image.decode();
+        assertEquals(List.of(0, 1, 1, 0), decodedLayer.pixels());
+    }
 }

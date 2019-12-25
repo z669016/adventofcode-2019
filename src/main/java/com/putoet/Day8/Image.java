@@ -1,6 +1,7 @@
 package com.putoet.Day8;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +33,23 @@ public class Image {
 
     public int layersCount() { return layers.size(); }
 
-    public int size() { return dimension.size() * layersCount(); };
+    public int size() { return dimension.size() * layersCount(); }
+
+    public Layer decode() {
+        final List<Integer> decodedLayer = new ArrayList<>();
+        for (int idy = 0; idy < dimension.y(); idy++) {
+            for (int idx = 0; idx < dimension.x(); idx++) {
+                final int finalIdx = idx;
+                final int finalIdy = idy;
+                decodedLayer.add(layers.stream()
+                        .map(layer -> layer.pixel(finalIdx, finalIdy))
+                        .reduce(2, (p1, p2) -> p1 != 2 ? p1 : p2));
+            }
+        }
+        return Layer.of(dimension, decodedLayer);
+    }
 
     public Optional<Layer> findLayerWithLowerNumberOf(int pixelValue) {
-        return layers.stream().sorted((l1, l2) -> l1.count(pixelValue) - l2.count(pixelValue)).findFirst();
+        return layers.stream().min(Comparator.comparingInt(l -> l.count(pixelValue)));
     }
 }
