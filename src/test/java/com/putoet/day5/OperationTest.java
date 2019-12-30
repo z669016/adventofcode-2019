@@ -33,12 +33,16 @@ public class OperationTest {
     }
 
     @Test
-    public void testOperationOperants() {
+    public void testOperationSize() {
         assertEquals(1, Operation.EXIT.size());
         assertEquals(4, Operation.PRODUCT.size());
         assertEquals(4, Operation.SUM.size());
         assertEquals(2, Operation.INPUT.size());
         assertEquals(2, Operation.OUTPUT.size());
+        assertEquals(3, Operation.JUMP_IF_TRUE.size());
+        assertEquals(3, Operation.JUMP_IF_FALSE.size());
+        assertEquals(4, Operation.LESS_THAN.size());
+        assertEquals(4, Operation.EQUAL.size());
     }
 
 }
