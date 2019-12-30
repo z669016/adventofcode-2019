@@ -1,4 +1,4 @@
-package com.putoet.Day8;
+package com.putoet.day8;
 
 import java.io.IOException;
 import java.nio.file.Files;

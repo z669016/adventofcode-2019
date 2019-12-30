@@ -1,4 +1,4 @@
-package com.putoet.Day8;
+package com.putoet.day8;
 
 import java.util.Collections;
 import java.util.List;

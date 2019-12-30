@@ -1,4 +1,4 @@
-package com.putoet.Day8;
+package com.putoet.day8;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
