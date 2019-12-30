@@ -49,9 +49,7 @@ public class Processor implements IProcessor {
                 final Optional<Registers> updated = instruction.execute();
                 log(instruction.toString());
 
-                if (updated.isPresent()) {
-                    regs = updated.get();
-                }
+                updated.ifPresent(registers -> regs = registers);
 
                 instruction = InstructionFactory.of(regs, memory, inputDevice, outputDevice);
             } catch (IllegalStateException | IllegalArgumentException exc) {
