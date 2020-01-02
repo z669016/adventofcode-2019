@@ -2,11 +2,18 @@ package com.putoet.day10;
 
 import java.util.*;
 
-public class LineOfSight {
+public class LineOfSight implements Comparable<LineOfSight> {
     private final Astroid origin;
     private final Vector direction;
     private Astroid visible;
-    private Set<Astroid> hidden = new HashSet<>();
+    private TreeSet<Astroid> hidden = new TreeSet<>(new Comparator<Astroid>() {
+        @Override
+        public int compare(Astroid o1, Astroid o2) {
+            double distance1 = Vector.ofPoints(origin.location(), o1.location()).length();
+            double distance2 = Vector.ofPoints(origin.location(), o2.location()).length();
+            return Double.compare(distance1, distance2);
+        }
+    });
 
     public LineOfSight(Astroid origin, Vector direction, Astroid visible) {
         this.origin = origin;
@@ -28,8 +35,8 @@ public class LineOfSight {
         return direction;
     }
 
-    public Astroid inLineOfSight() {
-        return visible;
+    public Optional<Astroid> inLineOfSight() {
+        return Optional.ofNullable(visible);
     }
 
     public Set<Astroid> hidden() {
@@ -58,5 +65,27 @@ public class LineOfSight {
     @Override
     public String toString() {
         return String.format("LineOfSight {origin: %s, direction: %s, visible: %s, hidden: %s}", origin, direction, visible, hidden);
+    }
+
+    @Override
+    public int compareTo(LineOfSight o) {
+        return Double.compare(direction.degrees(), o.direction.degrees());
+    }
+
+    public Optional<Astroid> vaporize() {
+        final Optional<Astroid> result = Optional.ofNullable(visible);
+
+        if (result.isPresent()) {
+            System.out.println("Vaporized astroid at " + result.get().location() + " at angle " + direction.degrees());
+
+            try {
+                final Astroid head = hidden.first();
+                hidden.remove(head);
+                visible = head;
+            } catch (NoSuchElementException exc) {
+                visible = null;
+            }
+        }
+        return result;
     }
 }

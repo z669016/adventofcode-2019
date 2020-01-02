@@ -2,7 +2,10 @@ package com.putoet.day10;
 
 import org.junit.Test;
 
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -63,4 +66,28 @@ public class Day10Test {
                 .name());
     }
 
+    @Test
+    public void test3() {
+        final AstroidMap astroidMap = AstroidMap.of(new String[]{
+                ".#....#####...#..",
+                "##...##.#####..##",
+                "##...#...#.#####.",
+                "..#.....#...###..",
+                "..#.#.....#....##"});
+        final Map<Astroid, LineOfSightMap> lineOfSightMaps = astroidMap.linesOfSightMaps();
+        final Optional<Astroid> astroid = astroidMap.astroidAt(new Point(8,3));
+        final Optional<LineOfSightMap> linesOfSightMap = astroidMap.linesOfSightMapFor(astroid.get());
+        final Set<LineOfSight> linesOfSight = linesOfSightMap.get().map();
+
+        System.out.println(linesOfSight);
+
+        Iterator<LineOfSight> iter = linesOfSight.iterator();
+        Optional<Astroid> result = iter.next().vaporize();
+        while (result.isPresent()) {
+            if (!iter.hasNext())
+                iter = linesOfSight.iterator();
+
+            result = iter.next().vaporize();
+        }
+    }
 }

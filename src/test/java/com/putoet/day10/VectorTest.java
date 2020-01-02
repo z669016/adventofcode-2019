@@ -25,4 +25,25 @@ public class VectorTest {
     public void testLength() {
         assertEquals(5.0, new Vector(3, 4).length());
     }
+
+    @Test
+    public void testDegrees() {
+//        System.out.println(new Vector(0, -3).degrees());
+//        System.out.println(new Vector(3, -3).degrees());
+//        System.out.println(new Vector(3, 0).degrees());
+//        System.out.println(new Vector(3, 3).degrees());
+//        System.out.println(new Vector(0, 3).degrees());
+//        System.out.println(new Vector(-3, 3).degrees());
+//        System.out.println(new Vector(-3, 0).degrees());
+//        System.out.println(new Vector(-3, -3).degrees());
+//
+        assertEquals(0.0, new Vector(0, -3).degrees());
+        assertEquals(45.0, new Vector(3, -3).degrees());
+        assertEquals(90.0, new Vector(3, 0).degrees());
+        assertEquals(135.0, new Vector(3, 3).degrees());
+        assertEquals(180.0, new Vector(0, 3).degrees());
+        assertEquals(225.0, new Vector(-3, 3).degrees());
+        assertEquals(270.0, new Vector(-3, 0).degrees());
+        assertEquals(315.0, new Vector(-3, -3).degrees());
+    }
 }

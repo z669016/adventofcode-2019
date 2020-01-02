@@ -29,5 +29,7 @@ public class LineOfSightMapTest {
         System.out.println("In line of sight: " + lineOfSightMap.inLineOfSight());
         System.out.println("Hidden: " + lineOfSightMap.hidden());
         assertEquals(5, lineOfSightMap.inLineOfSightCount());
+
+        System.out.println(lineOfSightMap.map());
     }
 }

@@ -40,4 +40,12 @@ public class AstroidMap {
         astroidMap.forEach(astroid -> map.put(astroid, LineOfSightMap.of(astroid, astroidMap)));
         return Collections.unmodifiableMap(map);
     }
+
+    public Optional<Astroid> astroidAt(Point point) {
+        return astroidMap.stream().filter(astroid -> astroid.location().equals(point)).findFirst();
+    }
+
+    public Optional<LineOfSightMap> linesOfSightMapFor(Astroid astroid) {
+        return Optional.ofNullable(astroidMap.contains(astroid) ? LineOfSightMap.of(astroid, astroidMap) : null);
+    }
 }

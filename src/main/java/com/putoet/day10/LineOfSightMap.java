@@ -17,8 +17,8 @@ public class LineOfSightMap {
         return map;
     }
 
-    public Map<Vector, LineOfSight> map() {
-        return Collections.unmodifiableMap(map);
+    public Set<LineOfSight> map() {
+        return Collections.unmodifiableSet(new TreeSet<>(map.values()));
     }
 
     public void add(Astroid astroid) {
@@ -37,7 +37,11 @@ public class LineOfSightMap {
     }
 
     public Set<Astroid> inLineOfSight() {
-        return map.entrySet().stream().map(entry -> entry.getValue().inLineOfSight()).collect(Collectors.toSet());
+        return map.entrySet().stream()
+                .map(entry -> entry.getValue().inLineOfSight())
+                .filter(optional -> optional.isPresent())
+                .map(Optional::get)
+                .collect(Collectors.toSet());
     }
 
     public Set<Astroid> hidden() {
