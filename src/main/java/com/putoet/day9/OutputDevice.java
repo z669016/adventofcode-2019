@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class OutputDevice implements IOutputDevice {
+public class OutputDevice implements IOutputDevice, IDump {
     private final List<Long> outputValues = new ArrayList<>();
 
     public OutputDevice() {

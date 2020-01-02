@@ -6,6 +6,4 @@ public interface IOutputDevice {
     void put(Long value);
 
     Long get();
-
-    List<Long> asList();
 }

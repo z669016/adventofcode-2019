@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class InputDevice implements IInputDevice {
+public class InputDevice implements IInputDevice, IDump {
     private final List<Long> inputValues;
     private int idx = 0;
 

@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class ImmediateMemoryAccessorTest {
     private static final List<Integer> memoryList = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-    private IMemory memory;
+    private Memory memory;
     private ImmediateMemoryAccessor accessor;
 
     @Before

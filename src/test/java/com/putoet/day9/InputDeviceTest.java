@@ -22,7 +22,7 @@ public class InputDeviceTest {
         assertEquals("No input available", is.getMessage());
 
         final List<Long> inputList = List.of(1L, 2L, 3L);
-        final IInputDevice id = new InputDevice(inputList);
+        final InputDevice id = new InputDevice(inputList);
         assertEquals(inputList, id.asList());
 
         assertEquals(Long.valueOf(1), id.get().get());

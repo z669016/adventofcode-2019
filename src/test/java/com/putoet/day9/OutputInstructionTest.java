@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 public class OutputInstructionTest {
     private Registers regs;
     private IMemoryAccessor accessor;
-    private IOutputDevice outputDevice;
+    private OutputDevice outputDevice;
     private OutputInstruction instruction;
 
     @Before

@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class PositionMemoryAccessorTest {
     private static final List<Integer> memoryList = List.of(9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
 
-    private IMemory memory;
+    private Memory memory;
     private PositionMemoryAccessor accessor;
 
     @Before

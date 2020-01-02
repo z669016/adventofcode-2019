@@ -7,6 +7,4 @@ public interface IInputDevice {
     Optional<Long> get();
 
     void put(Long value);
-
-    List<Long> asList();
 }

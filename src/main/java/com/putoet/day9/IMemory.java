@@ -7,5 +7,4 @@ public interface IMemory {
     void poke(Address address, Long value);
 
     int size();
-    List<Long> asList();
 }

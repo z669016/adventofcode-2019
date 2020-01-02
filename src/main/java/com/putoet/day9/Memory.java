@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Memory implements IMemory {
+public class Memory implements IMemory, IDump {
     private List<Long> memory;
 
     private Memory(List<Long> memory) {

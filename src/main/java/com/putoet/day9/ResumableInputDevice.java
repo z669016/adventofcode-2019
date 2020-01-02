@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ResumableInputDevice implements IInputDevice {
+public class ResumableInputDevice implements IInputDevice, IDump {
     private final List<Long> inputValues = new ArrayList<>();
     private int idx = 0;
 
