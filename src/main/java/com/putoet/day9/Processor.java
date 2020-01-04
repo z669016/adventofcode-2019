@@ -52,7 +52,7 @@ public class Processor implements IProcessor {
                 updated.ifPresent(registers -> regs = registers);
 
                 instruction = InstructionFactory.of(regs, memory, inputDevice, outputDevice);
-            } catch (IllegalStateException | IllegalArgumentException exc) {
+            } catch (RuntimeException exc) {
                 System.err.println("Error occurred on IntCode program, with registers " + regs +" on instruction " + instruction);
                 throw exc;
             }
