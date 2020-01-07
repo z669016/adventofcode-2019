@@ -1,6 +1,8 @@
 package com.putoet.day14;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ChemicalReaction {
     private final List<Ingredient> ingredients;
@@ -14,6 +16,8 @@ public class ChemicalReaction {
     public Ingredient result() { return result; }
 
     public List<Ingredient> ingredients() { return ingredients; }
+
+    public Set<Chemical> chemicals() { return ingredients.stream().map(Ingredient::chemical).collect(Collectors.toSet()); }
 
     public static ChemicalReaction of(String reaction) {
         final String[] parts = reaction.split(" => ");

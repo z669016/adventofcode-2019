@@ -10,7 +10,6 @@ import static java.util.stream.Collectors.groupingBy;
 
 public class FuelReactions {
     private final Map<Chemical, ChemicalReaction> map = new HashMap<>();
-    private  List<Chemical> replacementOrder;
 
     public FuelReactions(List<ChemicalReaction> chemicalReactions) {
         chemicalReactions.forEach(reaction -> map.put(reaction.result().chemical(), reaction));
@@ -37,12 +36,16 @@ public class FuelReactions {
         return Optional.of(map.get(Chemical.FUEL));
     }
 
-    public Optional<ChemicalReaction> simplifyChemicalReaction(ChemicalReaction reaction) {
-        replacementOrder = new ArrayList<>();
+    public Set<Chemical> baseChemicals() {
+        return map.entrySet().stream()
+                .filter(e -> e.getValue().ingredients().stream().allMatch(i -> i.chemical().equals(Chemical.ORE)))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+    }
 
+    public Optional<ChemicalReaction> simplifyChemicalReaction(ChemicalReaction reaction) {
         Optional<Chemical> chemical = nextToReplace(reaction);
         while (chemical.isPresent()) {
-            replacementOrder.add(chemical.get());
             Optional<ChemicalReaction> newReaction = replaceChemicalInReaction(reaction, chemical.get());
             if (newReaction.isEmpty())
                 return Optional.empty();
@@ -51,25 +54,15 @@ public class FuelReactions {
             chemical = nextToReplace(reaction);
         }
 
-        System.out.println("Number of replacements is " + replacementOrder.size());
-
         return Optional.of(reaction);
     }
 
     public Optional<Chemical> nextToReplace(ChemicalReaction reaction) {
-        final Set<Chemical> topLevelChemicals = reaction.ingredients().stream()
-                .map(Ingredient::chemical)
+        final Set<Chemical> topLevelChemicals = reaction.chemicals().stream()
                 .filter(chemical -> !chemical.equals(Chemical.ORE))
                 .collect(Collectors.toSet());
         final Set<Chemical> independentChemicals = topLevelChemicals.stream().filter(chemical -> noneIsDependingOn(topLevelChemicals, chemical)).collect(Collectors.toSet());
         return independentChemicals.stream().findFirst();
-    }
-
-   public Set<Chemical> baseChemicals() {
-        return map.entrySet().stream()
-                .filter(e -> e.getValue().ingredients().stream().allMatch(i -> i.chemical().equals(Chemical.ORE)))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
     }
 
     private boolean noneIsDependingOn(Set<Chemical> chemicals, Chemical chemical) {
@@ -78,7 +71,15 @@ public class FuelReactions {
                 .map(this::reactionFor)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .noneMatch(cr -> cr.ingredients().stream().anyMatch(i -> i.chemical().equals(chemical)));
+                .noneMatch(cr -> cr.chemicals().contains(chemical) || !noneIsDependingOn(cr.chemicals(), chemical));
+    }
+
+    private Set<Chemical> setOfChemichalsFor(Ingredient ingredient) {
+        final Optional<ChemicalReaction> reaction = reactionFor(ingredient.chemical());
+        if (reaction.isEmpty())
+            return Collections.emptySet();
+
+        return reaction.get().chemicals();
     }
 
     public Optional<ChemicalReaction> replaceChemicalInReaction(ChemicalReaction chemicalReaction, Chemical chemicalToReplace) {
