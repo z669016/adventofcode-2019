@@ -12,6 +12,7 @@ public class Screen implements IOutputDevice {
     private int x;
     private int y;
     private State state = State.X;
+    private long score;
 
     enum State {
         X, Y, TILE;
@@ -34,7 +35,10 @@ public class Screen implements IOutputDevice {
                 state = State.TILE;
                 break;
             case TILE:
-                surface.paint(x, y, Tile.of(value.intValue()));
+                if (x == -1 && y == 0)
+                    score = value;
+                else
+                    surface.paint(x, y, Tile.of(value.intValue()));
                 state = State.X;
         }
     }
@@ -46,7 +50,7 @@ public class Screen implements IOutputDevice {
 
     @Override
     public String toString() {
-        return surface.toString();
+        return "SCORE " + score + "\n" + surface.toString();
     }
 
     public List<String> dump() {
