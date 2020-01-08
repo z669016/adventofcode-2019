@@ -16,10 +16,5 @@ public class Day14 {
             }
             System.out.println("Replacement for " + reaction.get().result() + " is "  + newReaction);
         }
-        // 581510
-        // 581612
-        // 581166
-        // 580804
-        // 601568
     }
 }

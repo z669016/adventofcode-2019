@@ -4,21 +4,21 @@ import java.util.*;
 
 public class Ingredient {
     private final Chemical chemical;
-    private final int amount;
+    private final long amount;
 
     public Ingredient(Chemical chemical) {
         this.chemical = chemical;
         this.amount = 1;
     }
 
-    public Ingredient(Chemical chemical, int amount) {
+    public Ingredient(Chemical chemical, long amount) {
         this.chemical = chemical;
         this.amount = amount;
     }
 
     public Chemical chemical() { return chemical; }
 
-    public int amount() { return amount; }
+    public long amount() { return amount; }
 
     public static Ingredient of(String ingredient) {
         final String[] elements = ingredient.trim().split(" ");

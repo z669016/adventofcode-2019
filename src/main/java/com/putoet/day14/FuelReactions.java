@@ -74,14 +74,6 @@ public class FuelReactions {
                 .noneMatch(cr -> cr.chemicals().contains(chemical) || !noneIsDependingOn(cr.chemicals(), chemical));
     }
 
-    private Set<Chemical> setOfChemichalsFor(Ingredient ingredient) {
-        final Optional<ChemicalReaction> reaction = reactionFor(ingredient.chemical());
-        if (reaction.isEmpty())
-            return Collections.emptySet();
-
-        return reaction.get().chemicals();
-    }
-
     public Optional<ChemicalReaction> replaceChemicalInReaction(ChemicalReaction chemicalReaction, Chemical chemicalToReplace) {
         final Optional<Ingredient> ingredientToReplace = chemicalReaction.ingredients().stream().filter(i -> i.chemical().equals(chemicalToReplace)).findFirst();
         if (ingredientToReplace.isPresent()) {
@@ -96,7 +88,7 @@ public class FuelReactions {
         final Map<Chemical, List<Ingredient>> groupedIngredients = ingredientList.stream().collect(groupingBy(Ingredient::chemical));
 
         return groupedIngredients.entrySet().stream()
-                .map(entry -> new Ingredient(entry.getKey(), entry.getValue().stream().mapToInt(Ingredient::amount).sum()))
+                .map(entry -> new Ingredient(entry.getKey(), entry.getValue().stream().mapToLong(Ingredient::amount).sum()))
                 .collect(Collectors.toList());
     }
 
@@ -121,7 +113,7 @@ public class FuelReactions {
 
         final Ingredient toBeReplacedResult = map.get(ingredientToReplace.chemical()).result();
         final List<Ingredient> ingredientList = map.get(ingredientToReplace.chemical()).ingredients();
-        final int factor = (ingredientToReplace.amount() / toBeReplacedResult.amount()) + (ingredientToReplace.amount() % toBeReplacedResult.amount() == 0 ? 0 : 1);
+        final long factor = (ingredientToReplace.amount() / toBeReplacedResult.amount()) + (ingredientToReplace.amount() % toBeReplacedResult.amount() == 0 ? 0 : 1);
 
         return ingredientList.stream().map(i -> new Ingredient(i.chemical(), i.amount() * factor)).collect(Collectors.toList());
     }
@@ -131,5 +123,9 @@ public class FuelReactions {
         final StringBuilder sb = new StringBuilder();
         map.values().forEach(reaction -> sb.append(reaction).append("\n"));
         return sb.toString();
+    }
+
+    public Optional<ChemicalReaction> maxFuelReactionFor(long availableOre) {
+        return Optional.empty();
     }
 }

@@ -105,6 +105,18 @@ public class FuelReactionsTest {
         assertEquals(2210736, newReaction.get().ingredients().get(0).amount());
     }
 
+    @Test
+    public void testMaxFuerFor() {
+        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample3());
+
+        final long minAmountOfOre = 13312;
+        final long availableOre = 1_000_000_000_000L;
+
+        final Optional<ChemicalReaction> maxReaction = fuelReactions.maxFuelReactionFor(availableOre);
+        assertTrue(maxReaction.isPresent());
+        assertEquals(82892753L, maxReaction.get().result().amount());
+    }
+
     private List<ChemicalReaction> createFuelReactionsSample1() {
         return List.of(
                 ChemicalReaction.of("10 ORE => 10 A"),
