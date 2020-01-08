@@ -39,6 +39,14 @@ public class Ingredient {
         return Collections.unmodifiableList(list);
     }
 
+
+    public Ingredient multiplyBy(long factor) {
+        if (factor <= 0)
+            throw new IllegalArgumentException("Factor cannot be smallert han  or equal to 0.");
+
+        return new Ingredient(chemical, amount * factor);
+    }
+
     @Override
     public String toString() {
         return amount() + " " + chemical();

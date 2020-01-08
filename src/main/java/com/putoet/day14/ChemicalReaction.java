@@ -43,4 +43,8 @@ public class ChemicalReaction {
         ingredients.forEach(ingredient -> sb.append(ingredient.amount()).append(" ").append(ingredient.chemical()).append(", "));
         return sb.toString().substring(0, sb.length() - 2) + " => " + result.amount() + " " + result.chemical();
     }
+
+    public ChemicalReaction multiplyBy(long factor) {
+        return new ChemicalReaction(result.multiplyBy(factor), ingredients.stream().map(i -> i.multiplyBy(factor)).collect(Collectors.toList()));
+    }
 }

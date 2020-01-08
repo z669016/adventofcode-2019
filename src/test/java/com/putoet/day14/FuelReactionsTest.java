@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.putoet.day7.ExceptionTester.ia;
 import static org.junit.Assert.*;
 
 public class FuelReactionsTest {
@@ -106,15 +107,46 @@ public class FuelReactionsTest {
     }
 
     @Test
-    public void testMaxFuerFor() {
+    public void testMaxFuelForTooLittle() {
         final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample3());
 
-        final long minAmountOfOre = 13312;
-        final long availableOre = 1_000_000_000_000L;
+        final long availableOre = 1_000L;
+        final IllegalArgumentException ia = ia(() -> fuelReactions.maxFuelReactionFor(availableOre));
+        assertNotNull(ia);
+        assertEquals("Insufficient fuel for 1 fuel, you need a minimum of 13312 ORE.", ia.getMessage());
+    }
 
+    @Test
+    public void testMaxFuelFor1() {
+        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample3());
+
+        final long availableOre = 1_000_000_000_000L;
         final Optional<ChemicalReaction> maxReaction = fuelReactions.maxFuelReactionFor(availableOre);
         assertTrue(maxReaction.isPresent());
+        System.out.println(maxReaction);
         assertEquals(82892753L, maxReaction.get().result().amount());
+    }
+
+    @Test
+    public void testMaxFuelFor2() {
+        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample4());
+
+        final long availableOre = 1_000_000_000_000L;
+        final Optional<ChemicalReaction> maxReaction = fuelReactions.maxFuelReactionFor(availableOre);
+        assertTrue(maxReaction.isPresent());
+        System.out.println(maxReaction);
+        assertEquals(5586022L, maxReaction.get().result().amount());
+    }
+
+    @Test
+    public void testMaxFuelFor3() {
+        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample5());
+
+        final long availableOre = 1_000_000_000_000L;
+        final Optional<ChemicalReaction> maxReaction = fuelReactions.maxFuelReactionFor(availableOre);
+        assertTrue(maxReaction.isPresent());
+        System.out.println(maxReaction);
+        assertEquals(460664L, maxReaction.get().result().amount());
     }
 
     private List<ChemicalReaction> createFuelReactionsSample1() {

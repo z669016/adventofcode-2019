@@ -16,5 +16,12 @@ public class Day14 {
             }
             System.out.println("Replacement for " + reaction.get().result() + " is "  + newReaction);
         }
+
+        final Optional<ChemicalReaction> maxFuelTReaction = fuelReactions.maxFuelReactionFor(1_000_000_000_000L);
+        if (maxFuelTReaction.isEmpty()) {
+            System.out.println("No maximum fuel reaction possible.");
+        } else {
+            System.out.println("Maximum fuel reaction is: " + maxFuelTReaction.get());
+        }
     }
 }

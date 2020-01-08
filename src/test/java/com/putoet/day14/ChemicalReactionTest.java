@@ -27,4 +27,13 @@ public class ChemicalReactionTest {
                 new Ingredient(new Chemical("mgncw"), 7),
                 new Ingredient(new Chemical("kxbgp"), 26)), reaction.ingredients());
     }
+
+    @Test
+    public void testMultiplyBy() {
+        final ChemicalReaction reaction = ChemicalReaction.of("118 ORE, 5 A => 7 GTPZ");
+        final ChemicalReaction multipliedReaction = reaction.multiplyBy(3);
+        assertEquals(new Ingredient(new Chemical("gtpz"), 21), multipliedReaction.result());
+        assertEquals(List.of(new Ingredient(new Chemical("ORE"), 354), new Ingredient(new Chemical("A"), 15)), multipliedReaction.ingredients());
+    }
+
 }

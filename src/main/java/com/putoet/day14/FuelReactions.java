@@ -126,6 +126,38 @@ public class FuelReactions {
     }
 
     public Optional<ChemicalReaction> maxFuelReactionFor(long availableOre) {
-        return Optional.empty();
+        final Optional<ChemicalReaction> fuelReaction = reactionForFuel();
+        if (fuelReaction.isEmpty())
+            throw new IllegalStateException("No reaction for fuel available.");
+
+         final Optional<ChemicalReaction> simplifiedFuelReaction = simplifyChemicalReaction(fuelReaction.get());
+         if (simplifiedFuelReaction.isEmpty())
+             throw new IllegalStateException("Cannot determine max fuel without simplified chemicsl reaction for fuel");
+         final long minimalOreForFuel = simplifiedFuelReaction.get().ingredients().get(0).amount();
+
+         if (availableOre < minimalOreForFuel)
+             throw new IllegalArgumentException("Insufficient fuel for 1 fuel, you need a minimum of " + minimalOreForFuel + " ORE.");
+
+        return maxFuelFor(availableOre, minimalOreForFuel, fuelReaction.get());
+    }
+
+    private Optional<ChemicalReaction> maxFuelFor(long availableOre, long minimalOreForFuel, ChemicalReaction fuelReaction) {
+        Optional<ChemicalReaction> maxReaction = Optional.empty();
+        long max = 0;
+        long used = 0;
+        long rest = availableOre - used;
+
+        while (rest > minimalOreForFuel) {
+            final ChemicalReaction reaction = fuelReaction.multiplyBy(max + ((availableOre - used)/minimalOreForFuel));
+            maxReaction = simplifyChemicalReaction(reaction);
+            if (maxReaction.isEmpty())
+                return Optional.empty();
+
+            max = maxReaction.get().result().amount();
+            used = maxReaction.get().ingredients().get(0).amount();
+            rest = availableOre - used;
+        }
+
+        return maxReaction;
     }
 }
