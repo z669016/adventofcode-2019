@@ -41,7 +41,7 @@ public class Navigator {
     }
 
     public void west() {
-        currentPoint =currentPoint.moveWest();
+        currentPoint = currentPoint.moveWest();
         currentTile = currentTile.goWest();
 
         inputDevice.put(WEST);
@@ -57,7 +57,22 @@ public class Navigator {
     }
 
     public void back() {
+        long lastMove = trace.get(trace.size() - 1);
         trace.remove(trace.size() - 1);
+
+        if (lastMove == NORTH) {
+            currentPoint = currentPoint.moveSouth();
+            currentTile = currentTile.south();
+        } else if (lastMove == WEST) {
+            currentPoint = currentPoint.moveEast();
+            currentTile = currentTile.east();
+        } else if (lastMove == SOUTH) {
+            currentPoint = currentPoint.moveNorth();
+            currentTile = currentTile.north();
+        } else if (lastMove == EAST) {
+            currentPoint = currentPoint.moveWest();
+            currentTile = currentTile.west();
+        }
     }
 
     public Point currentPoint() {

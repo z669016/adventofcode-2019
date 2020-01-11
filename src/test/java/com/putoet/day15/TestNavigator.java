@@ -59,7 +59,7 @@ public class TestNavigator {
         navigator.west();
         navigator.east();
         navigator.back();
-        navigator.back();
-        assertEquals(List.of(Navigator.NORTH, Navigator.SOUTH), navigator.trace());
+        assertEquals(Point.of(1, 0), navigator.currentPoint());
+        assertEquals(List.of(Navigator.NORTH, Navigator.SOUTH, Navigator.WEST), navigator.trace());
     }
 }
