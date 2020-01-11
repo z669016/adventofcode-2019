@@ -5,13 +5,17 @@ public class OriginExtendableSurface extends ExtendableSurface {
     private int originY = 0;
 
     @Override
-    public Paintable at(int x, int y) {
+    public Paintable at(Point point) {
+        int x = point.x();
+        int y = point.y();
         resizeIfRequired(x, y);
         return surface[y + originY][x + originX];
     }
 
     @Override
-    public void paint(int x, int y, Paintable newPaintable) {
+    public void paint(Point point, Paintable newPaintable) {
+        int x = point.x();
+        int y = point.y();
         resizeIfRequired(x, y);
         surface[y + originY][x + originX] = newPaintable;
     }

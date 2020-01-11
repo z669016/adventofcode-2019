@@ -13,30 +13,34 @@ import static org.mockito.Mockito.verify;
 public class TestNavigator {
     @Test
     public void testInputDevice() {
-        final ExtendableSurface surface = new ExtendableSurface();
         final IInputDevice inputDevice = mock(IInputDevice.class);
-        final Navigator navigator = new Navigator(surface, inputDevice, new ArrayList<>());
+        final Navigator navigator = new Navigator(inputDevice, new ArrayList<>());
 
         navigator.north();
         verify(inputDevice).put(Navigator.NORTH);
+        assertEquals(Point.of(0, 1), navigator.currentPoint());
+        assertEquals(navigator.currentTile(), navigator.currentTile().south().north());
 
         navigator.south();
         verify(inputDevice).put(Navigator.SOUTH);
+        assertEquals(Point.ORIGIN, navigator.currentPoint());
+        assertEquals(navigator.currentTile(), navigator.currentTile().north().south());
 
         navigator.west();
         verify(inputDevice).put(Navigator.WEST);
+        assertEquals(Point.of(1, 0), navigator.currentPoint());
+        assertEquals(navigator.currentTile(), navigator.currentTile().east().west());
 
         navigator.east();
         verify(inputDevice).put(Navigator.EAST);
-
-        System.out.println(surface);
+        assertEquals(Point.ORIGIN, navigator.currentPoint());
+        assertEquals(navigator.currentTile(), navigator.currentTile().west().east());
     }
 
     @Test
     public void testTrace() {
-        final ExtendableSurface surface = new ExtendableSurface();
         final IInputDevice inputDevice = mock(IInputDevice.class);
-        final Navigator navigator = new Navigator(surface, inputDevice, new ArrayList<>());
+        final Navigator navigator = new Navigator(inputDevice, new ArrayList<>());
 
         navigator.north();
         navigator.south();
@@ -47,9 +51,8 @@ public class TestNavigator {
 
     @Test
     public void testBack() {
-        final ExtendableSurface surface = new ExtendableSurface();
         final IInputDevice inputDevice = mock(IInputDevice.class);
-        final Navigator navigator = new Navigator(surface, inputDevice, new ArrayList<>());
+        final Navigator navigator = new Navigator(inputDevice, new ArrayList<>());
 
         navigator.north();
         navigator.south();

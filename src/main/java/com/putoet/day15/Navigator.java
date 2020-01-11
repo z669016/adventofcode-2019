@@ -1,6 +1,5 @@
 package com.putoet.day15;
 
-import com.putoet.day11.Point;
 import com.putoet.day9.IInputDevice;
 
 import java.util.Collections;
@@ -14,50 +13,59 @@ public class Navigator {
 
     private final IInputDevice inputDevice;
     private final List<Long> trace;
-    private final ExtendableSurface surface;
     private Tile currentTile;
     private Point currentPoint;
 
-    public Navigator(ExtendableSurface surface, IInputDevice inputDevice, List<Long> trace) {
-        this.surface = surface;
+    public Navigator(IInputDevice inputDevice, List<Long> trace) {
         this.inputDevice = inputDevice;
         this.trace = trace;
 
         this.currentTile = Tile.START;
-        currentPoint = new Point();
-        this.surface.paint(currentPoint.x(), currentPoint.y(), currentTile);
+        this.currentPoint = Point.ORIGIN;
     }
 
     public void north() {
-        currentPoint.moveUp();
-        currentTile.goNorth();
-        inputDevice.put(NORTH);
+        currentPoint = currentPoint.moveNorth();
+        currentTile = currentTile.goNorth();
 
+        inputDevice.put(NORTH);
         trace.add(NORTH);
     }
 
     public void south() {
+        currentPoint = currentPoint.moveSouth();
+        currentTile = currentTile.goSouth();
+
         inputDevice.put(SOUTH);
         trace.add(SOUTH);
     }
 
     public void west() {
+        currentPoint =currentPoint.moveWest();
+        currentTile = currentTile.goWest();
+
         inputDevice.put(WEST);
         trace.add(WEST);
     }
 
     public void east() {
+        currentPoint = currentPoint.moveEast();
+        currentTile = currentTile.goEast();
+
         inputDevice.put(EAST);
         trace.add(EAST);
     }
 
-    private void openCurrentTile() {
-        if (currentTile.type() == Tile.Type.UNKNOWN)
-            currentTile.discovered(Tile.Type.OPEN);
-    }
-
     public void back() {
         trace.remove(trace.size() - 1);
+    }
+
+    public Point currentPoint() {
+        return this.currentPoint;
+    }
+
+    public Tile currentTile() {
+        return this.currentTile;
     }
 
     public IInputDevice inputDevice() {

@@ -11,13 +11,17 @@ public class ExtendableSurface implements IExtendableSurface {
     }
 
     @Override
-    public Paintable at(int x, int y) {
+    public Paintable at(Point point) {
+        int x = point.x();
+        int y = point.y();
         resizeIfRequired(x, y);
         return surface[y][x];
     }
 
     @Override
-    public void paint(int x, int y, Paintable newPaintable) {
+    public void paint(Point point, Paintable newPaintable) {
+        int x = point.x();
+        int y = point.y();
         resizeIfRequired(x, y);
         surface[y][x] = newPaintable;
     }

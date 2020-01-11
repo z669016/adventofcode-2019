@@ -3,7 +3,7 @@ package com.putoet.day15;
 public interface IExtendableSurface {
     long count(Paintable tile);
 
-    Paintable at(int x, int y);
+    Paintable at(Point point);
 
-    void paint(int x, int y, Paintable newPaintable);
+    void paint(Point point, Paintable newPaintable);
 }
