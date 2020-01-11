@@ -13,8 +13,9 @@ import static org.mockito.Mockito.verify;
 public class TestNavigator {
     @Test
     public void testInputDevice() {
+        final ExtendableSurface surface = new ExtendableSurface();
         final IInputDevice inputDevice = mock(IInputDevice.class);
-        final Navigator navigator = new Navigator(inputDevice, new ArrayList<>());
+        final Navigator navigator = new Navigator(surface, inputDevice, new ArrayList<>());
 
         navigator.north();
         verify(inputDevice).put(Navigator.NORTH);
@@ -27,12 +28,15 @@ public class TestNavigator {
 
         navigator.east();
         verify(inputDevice).put(Navigator.EAST);
+
+        System.out.println(surface);
     }
 
     @Test
     public void testTrace() {
+        final ExtendableSurface surface = new ExtendableSurface();
         final IInputDevice inputDevice = mock(IInputDevice.class);
-        final Navigator navigator = new Navigator(inputDevice, new ArrayList<>());
+        final Navigator navigator = new Navigator(surface, inputDevice, new ArrayList<>());
 
         navigator.north();
         navigator.south();
@@ -43,8 +47,9 @@ public class TestNavigator {
 
     @Test
     public void testBack() {
+        final ExtendableSurface surface = new ExtendableSurface();
         final IInputDevice inputDevice = mock(IInputDevice.class);
-        final Navigator navigator = new Navigator(inputDevice, new ArrayList<>());
+        final Navigator navigator = new Navigator(surface, inputDevice, new ArrayList<>());
 
         navigator.north();
         navigator.south();

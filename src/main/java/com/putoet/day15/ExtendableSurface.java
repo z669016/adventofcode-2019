@@ -2,38 +2,49 @@ package com.putoet.day15;
 
 import java.util.Arrays;
 
-public class ExtendableSurface {
-    private Paintable[][] surface = new Paintable[][] {{Paintable.unnkown()}};
+public class ExtendableSurface implements IExtendableSurface {
+    protected Paintable[][] surface = new Paintable[][] {{Paintable.unnkown()}};
 
+    @Override
     public long count(Paintable tile) {
         return Arrays.stream(surface).flatMap(Arrays::stream).filter(elem -> elem == tile).count();
     }
 
-    public void paint(int x, int y, Paintable newPaintable) {
-        if (y >= surface.length) extendVertically(y);
-        if (x >= surface[0].length) extendHorizontally(x);
+    @Override
+    public Paintable at(int x, int y) {
+        resizeIfRequired(x, y);
+        return surface[y][x];
+    }
 
+    @Override
+    public void paint(int x, int y, Paintable newPaintable) {
+        resizeIfRequired(x, y);
         surface[y][x] = newPaintable;
     }
 
-    private void extendHorizontally(int x) {
+    protected void resizeIfRequired(int x, int y) {
+        if (y >= surface.length) extendDown(y);
+        if (x >= surface[0].length) extendToTheRight(x);
+    }
+
+    protected void extendToTheRight(int newMaxX) {
         for (int idy = 0; idy < surface.length; idy++) {
-            final Paintable[] newLine = new Paintable[x + 1];
-            for (int idx = 0; idx < x + 1; idx++) {
+            final Paintable[] newLine = new Paintable[newMaxX + 1];
+            for (int idx = 0; idx < newMaxX + 1; idx++) {
                 newLine[idx] = (idx < surface[idy].length ? surface[idy][idx] : Paintable.unnkown());
             }
             surface[idy] = newLine;
         }
     }
 
-    private void extendVertically(int y) {
-        final Paintable[][] newSurface = new Paintable[y + 1][];
-        for (int idy = 0; idy < y + 1; idy++)
+    protected void extendDown(int newMaxY) {
+        final Paintable[][] newSurface = new Paintable[newMaxY + 1][];
+        for (int idy = 0; idy < newMaxY + 1; idy++)
             newSurface[idy] = (idy < surface.length ? surface[idy] : emptyLine());
         surface = newSurface;
     }
 
-    private Paintable[] emptyLine() {
+    protected Paintable[] emptyLine() {
         final Paintable[] newLine = new Paintable[surface[0].length];
         Arrays.fill(newLine, Paintable.unnkown());
         return newLine;
