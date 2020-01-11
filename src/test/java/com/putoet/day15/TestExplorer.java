@@ -16,7 +16,7 @@ public class TestExplorer {
         final IExtendableSurface surface = new OriginExtendableSurface();
         final IOutputDevice outputDevice = mock(IOutputDevice.class);
         final IInputDevice inputDevice = mock(IInputDevice.class);
-        final Navigator navigator = new Navigator(inputDevice, new ArrayList<Long>());
+        final Navigator navigator = new Navigator(inputDevice, new ArrayList<Direction>());
         final Explorer explorer = new Explorer(surface, navigator, outputDevice);
 
         when(outputDevice.get()).thenReturn((long) Explorer.BLOCKED);

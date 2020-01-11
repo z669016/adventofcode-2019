@@ -24,20 +24,22 @@ public class Point {
         return new Point(x + origin.x, y + origin.y);
     }
 
-    public Point moveNorth() {
-        return new Point(x, y + 1);
+    public Point move(Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return new Point(x, y + 1);
+            case WEST:
+                return new Point(x + 1, y);
+            case EAST:
+                return new Point(x - 1, y);
+            case SOUTH:
+            default:
+                return new Point(x, y - 1);
+        }
     }
 
-    public Point moveWest() {
-        return new Point(x + 1, y);
-    }
-
-    public Point moveSouth() {
-        return new Point(x, y - 1);
-    }
-
-    public Point moveEast() {
-        return new Point(x - 1, y);
+    public Point moveOpposite(Direction direction) {
+        return move(direction.opposite());
     }
 
     @Override

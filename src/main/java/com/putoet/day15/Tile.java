@@ -20,7 +20,7 @@ public class Tile implements Paintable {
     }
 
     public void discovered(Type type) {
-        if (this.type != Type.UNKNOWN)
+        if ((this.type != Type.UNKNOWN) || (type == Type.BLOCKED))
             throw new IllegalStateException("Tile was already discovered ('" + this.paint() + "')");
 
         this.type = type;
@@ -28,7 +28,27 @@ public class Tile implements Paintable {
 
     public Tile north() { return north; }
 
-    public Tile goNorth() {
+    public Tile west() { return west; }
+
+    public Tile south() { return south; }
+
+    public Tile east() { return east; }
+
+    public Tile move(Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return goNorth();
+            case WEST:
+                return goWest();
+            case SOUTH:
+                return goSouth();
+            case EAST:
+            default:
+                return goEast();
+        }
+    }
+
+    private Tile goNorth() {
         if (north == null) {
             north = new Tile(Type.UNKNOWN);
             north.south = this;
@@ -36,9 +56,7 @@ public class Tile implements Paintable {
         return north;
     }
 
-    public Tile west() { return west; }
-
-    public Tile goWest() {
+    private Tile goWest() {
         if (west == null) {
             west = new Tile(Type.UNKNOWN);
             west.east = this;
@@ -46,9 +64,7 @@ public class Tile implements Paintable {
         return west;
     }
 
-    public Tile south() { return south; }
-
-    public Tile goSouth() {
+    private Tile goSouth() {
         if (south == null) {
             south = new Tile(Type.UNKNOWN);
             south.north = this;
@@ -56,9 +72,7 @@ public class Tile implements Paintable {
         return south;
     }
 
-    public Tile east() { return east; }
-
-    public Tile goEast() {
+    private Tile goEast() {
         if (east == null) {
             east = new Tile(Type.UNKNOWN);
             east.west = this;
@@ -69,6 +83,7 @@ public class Tile implements Paintable {
     enum Type {
         UNKNOWN(' '),
         WALL('#'),
+        BLOCKED('B'),
         OPEN('.'),
         START('.'),
         AIR('A');

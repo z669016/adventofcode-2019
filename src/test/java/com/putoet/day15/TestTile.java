@@ -45,7 +45,7 @@ public class TestTile {
     @Test
     public void testGoNorth() {
         final Tile start = Tile.START;
-        final Tile newTile = start.goNorth();
+        final Tile newTile = start.move(Direction.NORTH);
         assertEquals(newTile.type(), Tile.Type.UNKNOWN);
 
         assertEquals(start.north(), newTile);
@@ -62,7 +62,7 @@ public class TestTile {
     @Test
     public void testGoWest() {
         final Tile start = Tile.START;
-        final Tile newTile = start.goWest();
+        final Tile newTile = start.move(Direction.WEST);
         assertEquals(newTile.type(), Tile.Type.UNKNOWN);
 
         assertEquals(start.west(), newTile);
@@ -79,7 +79,7 @@ public class TestTile {
     @Test
     public void testGoSouth() {
         final Tile start = Tile.START;
-        final Tile newTile = start.goSouth();
+        final Tile newTile = start.move(Direction.SOUTH);
         assertEquals(newTile.type(), Tile.Type.UNKNOWN);
 
         assertEquals(start.south(), newTile);
@@ -96,7 +96,7 @@ public class TestTile {
     @Test
     public void testGoEast() {
         final Tile start = Tile.START;
-        final Tile newTile = start.goEast();
+        final Tile newTile = start.move(Direction.EAST);
         assertEquals(newTile.type(), Tile.Type.UNKNOWN);
 
         assertEquals(start.east(), newTile);

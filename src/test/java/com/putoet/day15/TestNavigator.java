@@ -16,23 +16,23 @@ public class TestNavigator {
         final IInputDevice inputDevice = mock(IInputDevice.class);
         final Navigator navigator = new Navigator(inputDevice, new ArrayList<>());
 
-        navigator.north();
-        verify(inputDevice).put(Navigator.NORTH);
+        navigator.move(Direction.NORTH);
+        verify(inputDevice).put(1L);
         assertEquals(Point.of(0, 1), navigator.currentPoint());
         assertEquals(navigator.currentTile(), navigator.currentTile().south().north());
 
-        navigator.south();
-        verify(inputDevice).put(Navigator.SOUTH);
+        navigator.move(Direction.SOUTH);
+        verify(inputDevice).put(2L);
         assertEquals(Point.ORIGIN, navigator.currentPoint());
         assertEquals(navigator.currentTile(), navigator.currentTile().north().south());
 
-        navigator.west();
-        verify(inputDevice).put(Navigator.WEST);
+        navigator.move(Direction.WEST);
+        verify(inputDevice).put(3L);
         assertEquals(Point.of(1, 0), navigator.currentPoint());
         assertEquals(navigator.currentTile(), navigator.currentTile().east().west());
 
-        navigator.east();
-        verify(inputDevice).put(Navigator.EAST);
+        navigator.move(Direction.EAST);
+        verify(inputDevice).put(4L);
         assertEquals(Point.ORIGIN, navigator.currentPoint());
         assertEquals(navigator.currentTile(), navigator.currentTile().west().east());
     }
@@ -42,11 +42,11 @@ public class TestNavigator {
         final IInputDevice inputDevice = mock(IInputDevice.class);
         final Navigator navigator = new Navigator(inputDevice, new ArrayList<>());
 
-        navigator.north();
-        navigator.south();
-        navigator.west();
-        navigator.east();
-        assertEquals(List.of(Navigator.NORTH, Navigator.SOUTH, Navigator.WEST, Navigator.EAST), navigator.trace());
+        navigator.move(Direction.NORTH);
+        navigator.move(Direction.SOUTH);
+        navigator.move(Direction.WEST);
+        navigator.move(Direction.EAST);
+        assertEquals(List.of(Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST), navigator.trace());
     }
 
     @Test
@@ -54,12 +54,12 @@ public class TestNavigator {
         final IInputDevice inputDevice = mock(IInputDevice.class);
         final Navigator navigator = new Navigator(inputDevice, new ArrayList<>());
 
-        navigator.north();
-        navigator.south();
-        navigator.west();
-        navigator.east();
+        navigator.move(Direction.NORTH);
+        navigator.move(Direction.SOUTH);
+        navigator.move(Direction.WEST);
+        navigator.move(Direction.EAST);
         navigator.back();
         assertEquals(Point.of(1, 0), navigator.currentPoint());
-        assertEquals(List.of(Navigator.NORTH, Navigator.SOUTH, Navigator.WEST), navigator.trace());
+        assertEquals(List.of(Direction.NORTH, Direction.SOUTH, Direction.WEST), navigator.trace());
     }
 }

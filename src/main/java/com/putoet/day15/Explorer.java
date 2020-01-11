@@ -2,6 +2,7 @@ package com.putoet.day15;
 
 import com.putoet.day9.IOutputDevice;
 
+
 public class Explorer {
     public static final int BLOCKED = 0;
     public static final int MOVED = 1;
@@ -11,29 +12,33 @@ public class Explorer {
     private final IOutputDevice outputDevice;
     private final IExtendableSurface surface;
 
+    private final Direction initialDirection = Direction.NORTH;
+    private Direction currentDirection = initialDirection;
+
     public Explorer(IExtendableSurface surface, Navigator navigator, IOutputDevice outputDevice) {
         this.surface = surface;
         this.navigator = navigator;
         this.outputDevice = outputDevice;
     }
 
+
     public void explore() {
-        navigator.north();
+        navigator.move(Direction.NORTH);
         checkStatus();
     }
 
     private void checkStatus() {
         switch (outputDevice.get().intValue()) {
-            case MOVED:
+            case HIT_AIR:
                 if (navigator.currentTile().type() == Tile.Type.UNKNOWN) {
-                    navigator.currentTile().discovered(Tile.Type.OPEN);
+                    navigator.currentTile().discovered(Tile.Type.AIR);
                     surface.paint(navigator.currentPoint(), navigator.currentTile());
                 }
                 break;
 
-            case HIT_AIR:
+            case MOVED:
                 if (navigator.currentTile().type() == Tile.Type.UNKNOWN) {
-                    navigator.currentTile().discovered(Tile.Type.AIR);
+                    navigator.currentTile().discovered(Tile.Type.OPEN);
                     surface.paint(navigator.currentPoint(), navigator.currentTile());
                 }
                 break;

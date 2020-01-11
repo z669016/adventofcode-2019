@@ -6,73 +6,47 @@ import java.util.Collections;
 import java.util.List;
 
 public class Navigator {
-    protected static final long NORTH = 1;
-    protected static final long SOUTH = 2;
-    protected static final long WEST = 3;
-    protected static final long EAST = 4;
-
     private final IInputDevice inputDevice;
-    private final List<Long> trace;
+    private final List<Direction> trace;
     private Tile currentTile;
     private Point currentPoint;
 
-    public Navigator(IInputDevice inputDevice, List<Long> trace) {
+    public Navigator(IInputDevice inputDevice, List<Direction> trace) {
         this.inputDevice = inputDevice;
         this.trace = trace;
-
         this.currentTile = Tile.START;
         this.currentPoint = Point.ORIGIN;
     }
 
-    public void north() {
-        currentPoint = currentPoint.moveNorth();
-        currentTile = currentTile.goNorth();
-
-        inputDevice.put(NORTH);
-        trace.add(NORTH);
+    private static long intCodeFor(Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return 1;
+            case WEST:
+                return 3;
+            case SOUTH:
+                return 2;
+            case EAST:
+            default:
+                return 4;
+        }
     }
 
-    public void south() {
-        currentPoint = currentPoint.moveSouth();
-        currentTile = currentTile.goSouth();
-
-        inputDevice.put(SOUTH);
-        trace.add(SOUTH);
+    public void move(Direction direction) {
+        moveUpdate(direction);
+        trace.add(direction);
     }
 
-    public void west() {
-        currentPoint = currentPoint.moveWest();
-        currentTile = currentTile.goWest();
-
-        inputDevice.put(WEST);
-        trace.add(WEST);
-    }
-
-    public void east() {
-        currentPoint = currentPoint.moveEast();
-        currentTile = currentTile.goEast();
-
-        inputDevice.put(EAST);
-        trace.add(EAST);
+    private void moveUpdate(Direction direction) {
+        currentPoint = currentPoint.move(direction);
+        currentTile = currentTile.move(direction);
+        inputDevice.put(intCodeFor(direction));
     }
 
     public void back() {
-        long lastMove = trace.get(trace.size() - 1);
+        Direction lastMove = trace.get(trace.size() - 1);
         trace.remove(trace.size() - 1);
-
-        if (lastMove == NORTH) {
-            currentPoint = currentPoint.moveSouth();
-            currentTile = currentTile.south();
-        } else if (lastMove == WEST) {
-            currentPoint = currentPoint.moveEast();
-            currentTile = currentTile.east();
-        } else if (lastMove == SOUTH) {
-            currentPoint = currentPoint.moveNorth();
-            currentTile = currentTile.north();
-        } else if (lastMove == EAST) {
-            currentPoint = currentPoint.moveWest();
-            currentTile = currentTile.west();
-        }
+        moveUpdate(lastMove.opposite());
     }
 
     public Point currentPoint() {
@@ -87,7 +61,7 @@ public class Navigator {
         return inputDevice;
     }
 
-    public List<Long> trace() {
+    public List<Direction> trace() {
         return Collections.unmodifiableList(trace);
     }
 }
