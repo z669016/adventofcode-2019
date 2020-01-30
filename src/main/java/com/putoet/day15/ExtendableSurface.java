@@ -57,10 +57,23 @@ public class ExtendableSurface implements IExtendableSurface {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        for (Paintable[] paintables : surface) {
-            for (Paintable paintable : paintables) sb.append(paintable.paint());
+
+        sb.append('+').append('-');
+        for (int idx = 0; idx < surface[0].length; idx++)
+            sb.append(idx % 10);
+        sb.append('\n');
+
+        for (int idy = surface.length; idy-- > 0;) {
+            sb.append(idy % 10).append(' ');
+            for (Paintable paintable : surface[idy]) sb.append(paintable.paint());
             sb.append('\n');
         }
+
+        sb.append('+').append('-');
+        for (int idx = 0; idx < surface[0].length; idx++)
+            sb.append(idx % 10);
+        sb.append('\n');
+
         return sb.toString();
     }
 }

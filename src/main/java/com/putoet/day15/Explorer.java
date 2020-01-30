@@ -1,34 +1,66 @@
 package com.putoet.day15;
 
-import com.putoet.day9.IOutputDevice;
-
-
 public class Explorer {
-    public static final int BLOCKED = 0;
-    public static final int MOVED = 1;
-    public static final int HIT_AIR = 2;
-
     private final Navigator navigator;
-    private final IOutputDevice outputDevice;
+    private final Sensor sensor;
     private final IExtendableSurface surface;
 
     private final Direction initialDirection = Direction.NORTH;
     private Direction currentDirection = initialDirection;
+    private boolean initialTurnTaken = false;
 
-    public Explorer(IExtendableSurface surface, Navigator navigator, IOutputDevice outputDevice) {
+    public Explorer(IExtendableSurface surface, Navigator navigator, Sensor sensor) {
         this.surface = surface;
         this.navigator = navigator;
-        this.outputDevice = outputDevice;
+        this.sensor = sensor;
+        surface.paint(navigator.currentPoint(), navigator.currentTile());
     }
 
-
     public void explore() {
-        navigator.move(Direction.NORTH);
+        System.out.println(surface);
+
+        navigator.move(currentDirection);
         checkStatus();
+        System.out.println(surface);
+
+        while (navigator.currentTile().type() != Tile.Type.AIR) {
+            currentDirection = nextDirection();
+            navigator.move(currentDirection);
+            checkStatus();
+
+            System.out.println(surface);
+        }
+    }
+
+    private Direction nextDirection() {
+        Direction nextDirection = navigator.lastDirection();
+
+        // Once an initial turn has been taken, first try to get back on the original course
+        if (initialTurnTaken && !navigator.currentTile().blockedOnDirection(nextDirection.right())) {
+            return nextDirection.right();
+        }
+
+        // if current direction is not explored yet, just continue
+        if (navigator.currentTile().get(nextDirection).isEmpty())
+            return nextDirection;
+
+        // when on a dead end, go back until you have options again
+        while (navigator.currentTile().isDeadEnd() && navigator.currentTile() != Tile.START) {
+            navigator.currentTile().discovered(Tile.Type.BLOCKED);
+            navigator.back();
+        }
+
+        // Turn left until there is an opening
+        while (navigator.currentTile().blockedOnDirection(nextDirection))
+            nextDirection = nextDirection.left();
+        initialTurnTaken = true;
+
+        return nextDirection;
+        // throw new IllegalStateException("Cannot determine next direction");
     }
 
     private void checkStatus() {
-        switch (outputDevice.get().intValue()) {
+        switch (sensor.read()) {
             case HIT_AIR:
                 if (navigator.currentTile().type() == Tile.Type.UNKNOWN) {
                     navigator.currentTile().discovered(Tile.Type.AIR);
@@ -43,7 +75,7 @@ public class Explorer {
                 }
                 break;
 
-            case BLOCKED:
+            case HIT_WALL:
             default:
                 if (navigator.currentTile().type() == Tile.Type.UNKNOWN) {
                     navigator.currentTile().discovered(Tile.Type.WALL);

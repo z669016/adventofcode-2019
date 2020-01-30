@@ -14,8 +14,8 @@ public class Navigator {
     public Navigator(IInputDevice inputDevice, List<Direction> trace) {
         this.inputDevice = inputDevice;
         this.trace = trace;
-        this.currentTile = Tile.START;
         this.currentPoint = Point.ORIGIN;
+        makeTileCurrent(Tile.START);
     }
 
     private static long intCodeFor(Direction direction) {
@@ -33,20 +33,32 @@ public class Navigator {
     }
 
     public void move(Direction direction) {
-        moveUpdate(direction);
+        moveUpdateCurrent(direction);
         trace.add(direction);
+        inputDevice.put(intCodeFor(direction));
     }
 
-    private void moveUpdate(Direction direction) {
+    private void moveUpdateCurrent(Direction direction) {
         currentPoint = currentPoint.move(direction);
-        currentTile = currentTile.move(direction);
-        inputDevice.put(intCodeFor(direction));
+        makeTileCurrent(currentTile.move(direction));
     }
 
     public void back() {
         Direction lastMove = trace.get(trace.size() - 1);
         trace.remove(trace.size() - 1);
-        moveUpdate(lastMove.opposite());
+        moveUpdateCurrent(lastMove.opposite());
+    }
+
+    public Direction lastDirection() {
+        return trace.get(trace.size() - 1);
+    }
+
+    private void makeTileCurrent(Tile newCurrentTile) {
+        if (currentTile != null) {
+            currentTile.setCurrent(false);
+        }
+        currentTile = newCurrentTile;
+        currentTile.setCurrent(true);
     }
 
     public Point currentPoint() {

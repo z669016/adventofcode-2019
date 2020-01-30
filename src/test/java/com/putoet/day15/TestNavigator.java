@@ -19,22 +19,22 @@ public class TestNavigator {
         navigator.move(Direction.NORTH);
         verify(inputDevice).put(1L);
         assertEquals(Point.of(0, 1), navigator.currentPoint());
-        assertEquals(navigator.currentTile(), navigator.currentTile().south().north());
+        assertEquals(navigator.currentTile(), navigator.currentTile().get(Direction.SOUTH).get().get(Direction.NORTH).get());
 
         navigator.move(Direction.SOUTH);
         verify(inputDevice).put(2L);
         assertEquals(Point.ORIGIN, navigator.currentPoint());
-        assertEquals(navigator.currentTile(), navigator.currentTile().north().south());
+        assertEquals(navigator.currentTile(), navigator.currentTile().get(Direction.NORTH).get().get(Direction.SOUTH).get());
 
         navigator.move(Direction.WEST);
         verify(inputDevice).put(3L);
         assertEquals(Point.of(1, 0), navigator.currentPoint());
-        assertEquals(navigator.currentTile(), navigator.currentTile().east().west());
+        assertEquals(navigator.currentTile(), navigator.currentTile().get(Direction.EAST).get().get(Direction.WEST).get());
 
         navigator.move(Direction.EAST);
         verify(inputDevice).put(4L);
         assertEquals(Point.ORIGIN, navigator.currentPoint());
-        assertEquals(navigator.currentTile(), navigator.currentTile().west().east());
+        assertEquals(navigator.currentTile(), navigator.currentTile().get(Direction.WEST).get().get(Direction.EAST).get());
     }
 
     @Test

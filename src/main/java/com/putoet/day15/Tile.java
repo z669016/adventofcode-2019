@@ -1,10 +1,12 @@
 package com.putoet.day15;
 
+import java.util.*;
+
 public class Tile implements Paintable {
+    public static final Tile START = new Tile(Type.START);
     private Tile north, east, south, west;
     private Type type = Type.UNKNOWN;
-
-    public static final Tile START = new Tile(Type.START);
+    private boolean isCurrent = false;
 
     private Tile(Type type) {
         this.type = type;
@@ -12,7 +14,7 @@ public class Tile implements Paintable {
 
     @Override
     public char paint() {
-        return type.paint();
+        return isCurrent ? '@' : type.paint();
     }
 
     public Type type() {
@@ -20,19 +22,33 @@ public class Tile implements Paintable {
     }
 
     public void discovered(Type type) {
-        if ((this.type != Type.UNKNOWN) || (type == Type.BLOCKED))
+        if ((this.type != Type.UNKNOWN) && (type != Type.BLOCKED))
             throw new IllegalStateException("Tile was already discovered ('" + this.paint() + "')");
 
         this.type = type;
     }
 
-    public Tile north() { return north; }
+    public boolean isCurrent() {
+        return isCurrent;
+    }
 
-    public Tile west() { return west; }
+    public void setCurrent(boolean isCurrent) {
+        this.isCurrent = isCurrent;
+    }
 
-    public Tile south() { return south; }
-
-    public Tile east() { return east; }
+    public Optional<Tile> get(Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return Optional.ofNullable(north);
+            case WEST:
+                return Optional.ofNullable(west);
+            case SOUTH:
+                return Optional.ofNullable(south);
+            case EAST:
+            default:
+                return Optional.ofNullable(east);
+        }
+    }
 
     public Tile move(Direction direction) {
         switch (direction) {
@@ -80,12 +96,29 @@ public class Tile implements Paintable {
         return east;
     }
 
+    public boolean isDeadEnd() {
+        final Tile[] tiles = {north, east, south, west};
+        return Arrays.stream(tiles)
+                .filter(Objects::nonNull)
+                .filter(t -> t.type() == Type.WALL || t.type() == Type.BLOCKED)
+                .count() == 3;
+    }
+
+    public boolean blockedOnDirection(Direction direction) {
+        if (get(direction).isEmpty()) return false;
+
+        final Tile tile = get(direction).get();
+        if (tile.type() == Type.BLOCKED || tile.type() == Type.WALL) return true;
+
+        return false;
+    }
+
     enum Type {
         UNKNOWN(' '),
         WALL('#'),
         BLOCKED('B'),
         OPEN('.'),
-        START('.'),
+        START('S'),
         AIR('A');
 
         final char charToPaint;

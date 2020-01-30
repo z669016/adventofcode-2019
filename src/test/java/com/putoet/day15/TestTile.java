@@ -3,6 +3,7 @@ package com.putoet.day15;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.sound.midi.Soundbank;
 import java.lang.reflect.Field;
 
 import static com.putoet.day7.ExceptionTester.is;
@@ -48,15 +49,17 @@ public class TestTile {
         final Tile newTile = start.move(Direction.NORTH);
         assertEquals(newTile.type(), Tile.Type.UNKNOWN);
 
-        assertEquals(start.north(), newTile);
-        assertNull(start.west());
-        assertNull(start.south());
-        assertNull(start.east());
+        assertTrue(start.get(Direction.NORTH).isPresent());
+        assertEquals(start.get(Direction.NORTH).get(), newTile);
+        assertFalse(start.get(Direction.WEST).isPresent());
+        assertFalse(start.get(Direction.SOUTH).isPresent());
+        assertFalse(start.get(Direction.EAST).isPresent());
 
-        assertEquals(newTile.south(), start);
-        assertNull(newTile.north());
-        assertNull(newTile.west());
-        assertNull(newTile.east());
+        assertTrue(newTile.get(Direction.SOUTH).isPresent());
+        assertEquals(newTile.get(Direction.SOUTH).get(), start);
+        assertFalse(newTile.get(Direction.NORTH).isPresent());
+        assertFalse(newTile.get(Direction.WEST).isPresent());
+        assertFalse(newTile.get(Direction.EAST).isPresent());
     }
 
     @Test
@@ -65,15 +68,17 @@ public class TestTile {
         final Tile newTile = start.move(Direction.WEST);
         assertEquals(newTile.type(), Tile.Type.UNKNOWN);
 
-        assertEquals(start.west(), newTile);
-        assertNull(start.north());
-        assertNull(start.south());
-        assertNull(start.east());
+        assertTrue(start.get(Direction.WEST).isPresent());
+        assertEquals(start.get(Direction.WEST).get(), newTile);
+        assertFalse(start.get(Direction.NORTH).isPresent());
+        assertFalse(start.get(Direction.SOUTH).isPresent());
+        assertFalse(start.get(Direction.EAST).isPresent());
 
-        assertEquals(newTile.east(), start);
-        assertNull(newTile.north());
-        assertNull(newTile.west());
-        assertNull(newTile.south());
+        assertTrue(newTile.get(Direction.EAST).isPresent());
+        assertEquals(newTile.get(Direction.EAST).get(), start);
+        assertFalse(newTile.get(Direction.NORTH).isPresent());
+        assertFalse(newTile.get(Direction.WEST).isPresent());
+        assertFalse(newTile.get(Direction.SOUTH).isPresent());
     }
 
     @Test
@@ -82,15 +87,17 @@ public class TestTile {
         final Tile newTile = start.move(Direction.SOUTH);
         assertEquals(newTile.type(), Tile.Type.UNKNOWN);
 
-        assertEquals(start.south(), newTile);
-        assertNull(start.north());
-        assertNull(start.west());
-        assertNull(start.east());
+        assertTrue(start.get(Direction.SOUTH).isPresent());
+        assertEquals(start.get(Direction.SOUTH).get(), newTile);
+        assertFalse(start.get(Direction.NORTH).isPresent());
+        assertFalse(start.get(Direction.WEST).isPresent());
+        assertFalse(start.get(Direction.EAST).isPresent());
 
-        assertEquals(newTile.north(), start);
-        assertNull(newTile.west());
-        assertNull(newTile.south());
-        assertNull(newTile.east());
+        assertTrue(newTile.get(Direction.NORTH).isPresent());
+        assertEquals(newTile.get(Direction.NORTH).get(), start);
+        assertFalse(newTile.get(Direction.WEST).isPresent());
+        assertFalse(newTile.get(Direction.SOUTH).isPresent());
+        assertFalse(newTile.get(Direction.EAST).isPresent());
     }
 
     @Test
@@ -99,14 +106,26 @@ public class TestTile {
         final Tile newTile = start.move(Direction.EAST);
         assertEquals(newTile.type(), Tile.Type.UNKNOWN);
 
-        assertEquals(start.east(), newTile);
-        assertNull(start.north());
-        assertNull(start.west());
-        assertNull(start.south());
+        assertTrue(start.get(Direction.EAST).isPresent());
+        assertEquals(start.get(Direction.EAST).get(), newTile);
+        assertFalse(start.get(Direction.NORTH).isPresent());
+        assertFalse(start.get(Direction.WEST).isPresent());
+        assertFalse(start.get(Direction.SOUTH).isPresent());
 
-        assertEquals(newTile.west(), start);
-        assertNull(newTile.north());
-        assertNull(newTile.south());
-        assertNull(newTile.east());
+        assertTrue(newTile.get(Direction.WEST).isPresent());
+        assertEquals(newTile.get(Direction.WEST).get(), start);
+        assertFalse(newTile.get(Direction.NORTH).isPresent());
+        assertFalse(newTile.get(Direction.SOUTH).isPresent());
+        assertFalse(newTile.get(Direction.EAST).isPresent());
+    }
+
+    @Test
+    public void testIsDeadEnd() {
+        final Tile start = Tile.START;
+        start.move(Direction.NORTH).discovered(Tile.Type.WALL);
+        start.move(Direction.EAST).discovered(Tile.Type.BLOCKED);
+        start.move(Direction.SOUTH).discovered(Tile.Type.WALL);
+
+        assertTrue(start.isDeadEnd());
     }
 }
