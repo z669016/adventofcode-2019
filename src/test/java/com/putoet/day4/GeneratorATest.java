@@ -1,11 +1,11 @@
 package com.putoet.day4;
 
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class Day4Test {
+public class GeneratorATest {
     @Test
     public void testGeneratorStart() {
         GeneratorA generatorA = new GeneratorA();
@@ -45,17 +45,5 @@ public class Day4Test {
         assertTrue(generatorA.hasNext());
         assertEquals ("999999", generatorA.next());
         assertFalse(generatorA.hasNext());
-    }
-
-    @Test
-    public void testGeneratorB() {
-        GeneratorB generatorB = new GeneratorB(112233, 999999);
-        assertEquals ("112233", generatorB.next());
-
-        generatorB = new GeneratorB(123444, 999999);
-        assertEquals ("123445", generatorB.next());
-
-        generatorB = new GeneratorB(111122, 999999);
-        assertEquals ("111122", generatorB.next());
     }
 }
