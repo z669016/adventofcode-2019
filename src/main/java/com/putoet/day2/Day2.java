@@ -1,5 +1,7 @@
 package com.putoet.day2;
 
+import com.putoet.resources.CSV;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,16 +10,16 @@ import java.util.stream.Collectors;
 
 public class Day2 {
     public static void main(String[] args) throws IOException {
-        final List<Integer> intCode = List.of(1,12,2,3,1,1,2,3,1,3,4,3,1,5,0,3,2,10,1,19,1,19,6,23,2,13,23,27,1,27,13,31,
-                1,9,31,35,1,35,9,39,1,39,5,43,2,6,43,47,1,47,6,51,2,51,9,55,2,55,13,59,1,59,6,63,1,10,63,67,2,67,9,71,
-                2,6,71,75,1,75,5,79,2,79,10,83,1,5,83,87,2,9,87,91,1,5,91,95,2,13,95,99,1,99,10,103,1,103,2,107,1,107,
-                6,0,99,2,14,0,0);
+        final List<Integer> intCode = CSV.list("/day2.txt");
 
         // Part one
         Memory memory = Memory.of(intCode);
+        memory.poke(Address.of(1), 12);
+        memory.poke(Address.of(2), 2);
+
         Processor processor = new Processor(memory);
         processor.run();
-        System.out.println(processor.memory().dump());
+        System.out.println("The valeua at position 0 after running the program is " + memory.peek(Address.of(0)));
 
         // Brute force solution on part two
         final Address nounAddress = Address.of(1);
@@ -56,20 +58,20 @@ enum Operation {
     }
 
     static Operation of(int opcode) {
-        switch (opcode) {
-            case 1: return SUM;
-            case 2: return PRODUCT;
-            case 99: return EXIT;
-            default: throw new IllegalArgumentException("Illegal opcode " + opcode);
-        }
+        return switch (opcode) {
+            case 1 -> SUM;
+            case 2 -> PRODUCT;
+            case 99 -> EXIT;
+            default -> throw new IllegalArgumentException("Illegal opcode " + opcode);
+        };
     }
 
     BiFunction<Integer, Integer, Integer> biFunction() {
-        switch (this) {
-            case SUM: return (o1, o2) -> o1 + o2;
-            case PRODUCT: return (o1, o2) -> o1 * o2;
-            default: throw new IllegalArgumentException("NOP");
-        }
+        return switch (this) {
+            case SUM -> Integer::sum;
+            case PRODUCT -> (o1, o2) -> o1 * o2;
+            default -> throw new IllegalArgumentException("NOP");
+        };
     }
 
     int size() {
@@ -130,11 +132,14 @@ class Memory {
     }
 
     public String dump() {
-        return memory.stream().map(i -> String.valueOf(i)).collect(Collectors.joining(","));
+        return memory.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
     }
 
     private void checkAddress(Address address) {
-        if (address.toInt() > memory.size() - 1) throw new IllegalArgumentException("Invalid memory address " + address.toInt());
+        if (address.toInt() > memory.size() - 1)
+            throw new IllegalArgumentException("Invalid memory address " + address.toInt());
     }
 }
 

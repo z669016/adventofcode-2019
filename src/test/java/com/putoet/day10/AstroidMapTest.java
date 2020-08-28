@@ -1,20 +1,21 @@
 package com.putoet.day10;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AstroidMapTest {
-    final AstroidMap astroidMap = AstroidMap.of(new String[] {
+    final AstroidMap astroidMap = AstroidMap.of(List.of(
             ".#..#",
             ".....",
             "#####",
             "....#",
-            "...##"});
+            "...##"));
 
     private Astroid[] astroids = new Astroid[]{
             new Astroid(new Point(1, 0)),
@@ -40,12 +41,12 @@ public class AstroidMapTest {
     @Test
     public void testLeastVisible() {
         final Map<Astroid, LineOfSightMap> lineOfSightMaps = astroidMap.linesOfSightMaps();
-        assertEquals(5, lineOfSightMaps.entrySet().stream().mapToInt(entry -> entry.getValue().inLineOfSightCount()).min().getAsInt());
+        assertEquals(5, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).min().getAsInt());
     }
 
     @Test
     public void testMaxVisible() {
         final Map<Astroid, LineOfSightMap> lineOfSightMaps = astroidMap.linesOfSightMaps();
-        assertEquals(8, lineOfSightMaps.entrySet().stream().mapToInt(entry -> entry.getValue().inLineOfSightCount()).max().getAsInt());
+        assertEquals(8, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).max().getAsInt());
     }
 }

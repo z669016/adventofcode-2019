@@ -1,5 +1,7 @@
 package com.putoet.day1a;
 
+import com.putoet.resources.ResourceLines;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -35,8 +37,11 @@ class Fuel {
 }
 
 public class Day1a {
-    public static void main(String[] args) throws IOException {
-        System.out.println(Files.lines(Paths.get("modules.txt")).map(s -> new Mass(s)).map(m -> m.requiredFuel()).reduce(new Fuel(0), (f1, f2) -> f1.add(f2)));
+    public static void main(String[] args) {
+        System.out.println(ResourceLines.stream("/day1.txt")
+                .map(Mass::new)
+                .map(Mass::requiredFuel)
+                .reduce(new Fuel(0), Fuel::add));
     }
 }
 

@@ -1,13 +1,11 @@
 package com.putoet.day9;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
 
-import static com.putoet.day7.ExceptionTester.ia;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MemoryTest {
     @Test
@@ -18,13 +16,8 @@ public class MemoryTest {
         assertEquals(memory.size(), integerList.size());
         assertEquals(List.of(1L,9L,10L,3L,2L,3L,11L,0L,99L,30L,40L,50L), memory.asList());
 
-        IllegalArgumentException ia = ia(() -> Memory.ofIntegerList(null));
-        assertNotNull(ia);
-        assertEquals("No memory", ia.getMessage());
-
-        ia = ia(() -> Memory.ofIntegerList(Collections.emptyList()));
-        assertNotNull(ia);
-        assertEquals("No memory", ia.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> Memory.ofIntegerList(null));
+        assertThrows(IllegalArgumentException.class, () -> Memory.ofIntegerList(Collections.emptyList()));
     }
 
     @Test

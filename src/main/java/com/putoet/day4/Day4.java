@@ -78,7 +78,7 @@ class GeneratorA implements Iterator<String> {
 
     @Override
     public boolean hasNext() {
-        return (i1 != 10) && (Integer.valueOf(combine()) <= max);
+        return (i1 != 10) && (Integer.parseInt(combine()) <= max);
     }
 
     @Override

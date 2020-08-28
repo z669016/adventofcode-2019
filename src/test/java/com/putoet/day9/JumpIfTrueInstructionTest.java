@@ -1,13 +1,12 @@
 package com.putoet.day9;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class JumpIfTrueInstructionTest {
@@ -16,7 +15,7 @@ public class JumpIfTrueInstructionTest {
     private IMemoryAccessor accessorA;
     private IMemoryAccessor accessorB;
 
-    @Before
+    @BeforeEach
     public void setup() {
         regs = new Registers();
         accessorA = mock(ImmediateMemoryAccessor.class);

@@ -1,5 +1,7 @@
 package com.putoet.day8;
 
+import com.putoet.resources.ResourceLines;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,13 +13,8 @@ public class Day8 {
     public static void main(String[] args) throws IOException {
         System.out.println("[Day8 version 2.0]");
 
-        final Optional<String> line = Files.lines(Paths.get("password.txt")).findFirst();
-        if (line.isEmpty()) {
-            System.out.println("No image available");
-            return;
-        }
-
-        final List<Integer> pixels = line.get().chars().map(c -> c - '0').boxed().collect(Collectors.toList());
+        final List<String> lines = ResourceLines.list("/day8.txt");
+        final List<Integer> pixels = lines.get(0).chars().map(c -> c - '0').boxed().collect(Collectors.toList());
         final Image image = Image.of(Dimension.of(25, 6), pixels);
 
         final Layer layer = image.findLayerWithLowerNumberOf(0).get();

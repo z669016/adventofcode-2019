@@ -1,11 +1,10 @@
 package com.putoet.day10;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Set;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LineOfSightMapTest {
     private Astroid origin = new Astroid(new Point(4, 2));

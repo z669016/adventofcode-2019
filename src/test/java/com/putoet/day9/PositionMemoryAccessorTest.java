@@ -1,11 +1,11 @@
 package com.putoet.day9;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PositionMemoryAccessorTest {
     private static final List<Integer> memoryList = List.of(9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
@@ -13,7 +13,7 @@ public class PositionMemoryAccessorTest {
     private Memory memory;
     private PositionMemoryAccessor accessor;
 
-    @Before
+    @BeforeEach
     public void setup() {
         memory = Memory.ofIntegerList(memoryList);
         accessor = new PositionMemoryAccessor(Address.of(3), memory);

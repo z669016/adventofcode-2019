@@ -1,25 +1,20 @@
 package com.putoet.day5;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.putoet.day7.ExceptionTester.ae;
-import static com.putoet.day7.ExceptionTester.is;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InputDeviceTest {
     @Test
     public void testInputDevice() {
-        AssertionError ae = ae(() -> new InputDevice(null));
-        assertNotNull(ae);
+        assertThrows(AssertionError.class, () -> new InputDevice(null));
 
-        IllegalStateException is = is (() -> {
+        assertThrows(IllegalStateException.class, () -> {
             final InputDevice id = new InputDevice(List.of());
-            return id.get().get();
+            id.get().get();
         });
-        assertNotNull(is);
-        assertEquals("No input available", is.getMessage());
 
         final InputDevice id = new InputDevice(List.of(1, 2, 3));
         assertEquals("[1, 2, 3]", id.toString());
@@ -28,8 +23,7 @@ public class InputDeviceTest {
         assertEquals(Integer.valueOf(2), id.get().get());
         assertEquals(Integer.valueOf(3), id.get().get());
 
-        is = is(() -> id.get());
-        assertEquals("No input available", is.getMessage());
+        assertThrows(IllegalStateException.class, () -> id.get());
 
         assertEquals("[]", id.toString());
     }

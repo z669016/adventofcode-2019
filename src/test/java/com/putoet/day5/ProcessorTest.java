@@ -1,13 +1,10 @@
 package com.putoet.day5;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.BiFunction;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProcessorTest {
     private Memory runOnProcessor(List<Integer> list) {

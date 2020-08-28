@@ -1,11 +1,11 @@
 package com.putoet.day9;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RelativeBaseMemoryAccessorTest {
     private static final List<Integer> memoryList = List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
@@ -13,7 +13,7 @@ public class RelativeBaseMemoryAccessorTest {
     private Memory memory;
     private RelativeBaseMemoryAccessor accessor;
 
-    @Before
+    @BeforeEach
     public void setup() {
         memory = Memory.ofIntegerList(memoryList);
         accessor = new RelativeBaseMemoryAccessor(Address.of(3), Address.of(1), memory);

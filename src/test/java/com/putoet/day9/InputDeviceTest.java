@@ -1,25 +1,22 @@
 package com.putoet.day9;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.putoet.day7.ExceptionTester.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class InputDeviceTest {
     @Test
     public void testInputDevice() {
-        IllegalArgumentException ia = ia(() -> new InputDevice(null));
-        assertNotNull(ia);
+        assertThrows(IllegalArgumentException.class, () -> new InputDevice(null));
 
-        IllegalStateException is = is (() -> {
+        assertThrows(IllegalStateException.class, () -> {
             final IInputDevice id = new InputDevice(List.of());
-            return id.get().get();
+            id.get().get();
         });
-        assertNotNull(is);
-        assertEquals("No input available", is.getMessage());
 
         final List<Long> inputList = List.of(1L, 2L, 3L);
         final InputDevice id = new InputDevice(inputList);
@@ -28,9 +25,6 @@ public class InputDeviceTest {
         assertEquals(Long.valueOf(1), id.get().get());
         assertEquals(Long.valueOf(2), id.get().get());
         assertEquals(Long.valueOf(3), id.get().get());
-
-        is = is(id::get);
-        assertEquals("No input available", is.getMessage());
 
         assertEquals(List.of(), id.asList());
     }

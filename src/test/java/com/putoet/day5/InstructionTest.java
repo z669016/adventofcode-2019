@@ -1,13 +1,12 @@
 package com.putoet.day5;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.putoet.day7.ExceptionTester.ia;
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InstructionTest {
     @Test
@@ -15,9 +14,7 @@ public class InstructionTest {
         assertEquals(InstructionMode.POSITION_MODE, InstructionMode.of(0));
         assertEquals(InstructionMode.IMMEDIATE_MODE, InstructionMode.of(1));
 
-        IllegalArgumentException ia = ia(() -> InstructionMode.of(2));
-        assertNotNull(ia);
-        assertEquals("Invalid mode '2'", ia.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> InstructionMode.of(2));
     }
 
     @Test

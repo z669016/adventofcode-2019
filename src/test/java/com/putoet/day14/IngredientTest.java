@@ -1,11 +1,10 @@
 package com.putoet.day14;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.putoet.day7.ExceptionTester.ia;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class IngredientTest {
     private Chemical a = new Chemical("a");
@@ -26,9 +25,7 @@ public class IngredientTest {
 
     @Test
     public void testMultiplyBy() {
-        IllegalArgumentException ia = ia(() -> Ingredient.of("3 c").multiplyBy(0));
-        assertNotNull(ia);
-        assertEquals("Factor cannot be smallert han  or equal to 0.", ia.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> Ingredient.of("3 c").multiplyBy(0));
         assertEquals(new Ingredient(c, 9), Ingredient.of("3 c").multiplyBy(3));
     }
 }

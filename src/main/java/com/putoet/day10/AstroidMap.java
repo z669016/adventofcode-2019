@@ -5,16 +5,16 @@ import java.util.*;
 public class AstroidMap {
     private final Set<Astroid> astroidMap = new HashSet<>();
 
-    public static AstroidMap of(String[] mapLines) {
+    public static AstroidMap of(List<String> mapLines) {
         if (mapLines == null)
             throw new IllegalArgumentException("No map");
 
-        if (Arrays.stream(mapLines).filter(s -> s != null && s.length() > 0).count() == 0)
+        if (mapLines.stream().noneMatch(s -> s != null && s.length() > 0))
             throw new IllegalArgumentException("Empty map");
 
         final AstroidMap astroidMap = new AstroidMap();
-        for (int idy = 0; idy < mapLines.length; idy++) {
-            final String mapLine = mapLines[idy];
+        for (int idy = 0; idy < mapLines.size(); idy++) {
+            final String mapLine = mapLines.get(idy);
             if (mapLine != null) {
                 for (int idx = 0; idx < mapLine.length(); idx++) {
                     if (mapLine.charAt(idx) == '#') {

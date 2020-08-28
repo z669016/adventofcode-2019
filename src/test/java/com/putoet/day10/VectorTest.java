@@ -1,9 +1,8 @@
 package com.putoet.day10;
 
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
-
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VectorTest {
     @Test

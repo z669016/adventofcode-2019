@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Day13 {
     public static void main(String[] args) {
-        IMemory memory = MemoryLoader.fromFile("day13.txt");
+        IMemory memory = MemoryLoader.fromFile("/day13.txt");
         IInputDevice inputDevice = new InputDevice(List.of());
         Screen screen = new Screen();
         Processor processor = new Processor(memory, inputDevice, screen);
@@ -23,7 +23,7 @@ public class Day13 {
 
         System.out.println();
 
-        memory = MemoryLoader.fromFile("day13.txt");
+        memory = MemoryLoader.fromFile("/day13.txt");
         memory.poke(Address.START_ADDRESS, 2L);
         Joystick joystick = new Joystick();
         screen = new Screen();

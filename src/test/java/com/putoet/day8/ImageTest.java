@@ -1,11 +1,12 @@
 package com.putoet.day8;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class ImageTest {
     private static final Dimension dimension = Dimension.of(3, 2);

@@ -1,8 +1,9 @@
 package com.putoet.day4;
 
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Day4Test {
     @Test
@@ -29,7 +30,6 @@ public class Day4Test {
         assertEquals ("999999", generatorA.next());
         assertFalse(generatorA.hasNext());
     }
-
 
     @Test
     public void testGeneratorMinMax() {

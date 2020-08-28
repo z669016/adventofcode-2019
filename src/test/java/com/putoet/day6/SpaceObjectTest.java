@@ -1,12 +1,10 @@
 package com.putoet.day6;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.putoet.day7.ExceptionTester.ia;
-import static com.putoet.day7.ExceptionTester.is;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SpaceObjectTest {
 
@@ -53,14 +51,10 @@ public class SpaceObjectTest {
         assertEquals(AAA, BBB.center());
 
         // Cannot recenter to null
-        final IllegalArgumentException ia = ia(() -> {AAA.reCenter(null); return 1;} );
-        assertNotNull(ia);
-        assertEquals("Cannot recenter to null for AAA", ia.getMessage());
+        assertThrows(IllegalArgumentException.class,() -> AAA.reCenter(null));
 
         // Cannot recenter if center isn't COM
-        final IllegalStateException is = is(() -> {CCC.reCenter(AAA); return 1;});
-        assertNotNull(is);
-        assertEquals("Can only recenter from COM for CCC (current center is BBB)", is.getMessage());
+        assertThrows(IllegalStateException.class, () -> CCC.reCenter(AAA));
     }
 
     @Test

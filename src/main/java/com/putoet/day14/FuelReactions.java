@@ -1,5 +1,7 @@
 package com.putoet.day14;
 
+import com.putoet.resources.ResourceLines;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,12 +18,7 @@ public class FuelReactions {
     }
 
     public static List<ChemicalReaction> loadFile(String fileName) {
-        try {
-            return Files.lines(Paths.get(fileName)).map(ChemicalReaction::of).collect(Collectors.toList());
-        } catch (IOException exc) {
-            System.out.println("Could not load file " + fileName);
-        }
-        return List.of();
+        return ResourceLines.stream(fileName).map(ChemicalReaction::of).collect(Collectors.toList());
     }
 
     public Map<Chemical, ChemicalReaction> chemicalReactions() {

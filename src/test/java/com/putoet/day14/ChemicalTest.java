@@ -1,9 +1,9 @@
 package com.putoet.day14;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static com.putoet.day7.ExceptionTester.ia;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ChemicalTest {
     @Test
@@ -14,13 +14,11 @@ public class ChemicalTest {
 
     @Test
     public void testNoName() {
-        IllegalArgumentException ia = ia(() -> new Chemical(null));
-        assertEquals("No name", ia.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> new Chemical(null));
     }
 
     @Test
     public void testInvalidName() {
-        IllegalArgumentException ia = ia(() -> new Chemical("a1b"));
-        assertEquals("Invalid chemical name A1B", ia.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> new Chemical("a1b"));
     }
 }

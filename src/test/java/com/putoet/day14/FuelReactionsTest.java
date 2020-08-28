@@ -1,19 +1,18 @@
 package com.putoet.day14;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.putoet.day7.ExceptionTester.ia;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FuelReactionsTest {
 
     @Test
     public void testLoadFile() {
-        final List<ChemicalReaction> reactions = FuelReactions.loadFile("day14.txt");
+        final List<ChemicalReaction> reactions = FuelReactions.loadFile("/day14.txt");
         final FuelReactions fuelReactions = new FuelReactions(reactions);
         assertEquals(reactions.size(), fuelReactions.chemicalReactions().size());
 
@@ -111,9 +110,7 @@ public class FuelReactionsTest {
         final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample3());
 
         final long availableOre = 1_000L;
-        final IllegalArgumentException ia = ia(() -> fuelReactions.maxFuelReactionFor(availableOre));
-        assertNotNull(ia);
-        assertEquals("Insufficient fuel for 1 fuel, you need a minimum of 13312 ORE.", ia.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> fuelReactions.maxFuelReactionFor(availableOre));
     }
 
     @Test

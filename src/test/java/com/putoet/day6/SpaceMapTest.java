@@ -1,9 +1,10 @@
 package com.putoet.day6;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SpaceMapTest {
     public static final String AAA_NAME = "111";
@@ -14,7 +15,7 @@ public class SpaceMapTest {
 
     private SpaceMap map;
     
-    @Before
+    @BeforeEach
     public void setup() {
         map = new SpaceMap();
         map.add(AAA_NAME, SpaceObject.COM());

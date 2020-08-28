@@ -1,10 +1,8 @@
 package com.putoet.day5;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.util.function.BiFunction;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OperationTest {
     @Test

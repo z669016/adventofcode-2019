@@ -1,18 +1,17 @@
 package com.putoet.day12;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.ls.LSOutput;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoonTest {
     private Map<String,Moon> moons = new HashMap<>();
 
-    @Before
+    @BeforeEach
     public void setup() {
         moons.put("Io", Moon.of("Io", "<x=-1, y=0, z=2>"));
         moons.put("Europa", Moon.of("Europa", "<x=2, y=-10, z=-7>"));

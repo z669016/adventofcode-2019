@@ -1,9 +1,9 @@
 package com.putoet.day9;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
@@ -15,7 +15,7 @@ public class TripleOperantInstructionTest {
     private IMemoryAccessor accessorB;
     private IMemoryAccessor accessorC;
 
-    @Before
+    @BeforeEach
     public void setup() {
         regs = new Registers();
 
