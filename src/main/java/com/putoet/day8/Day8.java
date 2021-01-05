@@ -3,10 +3,7 @@ package com.putoet.day8;
 import com.putoet.resources.ResourceLines;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Day8 {

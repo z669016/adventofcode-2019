@@ -20,7 +20,7 @@ public class Position {
     public static Position of(String coordinates) {
         final Matcher matcher = pattern.matcher(coordinates);
         if (matcher.matches())
-            return new Position(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)),Integer.parseInt(matcher.group(3)));
+            return new Position(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
 
         throw new IllegalArgumentException("Invalid coordinates format('" + coordinates + "')");
     }
@@ -41,7 +41,7 @@ public class Position {
         return new Position(x + velocity.x(), y + velocity.y(), z + velocity.z());
     }
 
-    public int energy()  {
+    public int energy() {
         return Math.abs(x) + Math.abs(y) + Math.abs(z);
     }
 

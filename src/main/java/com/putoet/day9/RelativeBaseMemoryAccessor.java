@@ -24,6 +24,7 @@ public class RelativeBaseMemoryAccessor implements IMemoryAccessor {
     Address peekAddress() {
         return peekAddress;
     }
+
     @Override
     public Long peek() {
         return memory.peek(peekAddress);

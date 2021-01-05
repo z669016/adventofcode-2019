@@ -1,44 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.putoet</groupId>
   <artifactId>adventofcode-2019</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>adventofcode-2019</name>
-  <url>https://adventofcode.com/2019</url>
+  <name>adventofcode-2018</name>
+  <description>A simple adventofcode-2019.</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>14</maven.compiler.source>
     <maven.compiler.target>14</maven.compiler.target>
+    <lombok.version>1.18.16</lombok.version>
+    <javatuples.version>1.2</javatuples.version>
+    <junit.version>5.4.0</junit.version>
+    <mockito.version>3.2.4</mockito.version>
+    <assertj.version>3.18.1</assertj.version>
+    <jackson.version>2.10.2</jackson.version>
+    <algorithms.version>1.1.2</algorithms.version>
+    <aoc.version>1.4.4</aoc.version>
   </properties>
 
   <dependencies>
     <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.javatuples</groupId>
+      <artifactId>javatuples</artifactId>
+      <version>${javatuples.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.4.0</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.2.4</version>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.10.2</version>
+      <version>${jackson.version}</version>
     </dependency>
     <dependency>
       <groupId>com.putoet</groupId>
       <artifactId>aoc</artifactId>
-      <version>1.1</version>
+      <version>${aoc.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.putoet</groupId>
+      <artifactId>algorithms</artifactId>
+      <version>${algorithms.version}</version>
     </dependency>
   </dependencies>
 
@@ -98,4 +129,12 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

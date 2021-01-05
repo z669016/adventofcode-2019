@@ -12,8 +12,13 @@ public class Vector implements Comparable<Vector> {
         this.y = y;
     }
 
-    public int x() { return x; }
-    public int y() { return y; }
+    public int x() {
+        return x;
+    }
+
+    public int y() {
+        return y;
+    }
 
     public static Vector ofPoints(Point a, Point b) {
         return new Vector(b.x() - a.x(), b.y() - a.y());
@@ -21,7 +26,7 @@ public class Vector implements Comparable<Vector> {
 
     public Vector direction() {
         final int ggd = ggd(x, y);
-        return new Vector(x/ggd, y/ggd);
+        return new Vector(x / ggd, y / ggd);
     }
 
     public double degrees() {
@@ -30,7 +35,7 @@ public class Vector implements Comparable<Vector> {
     }
 
     public double length() {
-        return Math.sqrt(Math.pow(x, 2) + Math.pow(y,2));
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     @Override

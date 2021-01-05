@@ -3,7 +3,7 @@ package com.putoet.day6;
 import java.util.*;
 
 public class SpaceMap {
-    private Map<String, SpaceObject> spaceObjects = new HashMap<>();
+    private final Map<String, SpaceObject> spaceObjects = new HashMap<>();
 
     public SpaceMap() {
         spaceObjects.put(SpaceObject.COM().name(), SpaceObject.COM());

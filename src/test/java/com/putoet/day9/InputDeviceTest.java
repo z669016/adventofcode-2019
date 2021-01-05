@@ -1,6 +1,5 @@
 package com.putoet.day9;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

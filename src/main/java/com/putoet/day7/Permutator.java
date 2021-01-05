@@ -10,16 +10,14 @@ public class Permutator<T> {
         return list;
     }
 
-    private void permuteHelper(List<List<T>> list, List<T> resultList, List<T> source){
+    private void permuteHelper(List<List<T>> list, List<T> resultList, List<T> source) {
         // Base case
-        if(resultList.size() == source.size()){
+        if (resultList.size() == source.size()) {
             list.add(new ArrayList<T>(resultList));
-        }
-        else{
-            for(int i = 0; i < source.size(); i++){
+        } else {
+            for (int i = 0; i < source.size(); i++) {
 
-                if(resultList.contains(source.get(i)))
-                {
+                if (resultList.contains(source.get(i))) {
                     // If element already exists in the list then skip
                     continue;
                 }

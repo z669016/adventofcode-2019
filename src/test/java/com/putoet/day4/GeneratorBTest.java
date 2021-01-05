@@ -3,19 +3,19 @@ package com.putoet.day4;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GeneratorBTest {
 
     @Test
     public void testGeneratorB() {
         GeneratorB generatorB = new GeneratorB(112233, 999999);
-        assertEquals ("112233", generatorB.next());
+        assertEquals("112233", generatorB.next());
 
         generatorB = new GeneratorB(123444, 999999);
-        assertEquals ("123445", generatorB.next());
+        assertEquals("123445", generatorB.next());
 
         generatorB = new GeneratorB(111122, 999999);
-        assertEquals ("111122", generatorB.next());
+        assertEquals("111122", generatorB.next());
     }
 }

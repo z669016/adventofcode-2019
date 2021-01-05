@@ -22,16 +22,26 @@ public enum Operation {
 
     public static Operation of(final int opcode) {
         switch (opcode % 100) {
-            case 1: return SUM;
-            case 2: return PRODUCT;
-            case 3: return INPUT;
-            case 4: return OUTPUT;
-            case 5: return JUMP_IF_TRUE;
-            case 6: return JUMP_IF_FALSE;
-            case 7: return LESS_THAN;
-            case 8: return EQUAL;
-            case 9: return ADJUST_RELATIVE_BASE;
-            case 99: return EXIT;
+            case 1:
+                return SUM;
+            case 2:
+                return PRODUCT;
+            case 3:
+                return INPUT;
+            case 4:
+                return OUTPUT;
+            case 5:
+                return JUMP_IF_TRUE;
+            case 6:
+                return JUMP_IF_FALSE;
+            case 7:
+                return LESS_THAN;
+            case 8:
+                return EQUAL;
+            case 9:
+                return ADJUST_RELATIVE_BASE;
+            case 99:
+                return EXIT;
             default:
                 throw new IllegalArgumentException("Illegal opcode " + opcode);
         }

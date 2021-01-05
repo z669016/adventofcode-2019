@@ -5,7 +5,7 @@ import com.putoet.day5.Processor;
 import java.util.List;
 
 public class FeedbackAmplifierArray extends AmplifierArray {
-    private Computer[] computers;
+    private final Computer[] computers;
 
     private FeedbackAmplifierArray(List<Integer> sequence, List<Integer> intCode, Integer inputSignal) {
         super(sequence, intCode, inputSignal);
@@ -24,7 +24,7 @@ public class FeedbackAmplifierArray extends AmplifierArray {
     public Integer run() {
         log("Run the amplifier array of size " + ARRAY_SIZE);
 
-        while (computers[ARRAY_SIZE-1].state() != Processor.State.EXITED) {
+        while (computers[ARRAY_SIZE - 1].state() != Processor.State.EXITED) {
             for (int idx = 0; idx < ARRAY_SIZE; idx++) {
                 computers[idx].run();
                 feedback(idx);
@@ -38,7 +38,7 @@ public class FeedbackAmplifierArray extends AmplifierArray {
     private void feedback(int idx) {
         if (computers[idx].state() != Processor.State.EXITED)
             log("Amplifier feedback " + computers[idx].lastOutput() + " from " + idx + " to " + next(idx));
-            computers[next(idx)].provideInpute(computers[idx].lastOutput());
+        computers[next(idx)].provideInpute(computers[idx].lastOutput());
     }
 
     private int next(int idx) {

@@ -38,9 +38,17 @@ public class Moon implements Cloneable {
         position = position.applyVelocity(velocity);
     }
 
-    public int potentialEnergy() { return position.energy(); }
-    public int kineticEnergy() { return velocity.energy(); }
-    public int totalEnergy() { return potentialEnergy() * kineticEnergy(); }
+    public int potentialEnergy() {
+        return position.energy();
+    }
+
+    public int kineticEnergy() {
+        return velocity.energy();
+    }
+
+    public int totalEnergy() {
+        return potentialEnergy() * kineticEnergy();
+    }
 
     @Override
     public boolean equals(Object o) {

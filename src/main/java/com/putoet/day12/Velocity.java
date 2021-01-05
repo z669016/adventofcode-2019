@@ -33,7 +33,7 @@ public class Velocity {
         );
     }
 
-    public int energy()  {
+    public int energy() {
         return Math.abs(x) + Math.abs(y) + Math.abs(z);
     }
 

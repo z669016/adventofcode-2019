@@ -44,7 +44,7 @@ public class Processor implements IProcessor {
     @Override
     public void run() {
         Instruction instruction = InstructionFactory.of(regs, memory, inputDevice, outputDevice);
-        while(instruction.operation() != Operation.EXIT) {
+        while (instruction.operation() != Operation.EXIT) {
             try {
                 final Optional<Registers> updated = instruction.execute();
                 log(instruction.toString());
@@ -53,7 +53,7 @@ public class Processor implements IProcessor {
 
                 instruction = InstructionFactory.of(regs, memory, inputDevice, outputDevice);
             } catch (RuntimeException exc) {
-                System.err.println("Error occurred on IntCode program, with registers " + regs +" on instruction " + instruction);
+                System.err.println("Error occurred on IntCode program, with registers " + regs + " on instruction " + instruction);
                 throw exc;
             }
         }

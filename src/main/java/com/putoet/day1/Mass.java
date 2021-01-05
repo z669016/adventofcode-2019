@@ -18,7 +18,7 @@ public class Mass {
     }
 
     public static Fuel requiredFuelForMass(Mass mass) {
-        long fuel =  (mass.mass / 3) - 2;
+        long fuel = (mass.mass / 3) - 2;
         return new Fuel(fuel >= 0 ? fuel : 0);
     }
 }

@@ -17,7 +17,7 @@ public class AstroidMapTest {
             "....#",
             "...##"));
 
-    private Astroid[] astroids = new Astroid[]{
+    private final Astroid[] astroids = new Astroid[]{
             new Astroid(new Point(1, 0)),
             new Astroid(new Point(4, 0)),
             new Astroid(new Point(1, 2)),

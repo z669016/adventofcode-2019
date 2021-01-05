@@ -11,8 +11,13 @@ public class Point {
         this.y = y;
     }
 
-    public int x() { return x; }
-    public int y() { return y; }
+    public int x() {
+        return x;
+    }
+
+    public int y() {
+        return y;
+    }
 
     public double distanceTo(Point point) {
         return Vector.ofPoints(this, point).length();

@@ -15,7 +15,7 @@ public class Screen implements IOutputDevice {
     private long score;
 
     enum State {
-        X, Y, TILE;
+        X, Y, TILE
     }
 
     public long count(Tile tile) {

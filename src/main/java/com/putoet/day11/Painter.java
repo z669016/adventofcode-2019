@@ -22,8 +22,7 @@ public class Painter implements IOutputDevice, IDump {
 
         if (isPainting) {
             surface.paint(value == 0L ? Color.BLACK : Color.WHITE);
-        }
-        else {
+        } else {
             if (value == 0L)
                 surface.turnRobotLeft();
             else

@@ -9,11 +9,16 @@ public class Tile {
 
     public static Tile of(int code) {
         switch (code) {
-            case 0: return EMPTY;
-            case 1: return WALL;
-            case 2: return BLOCK;
-            case 3: return BALL;
-            case 4: return PADDLE;
+            case 0:
+                return EMPTY;
+            case 1:
+                return WALL;
+            case 2:
+                return BLOCK;
+            case 3:
+                return BALL;
+            case 4:
+                return PADDLE;
             default:
                 throw new IllegalArgumentException("Invalid tile code: " + code);
         }
@@ -44,13 +49,13 @@ class Block extends Tile {
 class Ball extends Tile {
     @Override
     public String toString() {
-        return 	"o" /*"\u26BD" */;
+        return "o" /*"\u26BD" */;
     }
 }
 
 class Paddle extends Tile {
     @Override
     public String toString() {
-        return 	"-" /*"\uD83C\uDFD3"*/ ;
+        return "-" /*"\uD83C\uDFD3"*/;
     }
 }

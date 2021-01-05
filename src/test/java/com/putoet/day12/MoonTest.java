@@ -9,7 +9,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoonTest {
-    private Map<String,Moon> moons = new HashMap<>();
+    private final Map<String, Moon> moons = new HashMap<>();
 
     @BeforeEach
     public void setup() {

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 public class InputInstruction extends SingeOperantInstruction {
     private final IInputDevice inputDevice;
+
     protected InputInstruction(Registers regs, IMemoryAccessor accessorA, IInputDevice inputDevice) {
         super(regs, Operation.INPUT, accessorA);
         this.inputDevice = inputDevice;

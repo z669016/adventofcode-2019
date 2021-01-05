@@ -3,7 +3,7 @@ package com.putoet.day9;
 import java.util.Optional;
 
 abstract class Instruction {
-    private Registers regs;
+    private final Registers regs;
     private final Operation operation;
 
     protected Instruction(Registers regs, Operation operation) {

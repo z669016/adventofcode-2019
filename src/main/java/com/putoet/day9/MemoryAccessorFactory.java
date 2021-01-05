@@ -17,7 +17,7 @@ public class MemoryAccessorFactory {
 
     private static MemoryAccessMode ofInstructionCode(int instructionCode, int offset) {
         final int modes = instructionCode / 100;
-        final int code = (modes / ((int) Math.pow(10,offset - 1))) % 10;
+        final int code = (modes / ((int) Math.pow(10, offset - 1))) % 10;
         switch (code) {
             case 0:
                 return MemoryAccessMode.POSITION_MODE;

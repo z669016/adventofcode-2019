@@ -42,7 +42,7 @@ public class InstructionTest {
         final Memory memory = Memory.of(List.of(99));
         final IInputDevice inputDevice = new InputDevice(List.of());
         final OutputDevice outputDevice = new OutputDevice();
-        final Integer[] operants = new Integer[] {};
+        final Integer[] operants = new Integer[]{};
 
         final Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operants);
         verifyAddress(ip, address);

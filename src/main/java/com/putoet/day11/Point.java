@@ -31,9 +31,13 @@ public class Point {
         return new Point(x, y - 1);
     }
 
-    public int x() { return x; }
+    public int x() {
+        return x;
+    }
 
-    public int y() { return y; }
+    public int y() {
+        return y;
+    }
 
     public boolean isAt(int x, int y) {
         return this.x == x && this.y == y;

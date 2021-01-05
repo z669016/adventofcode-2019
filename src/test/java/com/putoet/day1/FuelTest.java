@@ -8,6 +8,6 @@ public class FuelTest {
 
     @Test
     public void testAdd() {
-        assertEquals ("5", new Fuel(2).add(new Fuel(3)).toString());
+        assertEquals("5", new Fuel(2).add(new Fuel(3)).toString());
     }
 }

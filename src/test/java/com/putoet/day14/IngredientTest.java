@@ -4,12 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IngredientTest {
-    private Chemical a = new Chemical("a");
-    private Chemical b = new Chemical("b");
-    private Chemical c = new Chemical("c");
+    private final Chemical a = new Chemical("a");
+    private final Chemical b = new Chemical("b");
+    private final Chemical c = new Chemical("c");
 
     @Test
     public void testOf() {

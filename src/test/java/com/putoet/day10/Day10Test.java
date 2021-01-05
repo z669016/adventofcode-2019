@@ -72,7 +72,7 @@ public class Day10Test {
                 "..#.....#...###..",
                 "..#.#.....#....##"));
         final Map<Astroid, LineOfSightMap> lineOfSightMaps = astroidMap.linesOfSightMaps();
-        final Optional<Astroid> astroid = astroidMap.astroidAt(new Point(8,3));
+        final Optional<Astroid> astroid = astroidMap.astroidAt(new Point(8, 3));
         final Optional<LineOfSightMap> linesOfSightMap = astroidMap.linesOfSightMapFor(astroid.get());
         final Set<LineOfSight> linesOfSight = linesOfSightMap.get().map();
 

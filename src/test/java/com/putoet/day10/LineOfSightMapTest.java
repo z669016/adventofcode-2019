@@ -7,8 +7,8 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LineOfSightMapTest {
-    private Astroid origin = new Astroid(new Point(4, 2));
-    private Astroid[] astroids = new Astroid[]{
+    private final Astroid origin = new Astroid(new Point(4, 2));
+    private final Astroid[] astroids = new Astroid[]{
             new Astroid(new Point(1, 0)),
             new Astroid(new Point(4, 0)),
             new Astroid(new Point(1, 2)),

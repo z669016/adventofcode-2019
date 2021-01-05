@@ -25,7 +25,8 @@ public class DoubleOperantInstructionTest {
         when(accessorB.peek()).thenReturn(2L);
         when(accessorB.toString()).thenReturn(" 2 (<-- 11)");
 
-        instruction = new DoubleOperantInstruction(regs, Operation.JUMP_IF_TRUE, accessorA, accessorB) {};
+        instruction = new DoubleOperantInstruction(regs, Operation.JUMP_IF_TRUE, accessorA, accessorB) {
+        };
     }
 
     @Test

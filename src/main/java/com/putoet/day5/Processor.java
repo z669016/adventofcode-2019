@@ -31,8 +31,8 @@ public class Processor {
         try {
             Instruction instruction = InstructionFactory.of(memory.peek(ip));
             while (instruction.operation() != Operation.EXIT) {
-                Optional<Address> address =  instruction.execute(ip, memory, inputDevice, outputDevice, operantsForInstruction(instruction, ip));
-                if(address.isEmpty()) {
+                Optional<Address> address = instruction.execute(ip, memory, inputDevice, outputDevice, operantsForInstruction(instruction, ip));
+                if (address.isEmpty()) {
                     state = State.RUNNABLE;
                     return;
                 }
@@ -49,7 +49,9 @@ public class Processor {
         state = State.EXITED;
     }
 
-    public State state() { return state; }
+    public State state() {
+        return state;
+    }
 
     private Integer[] operantsForInstruction(Instruction instruction, Address address) {
         List<Integer> operants = new ArrayList<>();
@@ -73,6 +75,7 @@ public class Processor {
     public static void enableLog() {
         Instruction.enableLog();
     }
+
     public static void disableLog() {
         Instruction.disableLog();
     }

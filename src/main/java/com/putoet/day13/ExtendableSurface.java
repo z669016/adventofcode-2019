@@ -3,7 +3,7 @@ package com.putoet.day13;
 import java.util.Arrays;
 
 public class ExtendableSurface {
-    private Tile[][] surface = new Tile[][] {{Tile.of(0)}};
+    private Tile[][] surface = new Tile[][]{{Tile.of(0)}};
 
     public long count(Tile tile) {
         return Arrays.stream(surface).flatMap(row -> Arrays.stream(row)).filter(elem -> elem == tile).count();

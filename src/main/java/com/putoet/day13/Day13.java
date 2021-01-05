@@ -14,7 +14,7 @@ public class Day13 {
         try {
             processor.run();
             System.out.println("Number of block tiles is " + screen.count(Tile.BLOCK));
-        } catch (RuntimeException exc){
+        } catch (RuntimeException exc) {
             System.out.println("Output so far: " + screen.dump());
             throw exc;
         } finally {
@@ -31,7 +31,7 @@ public class Day13 {
         try {
             processor.run();
             System.out.println("Number of block tiles is " + screen.count(Tile.BLOCK));
-        } catch (RuntimeException exc){
+        } catch (RuntimeException exc) {
             System.out.println("Output so far: " + screen.dump());
             throw exc;
         } finally {

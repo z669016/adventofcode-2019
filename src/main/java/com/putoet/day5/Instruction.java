@@ -8,9 +8,11 @@ public abstract class Instruction implements IInstruction {
     public static final int THIRD_OPERANT_INDEX = SECOND_OPERANT_INDEX + 1;
 
     private static Boolean logEnabled = false;
+
     public static void enableLog() {
         logEnabled = true;
     }
+
     public static void disableLog() {
         logEnabled = false;
     }
@@ -48,7 +50,7 @@ public abstract class Instruction implements IInstruction {
     }
 
     public void log(String line) {
-        if(logEnabled)
+        if (logEnabled)
             System.out.println(line);
     }
 
@@ -101,7 +103,7 @@ enum InstructionMode {
     }
 
     public Integer peek(Memory memory, int operant) {
-        return this == IMMEDIATE_MODE ? operant : memory.peek( Address.of(operant));
+        return this == IMMEDIATE_MODE ? operant : memory.peek(Address.of(operant));
     }
 }
 

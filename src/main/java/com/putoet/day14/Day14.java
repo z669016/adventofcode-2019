@@ -14,7 +14,7 @@ public class Day14 {
             if (newReaction.isEmpty()) {
                 System.out.println("No new reaction possible for " + reaction.get().result());
             }
-            System.out.println("Replacement for " + reaction.get().result() + " is "  + newReaction);
+            System.out.println("Replacement for " + reaction.get().result() + " is " + newReaction);
         }
 
         final Optional<ChemicalReaction> maxFuelTReaction = fuelReactions.maxFuelReactionFor(1_000_000_000_000L);

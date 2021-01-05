@@ -16,9 +16,13 @@ public class Ingredient {
         this.amount = amount;
     }
 
-    public Chemical chemical() { return chemical; }
+    public Chemical chemical() {
+        return chemical;
+    }
 
-    public long amount() { return amount; }
+    public long amount() {
+        return amount;
+    }
 
     public static Ingredient of(String ingredient) {
         final String[] elements = ingredient.trim().split(" ");

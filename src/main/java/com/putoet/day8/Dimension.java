@@ -18,10 +18,17 @@ public class Dimension {
         this.y = y;
     }
 
-    public int x() { return x; }
-    public int y() { return y; }
+    public int x() {
+        return x;
+    }
 
-    public int size() { return x * y; }
+    public int y() {
+        return y;
+    }
+
+    public int size() {
+        return x * y;
+    }
 
     @Override
     public boolean equals(Object o) {

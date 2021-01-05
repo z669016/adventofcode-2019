@@ -38,4 +38,5 @@ public class ResumableInputDevice implements IInputDevice {
     @Override
     public List<Integer> dump() {
         return inputValues.stream().skip(idx).collect(Collectors.toUnmodifiableList());
-    }}
+    }
+}

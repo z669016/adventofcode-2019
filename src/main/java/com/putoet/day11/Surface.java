@@ -39,7 +39,7 @@ public class Surface {
     }
 
     private Optional<Point> robotPointFrom(String[] initialPanels) {
-        for (int idy = 0; idy < initialPanels.length; idy ++) {
+        for (int idy = 0; idy < initialPanels.length; idy++) {
             for (int idx = 0; idx < initialPanels[idy].length(); idx++)
                 if (initialPanels[idy].charAt(idx) == '^')
                     return Optional.of(new Point(idx, initialPanels.length - 1 - idy));

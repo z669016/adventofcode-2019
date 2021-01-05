@@ -13,13 +13,14 @@ public class SingeOperantInstructionTest {
 
     @BeforeEach
     public void setup() {
-        regs  = mock(Registers.class);
+        regs = mock(Registers.class);
 
         accessor = mock(ImmediateMemoryAccessor.class);
         when(accessor.peek()).thenReturn(7L);
         when(accessor.toString()).thenReturn(" 7 (<-- 10)");
 
-        instruction = new SingeOperantInstruction(regs, Operation.INPUT, accessor) {};
+        instruction = new SingeOperantInstruction(regs, Operation.INPUT, accessor) {
+        };
     }
 
     @Test

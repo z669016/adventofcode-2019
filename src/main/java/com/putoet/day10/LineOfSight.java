@@ -6,7 +6,7 @@ public class LineOfSight implements Comparable<LineOfSight> {
     private final Astroid origin;
     private final Vector direction;
     private Astroid visible;
-    private TreeSet<Astroid> hidden = new TreeSet<>(new Comparator<Astroid>() {
+    private final TreeSet<Astroid> hidden = new TreeSet<>(new Comparator<Astroid>() {
         @Override
         public int compare(Astroid o1, Astroid o2) {
             double distance1 = Vector.ofPoints(origin.location(), o1.location()).length();

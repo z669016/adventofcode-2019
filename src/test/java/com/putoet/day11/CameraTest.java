@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CameraTest {
     @Test
     public void cameraTest() {
-        final Surface surface = new Surface(new String[] {"#....", ".#...", "..^..", "...#.", "....#"});
+        final Surface surface = new Surface(new String[]{"#....", ".#...", "..^..", "...#.", "....#"});
         final Camera camera = new Camera(surface);
 
         surface.moveRobot();
@@ -23,7 +23,7 @@ public class CameraTest {
 
     @Test
     public void testGet() {
-        final Surface surface = new Surface(new String[] {"#....", ".#...", "..^..", "...#.", "....#"});
+        final Surface surface = new Surface(new String[]{"#....", ".#...", "..^..", "...#.", "....#"});
         final Camera camera = new Camera(surface);
 
         surface.moveRobot();

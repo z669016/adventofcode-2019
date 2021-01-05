@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 public class TripleOperantInstructionTest {
     private TripleOperantInstruction instruction;
@@ -31,7 +30,8 @@ public class TripleOperantInstructionTest {
         when(accessorC.peek()).thenReturn(3L);
         when(accessorC.toString()).thenReturn(" 3 (<-- 13)");
 
-        instruction = new TripleOperantInstruction(regs, Operation.SUM, accessorA, accessorB, accessorC) {};
+        instruction = new TripleOperantInstruction(regs, Operation.SUM, accessorA, accessorB, accessorC) {
+        };
     }
 
     @Test

@@ -7,7 +7,7 @@ public class ExitInstruction extends Instruction {
         super(regs, Operation.EXIT);
     }
 
-        @Override
+    @Override
     public Optional<Registers> execute() {
         return Optional.of(registers());
     }

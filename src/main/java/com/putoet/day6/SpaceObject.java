@@ -9,7 +9,11 @@ public class SpaceObject {
     private SpaceObject center;
 
     private static final SpaceObject COM = new SpaceObject();
-    public static final SpaceObject COM() { return COM; }
+
+    public static final SpaceObject COM() {
+        return COM;
+    }
+
     private SpaceObject() {
         this.name = "COM";
         this.center = null;

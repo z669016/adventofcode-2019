@@ -1,19 +1,16 @@
 package com.putoet.day12;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Day12b {
     public static void main(String[] args) {
-        final Map<String,Moon> m = MoonMap.loadFile("day12.txt");
+        final Map<String, Moon> m = MoonMap.loadFile("day12.txt");
         final Moon io = m.get("Io");
         final Moon europa = m.get("Europa");
         final Moon ganymede = m.get("Ganymede");
         final Moon calisto = m.get("Calisto");
 
-        final Map<String,Moon> moons = MoonMap.loadFile("day12.txt");
+        final Map<String, Moon> moons = MoonMap.loadFile("day12.txt");
 
         long idx = 0;
         do {

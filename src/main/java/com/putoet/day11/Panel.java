@@ -4,7 +4,8 @@ public class Panel {
     private Color color = Color.BLACK;
     private boolean painted = false;
 
-    public Panel() {}
+    public Panel() {
+    }
 
     public static Panel blackPanel() {
         return new Panel();
@@ -21,7 +22,11 @@ public class Panel {
         painted = true;
     }
 
-    public Color color() { return color; }
+    public Color color() {
+        return color;
+    }
 
-    public boolean painted() { return painted; }
+    public boolean painted() {
+        return painted;
+    }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Day5 {
     public static void main(String[] args) {
-       final List<Integer> intCode = CSV.list("/day5.txt", Integer::parseInt).get(0);
+        final List<Integer> intCode = CSV.list("/day5.txt", Integer::parseInt).get(0);
 
         Processor.enableLog();
         InputDevice inputDevice = new InputDevice(List.of(1));

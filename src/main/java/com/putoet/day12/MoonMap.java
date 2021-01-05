@@ -2,9 +2,6 @@ package com.putoet.day12;
 
 import com.putoet.resources.ResourceLines;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +15,9 @@ public class MoonMap {
                 .collect(Collectors.toList());
 
         if (positions.size() != moons.size())
-            throw new IllegalArgumentException("Number of provided positions (" + positions.size() + " doesn't match the number of moons (" + moons.size() +")");
+            throw new IllegalArgumentException("Number of provided positions (" + positions.size() + " doesn't match the number of moons (" + moons.size() + ")");
 
-        final Map<String,Moon> moonMap = new HashMap<>();
+        final Map<String, Moon> moonMap = new HashMap<>();
         for (int idx = 0; idx < moons.size(); idx++) {
             final String name = moons.get(idx);
             moonMap.put(name, new Moon(name, positions.get(idx)));
@@ -29,7 +26,7 @@ public class MoonMap {
         return moonMap;
     }
 
-    public static String snapshot(Map<String,Moon> moons) {
+    public static String snapshot(Map<String, Moon> moons) {
         final StringBuilder sb = new StringBuilder();
         moons.values().forEach(moon -> sb.append(moon.position().toString()).append(moon.velocity().toString()));
         return sb.toString();

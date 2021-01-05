@@ -1,6 +1,9 @@
 package com.putoet.day11;
 
-import com.putoet.day9.*;
+import com.putoet.day9.IInputDevice;
+import com.putoet.day9.IMemory;
+import com.putoet.day9.IOutputDevice;
+import com.putoet.day9.Processor;
 
 public class Day11 {
     public static void main(String[] args) {

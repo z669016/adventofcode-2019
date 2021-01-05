@@ -5,16 +5,17 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MemoryTest {
     @Test
     public void testCreateMemory() {
-        final List<Integer> integerList = List.of(1,9,10,3,2,3,11,0,99,30,40,50);
+        final List<Integer> integerList = List.of(1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50);
         final Memory memory = Memory.ofIntegerList(integerList);
 
         assertEquals(memory.size(), integerList.size());
-        assertEquals(List.of(1L,9L,10L,3L,2L,3L,11L,0L,99L,30L,40L,50L), memory.asList());
+        assertEquals(List.of(1L, 9L, 10L, 3L, 2L, 3L, 11L, 0L, 99L, 30L, 40L, 50L), memory.asList());
 
         assertThrows(IllegalArgumentException.class, () -> Memory.ofIntegerList(null));
         assertThrows(IllegalArgumentException.class, () -> Memory.ofIntegerList(Collections.emptyList()));

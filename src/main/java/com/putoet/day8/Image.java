@@ -10,7 +10,7 @@ public class Image {
     private final List<Layer> layers;
 
     public static Image of(Dimension dimension, List<Integer> pixels) {
-        assert ( pixels.size() % dimension.size() == 0);
+        assert (pixels.size() % dimension.size() == 0);
 
         final List<Layer> layers = new ArrayList<>();
         for (int idx = 0; idx < pixels.size(); idx += dimension.size()) {
@@ -26,14 +26,18 @@ public class Image {
     }
 
     public Layer layer(int number) {
-        assert (number>=0 && number < layers.size());
+        assert (number >= 0 && number < layers.size());
 
         return layers.get(number);
     }
 
-    public int layersCount() { return layers.size(); }
+    public int layersCount() {
+        return layers.size();
+    }
 
-    public int size() { return dimension.size() * layersCount(); }
+    public int size() {
+        return dimension.size() * layersCount();
+    }
 
     public Layer decode() {
         final List<Integer> decodedLayer = new ArrayList<>();

@@ -5,10 +5,10 @@ import com.putoet.day5.*;
 import java.util.List;
 
 public class Computer {
-    private IInputDevice inputDevice;
-    private OutputDevice outputDevice;
-    private Memory memory;
-    private Processor processor;
+    private final IInputDevice inputDevice;
+    private final OutputDevice outputDevice;
+    private final Memory memory;
+    private final Processor processor;
 
     public Computer(IInputDevice inputDevice, Memory memory) {
         this.inputDevice = inputDevice;
@@ -28,7 +28,10 @@ public class Computer {
     public void provideInpute(Integer value) {
         inputDevice.put(value);
     }
-    public Integer lastOutput() { return outputDevice.get(); }
+
+    public Integer lastOutput() {
+        return outputDevice.get();
+    }
 
     public List<Integer> inputDump() {
         return inputDevice.dump();
@@ -49,12 +52,18 @@ public class Computer {
     public static void enableLog() {
         Processor.enableLog();
     }
+
     public static void disableLog() {
         Processor.disableLog();
     }
 
-    public static ComputerBuilder builder() { return new ComputerBuilder(); }
-    public static ComputerBuilder resumableBuilder() { return new ResumableComputerBuilder(); }
+    public static ComputerBuilder builder() {
+        return new ComputerBuilder();
+    }
+
+    public static ComputerBuilder resumableBuilder() {
+        return new ResumableComputerBuilder();
+    }
 
     static class ComputerBuilder {
         protected IInputDevice inputDevice;
@@ -68,7 +77,7 @@ public class Computer {
         public ComputerBuilder input(List<Integer> input) {
             if (this.inputDevice != null)
                 throw new IllegalStateException("Input device already set");
-            this.inputDevice =  new InputDevice(input);
+            this.inputDevice = new InputDevice(input);
 
             return this;
         }
@@ -97,7 +106,7 @@ public class Computer {
             if (this.inputDevice != null)
                 throw new IllegalStateException("Input device already set");
 
-            this.inputDevice =  new ResumableInputDevice(input);
+            this.inputDevice = new ResumableInputDevice(input);
 
             return this;
         }

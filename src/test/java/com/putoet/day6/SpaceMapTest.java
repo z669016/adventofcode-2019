@@ -14,7 +14,7 @@ public class SpaceMapTest {
     public static final String EEE_NAME = "555";
 
     private SpaceMap map;
-    
+
     @BeforeEach
     public void setup() {
         map = new SpaceMap();

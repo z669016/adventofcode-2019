@@ -6,9 +6,11 @@ public class AmplifierArray {
     public static final int ARRAY_SIZE = 5;
 
     private static Boolean logEnabled = false;
+
     public static final void enableLog() {
         logEnabled = true;
     }
+
     public static final void disableLog() {
         logEnabled = false;
     }

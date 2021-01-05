@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 class Route {
     private final List<Coordinate> route = new ArrayList<>(175_000);
 
-    public Route() {}
+    public Route() {
+    }
 
     public Route(List<String> pathList) {
         assert pathList != null;

@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class Day12a {
     public static void main(String[] args) {
-        final Map<String,Moon> moons = MoonMap.loadFile("day12.txt");
+        final Map<String, Moon> moons = MoonMap.loadFile("day12.txt");
 
         for (int idx = 0; idx < 1000; idx++) {
             moons.values().forEach(moon -> moon.applyGravity(moons));

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Memory implements IMemory, IDump {
-    private List<Long> memory;
+    private final List<Long> memory;
 
     private Memory(List<Long> memory) {
         if ((memory == null) || memory.size() == 0) throw new IllegalArgumentException("No memory");
@@ -21,7 +21,7 @@ public class Memory implements IMemory, IDump {
         return new Memory(memory.stream().mapToLong(Integer::longValue).boxed().collect(Collectors.toList()));
     }
 
-    public static  Memory ofLongList(List<Long> memory) {
+    public static Memory ofLongList(List<Long> memory) {
         return new Memory(memory);
     }
 

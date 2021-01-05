@@ -1,17 +1,17 @@
 package com.putoet.day6;
 
-import com.putoet.resources.ResourceLines;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SpaceMapLoader {
     private static boolean logEnabled = false;
-    public static void enableLog() { logEnabled = true; }
-    public static void disableLog() { logEnabled = false; }
+
+    public static void enableLog() {
+        logEnabled = true;
+    }
+
+    public static void disableLog() {
+        logEnabled = false;
+    }
 
     public static SpaceMap loadMap(List<String> mapNotations) {
         SpaceMap map = new SpaceMap();

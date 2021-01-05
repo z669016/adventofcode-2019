@@ -27,7 +27,7 @@ public class AstroidMap {
         return astroidMap;
     }
 
-    private void add (Astroid astroid) {
+    private void add(Astroid astroid) {
         astroidMap.add(astroid);
     }
 

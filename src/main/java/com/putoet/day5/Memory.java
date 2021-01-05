@@ -23,8 +23,8 @@ public class Memory implements IDump, IMemory {
         return memory.get(address.toInt());
     }
 
-   @Override
-   public void poke(Address address, Integer value) {
+    @Override
+    public void poke(Address address, Integer value) {
         if (value == null) throw new IllegalArgumentException("Invalid memory write (null)");
 
         checkAddress(address);
