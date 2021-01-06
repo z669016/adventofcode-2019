@@ -1,7 +1,15 @@
 package com.putoet.day3;
 
+import com.putoet.grid.Point;
+
 enum Direction {
-    UP, DOWN, LEFT, RIGHT;
+    UP(Point.NORTH), DOWN(Point.SOUTH), LEFT(Point.WEST), RIGHT(Point.EAST);
+
+    private final Point move;
+
+    Direction(Point move) {
+        this.move = move;
+    }
 
     public static Direction of(Character c) {
         assert c != null;
@@ -11,7 +19,11 @@ enum Direction {
             case 'D' -> DOWN;
             case 'L' -> LEFT;
             case 'R' -> RIGHT;
-            default -> throw new IllegalArgumentException("Not a direction: " + c);
+            default -> throw new AssertionError(c);
         };
+    }
+
+    public Point asMove() {
+        return move;
     }
 }

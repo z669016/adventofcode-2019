@@ -24,6 +24,15 @@ Based on learnings from other years and knowing the IntCodeDevice would be heavi
 reusable classes in a generic package (intcode) to be enhanced later. The original approach with the classes that 
 implemented the operations was way too complex.
 
+## Day 3
+Based on the description I decided to create a '''Route''' from the route description (puzzle input) containing all 
+points visited. The intersection contains all the points which are on both routes, and those can be easily determined 
+using a filter. By reusing the '''Point''' class from the aoc project it's pretty easy.
+
+The processing of the puzzle input (constructing the routes, and find the intersections) takes a while (as both routes 
+contain about 150.000 steps). A faster algorithm would only record the locations of the turns in the route, which would 
+make the data set way smaller, but the calculation of the intersections a bit harder. 
+
 ## intcode
 An '''Address''' class is used to represent a memory address. 
 

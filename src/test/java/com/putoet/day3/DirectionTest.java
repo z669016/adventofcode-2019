@@ -3,6 +3,7 @@ package com.putoet.day3;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DirectionTest {
 
@@ -13,16 +14,7 @@ public class DirectionTest {
         assertEquals(Direction.LEFT, Direction.of('L'));
         assertEquals(Direction.RIGHT, Direction.of('R'));
 
-        try {
-            Direction.of(null);
-        } catch (IllegalArgumentException exc) {
-            assertEquals("Not a direction", exc.getMessage());
-        }
-
-        try {
-            Direction.of('q');
-        } catch (IllegalArgumentException exc) {
-            assertEquals("Not a direction: q", exc.getMessage());
-        }
+        assertThrows(AssertionError.class, () -> Direction.of(null));
+        assertThrows(AssertionError.class, () -> Direction.of('q'));
     }
 }

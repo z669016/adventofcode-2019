@@ -10,7 +10,7 @@ public class PathTest {
     @Test
     public void testPath() {
         assertThrows(AssertionError.class, () -> Path.of((String) null));
-        assertThrows(IllegalArgumentException.class, () -> Path.of("q"));
+        assertThrows(AssertionError.class, () -> Path.of("q"));
         assertThrows(IllegalArgumentException.class, () -> Path.of("uu"));
         assertThrows(IllegalArgumentException.class, () -> Path.of("u-2"));
 

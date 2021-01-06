@@ -1,14 +1,17 @@
 package com.putoet.day3;
 
+import com.putoet.grid.Point;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 class Route {
-    private final List<Coordinate> route = new ArrayList<>(175_000);
+    private final List<Point> route = new ArrayList<>(155_000);
+    private Point endPoint = Point.ORIGIN;
 
-    public Route() {
-    }
+    public Route() {}
 
     public Route(List<String> pathList) {
         assert pathList != null;
@@ -16,46 +19,47 @@ class Route {
         add(pathList.stream().map(Path::of).collect(Collectors.toList()));
     }
 
-    public void add(List<Path> paths) {
+    private void add(List<Path> paths) {
         assert paths != null;
 
         paths.forEach(this::add);
     }
 
-    public void add(Path path) {
+    private void add(Path path) {
         assert path != null;
 
         if (path.length() > 0) {
-            Coordinate coord = endPoint();
+            Point coord = endPoint();
             for (int idx = 0; idx < path.length(); idx++) {
-                coord = coord.move(path.direction());
+                coord = coord.add(path.direction().asMove());
                 route.add(coord);
             }
+            endPoint = coord;
         }
     }
 
-    public Coordinate endPoint() {
-        return route.size() > 0 ? route.get(route.size() - 1) : Coordinate.ORIGIN;
+    public Point endPoint() {
+        return endPoint;
     }
 
     public int length() {
         return route.size();
     }
 
-    public int distanceToOrigin() {
-        return endPoint().manhattanDistance();
+    public int manhattenDistance() {
+        return endPoint.manhattanDistance(Point.ORIGIN);
     }
 
-    public List<Coordinate> intersect(Route other) {
+    public Set<Point> intersect(Route other) {
         assert other != null;
 
-        return route.stream().filter(other.route::contains).collect(Collectors.toList());
+        return route.stream().filter(other.route::contains).collect(Collectors.toSet());
     }
 
-    public int stepsTo(Coordinate coordinate) {
-        assert coordinate != null;
+    public int stepsTo(Point point) {
+        assert point != null;
 
-        final int idx = route.indexOf(coordinate);
+        final int idx = route.indexOf(point);
         if (idx == -1)
             throw new IllegalArgumentException("Coordinate not on route");
 
