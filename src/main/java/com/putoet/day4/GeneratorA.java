@@ -3,7 +3,7 @@ package com.putoet.day4;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-class GeneratorA implements Iterator<String> {
+class GeneratorA implements Iterator<Password> {
     protected int i1 = 1;
     protected int i2 = i1;
     protected int i3 = i2;
@@ -50,10 +50,10 @@ class GeneratorA implements Iterator<String> {
     }
 
     @Override
-    public String next() {
+    public Password next() {
         final String result = combine();
         increase();
-        return result;
+        return new Password(result);
     }
 
     private void increase() {
@@ -93,7 +93,7 @@ class GeneratorA implements Iterator<String> {
     }
 
     @Override
-    public void forEachRemaining(Consumer<? super String> action) {
+    public void forEachRemaining(Consumer<? super Password> action) {
         while (hasNext()) {
             action.accept(next());
         }

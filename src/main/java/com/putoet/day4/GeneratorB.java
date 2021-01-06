@@ -1,13 +1,6 @@
 package com.putoet.day4;
 
 class GeneratorB extends GeneratorA {
-    public GeneratorB() {
-        super();
-    }
-
-    public GeneratorB(int initialValue) {
-        super(initialValue);
-    }
 
     public GeneratorB(int min, int max) {
         super(min, max);

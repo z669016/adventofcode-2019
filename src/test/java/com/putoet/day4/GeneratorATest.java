@@ -9,24 +9,24 @@ public class GeneratorATest {
     public void testGeneratorStart() {
         GeneratorA generatorA = new GeneratorA();
         assertTrue(generatorA.hasNext());
-        assertEquals("111111", generatorA.next());
+        assertEquals("111111", generatorA.next().toString());
         assertTrue(generatorA.hasNext());
-        assertEquals("111112", generatorA.next());
-        assertEquals("111113", generatorA.next());
-        assertEquals("111114", generatorA.next());
-        assertEquals("111115", generatorA.next());
-        assertEquals("111116", generatorA.next());
-        assertEquals("111117", generatorA.next());
-        assertEquals("111118", generatorA.next());
-        assertEquals("111119", generatorA.next());
-        assertEquals("111122", generatorA.next());
+        assertEquals("111112", generatorA.next().toString());
+        assertEquals("111113", generatorA.next().toString());
+        assertEquals("111114", generatorA.next().toString());
+        assertEquals("111115", generatorA.next().toString());
+        assertEquals("111116", generatorA.next().toString());
+        assertEquals("111117", generatorA.next().toString());
+        assertEquals("111118", generatorA.next().toString());
+        assertEquals("111119", generatorA.next().toString());
+        assertEquals("111122", generatorA.next().toString());
     }
 
     @Test
     public void testGeneratorEnd() {
         GeneratorA generatorA = new GeneratorA(9);
         assertTrue(generatorA.hasNext());
-        assertEquals("999999", generatorA.next());
+        assertEquals("999999", generatorA.next().toString());
         assertFalse(generatorA.hasNext());
     }
 
@@ -34,15 +34,15 @@ public class GeneratorATest {
     public void testGeneratorMinMax() {
         GeneratorA generatorA = new GeneratorA(123456, 999999);
         assertTrue(generatorA.hasNext());
-        assertEquals("123466", generatorA.next());
+        assertEquals("123466", generatorA.next().toString());
 
         generatorA = new GeneratorA(111111, 999999);
         assertTrue(generatorA.hasNext());
-        assertEquals("111111", generatorA.next());
+        assertEquals("111111", generatorA.next().toString());
 
         generatorA = new GeneratorA(999989, 999999);
         assertTrue(generatorA.hasNext());
-        assertEquals("999999", generatorA.next());
+        assertEquals("999999", generatorA.next().toString());
         assertFalse(generatorA.hasNext());
     }
 }

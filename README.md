@@ -33,6 +33,12 @@ The processing of the puzzle input (constructing the routes, and find the inters
 contain about 150.000 steps). A faster algorithm would only record the locations of the turns in the route, which would 
 make the data set way smaller, but the calculation of the intersections a bit harder. 
 
+## Day 4
+Created two generators (one for part 1 and another for part 2) which implement '''Iterator<String>''' to generate valid 
+the passwords (codes) based on the provided min and max (puzzle input). The number of genarated values is counted 
+using the '''Iterator.forEachRemaining(Consumer<>)''' method, where the consumer only updates a simple counter to 
+obtain the answer.
+
 ## intcode
 An '''Address''' class is used to represent a memory address. 
 
