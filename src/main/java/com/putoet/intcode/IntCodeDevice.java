@@ -11,7 +11,7 @@ public class IntCodeDevice implements Runnable {
     @Override
     public void run() {
         Instruction instruction = Interpreter.interpret(ip, memory);
-        while (instruction.opcode() != Instruction.EXIT) {
+        while (instruction.opcode().opcode() != Instruction.EXIT) {
             instruction.run();
 
             ip = ip.increase(instruction.size());
