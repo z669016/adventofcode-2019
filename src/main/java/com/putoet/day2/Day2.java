@@ -22,7 +22,7 @@ public class Day2 {
         memory.poke(new Address(2), 2);
 
         device.run();
-        System.out.println("The valeua at position 0 after running the program is " + memory.peek(new Address(0)));
+        System.out.println("The value at position 0 after running the program is " + memory.peek(new Address(0)));
     }
 
     private static void part2(List<Integer> intCode) {
