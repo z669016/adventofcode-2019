@@ -1,21 +1,16 @@
 package com.putoet.intcode;
 
-public class IntCodeDevice implements Runnable {
-    private final Memory memory;
-    private Address ip = Address.START;
+import java.util.Queue;
 
-    public IntCodeDevice(Memory memory) {
-        this.memory = memory;
-    }
+public interface IntCodeDevice extends Runnable {
+    Address ip();
+    void ip(long ip);
 
-    @Override
-    public void run() {
-        Instruction instruction = Interpreter.interpret(ip, memory);
-        while (instruction.opcode().opcode() != Instruction.EXIT) {
-            instruction.run();
+    void next(long offset);
 
-            ip = ip.increase(instruction.size());
-            instruction = Interpreter.interpret(ip, memory);
-        }
-    }
+    Queue<Long> input();
+
+    Queue<Long> output();
+
+    Memory memory();
 }

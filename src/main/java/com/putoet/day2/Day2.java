@@ -16,7 +16,7 @@ public class Day2 {
 
     private static void part1(List<Integer> intCode) {
         final Memory memory = new FixedMemory(intCode);
-        final IntCodeDevice device = new IntCodeDevice(memory);
+        final IntCodeDevice device = new IntCodeComputer(memory);
 
         memory.poke(new Address(1), 12);
         memory.poke(new Address(2), 2);
@@ -32,7 +32,7 @@ public class Day2 {
         for (int noun = 0; noun < intCode.size(); noun++) {
             for (int verb = 0; verb < intCode.size(); verb++) {
                 final Memory memory = new FixedMemory(intCode);
-                final IntCodeDevice device = new IntCodeDevice(memory);
+                final IntCodeDevice device = new IntCodeComputer(memory);
 
                 memory.poke(nounAddress, noun);
                 memory.poke(verbAddress, verb);
