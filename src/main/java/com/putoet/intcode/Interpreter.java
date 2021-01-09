@@ -1,29 +1,45 @@
 package com.putoet.intcode;
 
 import java.io.PrintStream;
+import java.util.Iterator;
 import java.util.Queue;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.TimeUnit;
 
-public class Interpreter {
-    private static PrintStream printStream;
+public class Interpreter implements Iterator<Instruction> {
+    private PrintStream printStream;
+    private final IntCodeDevice device;
 
-    private Interpreter() {
+    public Interpreter(IntCodeDevice device) {
+        this.device = device;
+        this.printStream = device.printStream();
     }
 
-    public static Instruction interpret(IntCodeDevice device) {
+    @Override
+    public boolean hasNext() {
+        final Memory memory = device.memory();
+        final Address address = device.ip();
+        final Opcode opcode = new Opcode(memory.peek(address));
+
+        return opcode.opcode() != Instruction.EXIT;
+    }
+
+    @Override
+    public Instruction next() {
         final Memory memory = device.memory();
         final Address address = device.ip();
 
         final Opcode opcode = new Opcode(memory.peek(address));
         final Instruction instruction = switch (opcode.opcode()) {
-            case 1 -> add(opcode, device);
-            case 2 -> mul(opcode, device);
-            case 3 -> in(opcode, device);
-            case 4 -> out(opcode, device);
-            case 5 -> jumpIfTrue(opcode, device);
-            case 6 -> jumpIfFalse(opcode, device);
-            case 7 -> lessThan(opcode, device);
-            case 8 -> equals(opcode, device);
-            case 99 -> exit(opcode, device);
+            case Instruction.ADD -> add(opcode);
+            case Instruction.MUL -> mul(opcode);
+            case Instruction.IN -> in(opcode);
+            case Instruction.OUT -> out(opcode);
+            case Instruction.JIT -> jit(opcode);
+            case Instruction.JIF -> jif(opcode);
+            case Instruction.LT -> lt(opcode);
+            case Instruction.EQ -> eq(opcode);
+            case Instruction.EXIT -> ex(opcode);
             default -> throw new InvalidInstructionOpcodeException(address, opcode);
         };
 
@@ -33,7 +49,7 @@ public class Interpreter {
         return instruction;
     }
 
-    private static Instruction exit(Opcode opcode, IntCodeDevice device) {
+    private Instruction ex(Opcode opcode) {
         final Address address = device.ip();
 
         return new AbstractInstruction(opcode) {
@@ -54,75 +70,8 @@ public class Interpreter {
         };
     }
 
-    private static Instruction in(Opcode opcode, IntCodeDevice device) {
-        final Address address = device.ip();
-        final Memory memory = device.memory();
-        final Queue<Long> input = device.input();
 
-        return new AbstractInstruction(opcode) {
-            final long p1 = memory.peek(address.increase(1));
-
-            @Override
-            public int size() {
-                return 2;
-            }
-
-            @Override
-            public void run() {
-                if (input == null)
-                    throw new NoInputAvailableException(address);
-
-                final Long value = input.poll();
-                if (value == null)
-                    throw new NoInputSignalAvailableException(address);
-
-                setValue1(new Address(p1), memory, value);
-                next(device);
-            }
-
-            @Override
-            public String toString() {
-                return String.format("%08d - in %s",
-                        address.intValue(),
-                        parameter(opcode.mode1(), p1)
-                );
-            }
-        };
-    }
-
-    private static Instruction out(Opcode opcode, IntCodeDevice device) {
-        final Address address = device.ip();
-        final Memory memory = device.memory();
-        final Queue<Long> output = device.output();
-
-        return new AbstractInstruction(opcode) {
-            final long p1 = memory.peek(address.increase(1));
-
-            @Override
-            public int size() {
-                return 2;
-            }
-
-            @Override
-            public void run() {
-                if (output == null)
-                    throw new NoOutputAvailableException(address);
-
-                output.offer(getValue1(p1, memory));
-                next(device);
-            }
-
-            @Override
-            public String toString() {
-                return String.format("%08d - out %s",
-                        address.intValue(),
-                        parameter(opcode.mode1(), p1)
-                );
-            }
-        };
-    }
-
-    private static Instruction add(Opcode opcode, IntCodeDevice device) {
+    private Instruction add(Opcode opcode) {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
@@ -154,7 +103,7 @@ public class Interpreter {
         };
     }
 
-    private static Instruction mul(Opcode opcode, IntCodeDevice device) {
+    private Instruction mul(Opcode opcode) {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
@@ -186,7 +135,80 @@ public class Interpreter {
         };
     }
 
-    private static Instruction jumpIfTrue(Opcode opcode, IntCodeDevice device) {
+    private Instruction in(Opcode opcode) {
+        final Address address = device.ip();
+        final Memory memory = device.memory();
+        final BlockingDeque<Long> input = device.input();
+
+        return new AbstractInstruction(opcode) {
+            final long p1 = memory.peek(address.increase(1));
+
+            @Override
+            public int size() {
+                return 2;
+            }
+
+            @Override
+            public void run() {
+                if (input == null)
+                    throw new NoInputAvailableException(address);
+
+                final Long value;
+                try {
+                    value = input.poll(device.timeout(), device.timeUnit());
+                    if (value != null) {
+                        setValue1(new Address(p1), memory, value);
+                        next(device);
+                        return;
+                    }
+                } catch (InterruptedException ignored) {
+                }
+                throw new NoInputSignalAvailableException(address, device.timeout(), device.timeUnit());
+            }
+
+            @Override
+            public String toString() {
+                return String.format("%08d - in %s",
+                        address.intValue(),
+                        parameter(opcode.mode1(), p1)
+                );
+            }
+        };
+    }
+
+    private Instruction out(Opcode opcode) {
+        final Address address = device.ip();
+        final Memory memory = device.memory();
+        final Queue<Long> output = device.output();
+
+        return new AbstractInstruction(opcode) {
+            final long p1 = memory.peek(address.increase(1));
+
+            @Override
+            public int size() {
+                return 2;
+            }
+
+            @Override
+            public void run() {
+                if (output == null)
+                    throw new NoOutputAvailableException(address);
+
+                output.offer(getValue1(p1, memory));
+                next(device);
+            }
+
+            @Override
+            public String toString() {
+                return String.format("%08d - out %s",
+                        address.intValue(),
+                        parameter(opcode.mode1(), p1)
+                );
+            }
+        };
+    }
+
+    private Instruction jit(Opcode opcode) {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
@@ -218,7 +240,7 @@ public class Interpreter {
         };
     }
 
-    private static Instruction jumpIfFalse(Opcode opcode, IntCodeDevice device) {
+    private Instruction jif(Opcode opcode) {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
@@ -251,7 +273,7 @@ public class Interpreter {
     }
 
 
-    private static Instruction lessThan(Opcode opcode, IntCodeDevice device) {
+    private Instruction lt(Opcode opcode) {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
@@ -283,7 +305,7 @@ public class Interpreter {
         };
     }
 
-    private static Instruction equals(Opcode opcode, IntCodeDevice device) {
+    private Instruction eq(Opcode opcode) {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
@@ -315,13 +337,6 @@ public class Interpreter {
         };
     }
 
-    public static void output() {
-        printStream = null;
-    }
-    public static void output(PrintStream out) {
-        printStream = out;
-    }
-
     static class InvalidInstructionOpcodeException extends IllegalArgumentException {
         public InvalidInstructionOpcodeException(Address offset, Opcode opcode) {
             super("Invalid opcode " + opcode + " at offset " + offset);
@@ -329,8 +344,8 @@ public class Interpreter {
     }
 
     static class NoInputSignalAvailableException extends IllegalStateException {
-        public NoInputSignalAvailableException(Address ip) {
-            super("No input available for IN at address " + ip);
+        public NoInputSignalAvailableException(Address ip, int timeout, TimeUnit timeUnit) {
+            super("No input available for IN at address " + ip + " after " + timeout + " " + timeUnit);
         }
     }
 
@@ -354,13 +369,13 @@ abstract class AbstractInstruction implements Instruction {
         this.opcode = opcode;
     }
 
+    protected static String parameter(Mode mode, long value) {
+        return mode == Mode.POSITION ? String.valueOf(value) : "[" + value + "]";
+    }
+
     @Override
     public void next(IntCodeDevice device) {
         device.next(size());
-    }
-
-    protected static String parameter(Mode mode, long value) {
-        return mode == Mode.POSITION ? String.valueOf(value) : "[" + value + "]";
     }
 
     protected long getValue1(long value, Memory memory) {

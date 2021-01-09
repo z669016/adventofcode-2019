@@ -1,31 +1,43 @@
 package com.putoet.intcode;
 
+import java.io.PrintStream;
 import java.util.Queue;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.TimeUnit;
 
 public class IntCodeComputer implements IntCodeDevice {
-    private final Queue<Long> input;
+    private final BlockingDeque<Long> input;
     private final Queue<Long> output;
     private final Memory memory;
+    private final PrintStream printStream;
+    private final int timeout;
+    private final TimeUnit timeUnit;
+
     private Address ip = Address.START;
 
-    public IntCodeComputer(Memory memory) {
-        this.memory = memory;
-        input = null;
-        output = null;
-    }
-
-    public IntCodeComputer(Memory memory, Queue<Long> input, Queue<Long> output) {
+    private IntCodeComputer(Memory memory, BlockingDeque<Long> input, Queue<Long> output,
+                            PrintStream printStream, int timeout, TimeUnit timeUnit) {
         this.memory = memory;
         this.input = input;
         this.output = output;
+        this.printStream = printStream;
+
+        if (timeUnit != null) {
+            this.timeout = timeout;
+            this.timeUnit = timeUnit;
+        } else {
+            this.timeout = 100;
+            this.timeUnit = TimeUnit.MILLISECONDS;
+        }
     }
 
     @Override
     public void run() {
-        Instruction instruction = Interpreter.interpret(this);
-        while (instruction.opcode().opcode() != Instruction.EXIT) {
+        final Interpreter interpreter = new Interpreter(this);
+
+        while (interpreter.hasNext()) {
+            final Instruction instruction = interpreter.next();
             instruction.run();
-            instruction = Interpreter.interpret(this);
         }
     }
 
@@ -47,11 +59,68 @@ public class IntCodeComputer implements IntCodeDevice {
     }
 
     @Override
-    public Queue<Long> input() { return input; }
+    public BlockingDeque<Long> input() { return input; }
 
     @Override
     public Queue<Long> output() { return output; }
 
     @Override
     public Memory memory() { return memory; }
+
+    @Override
+    public PrintStream printStream() { return printStream; }
+
+
+    @Override
+    public int timeout() {
+        return timeout;
+    }
+
+    @Override
+    public TimeUnit timeUnit() {
+        return timeUnit;
+    }
+
+    public static Builder builder() { return new Builder(); }
+
+    public static class Builder {
+        private Memory memory;
+        private BlockingDeque<Long> input;
+        private Queue<Long> output;
+        private PrintStream printStream;
+        private int timeout;
+        private TimeUnit timeUnit;
+
+        private Builder() {}
+
+        public Builder memory(Memory memory) {
+            this.memory = memory;
+            return this;
+        }
+
+        public Builder input(BlockingDeque<Long> input) {
+            this.input = input;
+            return this;
+        }
+
+        public Builder output(Queue<Long> output) {
+            this.output = output;
+            return this;
+        }
+
+        public Builder printStream(PrintStream printStream) {
+            this.printStream = printStream;
+            return this;
+        }
+
+        public Builder timeout(int timeout, TimeUnit timeUnit) {
+            this.timeout = timeout;
+            this.timeUnit = timeUnit;
+            return this;
+        }
+
+        public IntCodeDevice build() {
+            return new IntCodeComputer(memory, input, output, printStream, timeout, timeUnit);
+        }
+    }
 }

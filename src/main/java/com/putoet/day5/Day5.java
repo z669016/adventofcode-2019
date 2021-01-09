@@ -9,6 +9,8 @@ import com.putoet.resources.CSV;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class Day5 {
     public static void main(String[] args) {
@@ -20,9 +22,9 @@ public class Day5 {
 
     private static void part1(List<Integer> intCode) {
         final Memory memory = new FixedMemory(intCode);
-        final Queue<Long> input = new LinkedList<>();
+        final BlockingDeque<Long> input = new LinkedBlockingDeque<>();
         final Queue<Long> output = new LinkedList<>();
-        final IntCodeDevice device = new IntCodeComputer(memory, input, output);
+        final IntCodeDevice device = IntCodeComputer.builder().memory(memory).input(input).output(output).build();
 
         input.offer(1L);
         device.run();
@@ -32,9 +34,9 @@ public class Day5 {
 
     private static void part2(List<Integer> intCode) {
         final Memory memory = new FixedMemory(intCode);
-        final Queue<Long> input = new LinkedList<>();
+        final BlockingDeque<Long> input = new LinkedBlockingDeque<>();
         final Queue<Long> output = new LinkedList<>();
-        final IntCodeDevice device = new IntCodeComputer(memory, input, output);
+        final IntCodeDevice device = IntCodeComputer.builder().memory(memory).input(input).output(output).build();
 
         input.offer(5L);
         device.run();
