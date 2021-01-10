@@ -51,7 +51,7 @@ public class SpaceObjectTest {
         assertEquals(AAA, BBB.center());
 
         // Cannot recenter to null
-        assertThrows(IllegalArgumentException.class, () -> AAA.reCenter(null));
+        assertThrows(AssertionError.class, () -> AAA.reCenter(null));
 
         // Cannot recenter if center isn't COM
         assertThrows(IllegalStateException.class, () -> CCC.reCenter(AAA));

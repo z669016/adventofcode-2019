@@ -46,6 +46,15 @@ similar  to all the other instructions. Now solving part 1 and two is simple. I 
 classes originally developed for this puzzle.
 
 ## Day 6
+Collect info about space objects in orbit of other space objects ... The '''SpaceObject''' class models a space object 
+(which has a name, and another space object as its center), and has some convenience methods to find the route to the 
+absolute center (a space object called COM), or the number of steps to take towards another space object on the 
+route towards the center.
+
+The '''SpaceMap''' contains a map of all the space objects and methods to count the total number of orbits, and the 
+distance between two arbitrary space objects on the map.
+
+The '''SpaceMapLoader''' loads the puzzle input and creates the '''SpaceMap'''.
 
 ## Day 7
 Due to deleting the IntCode classes of day5, made it necessary to also refactor day 7 (as it reused the day5 classes). 

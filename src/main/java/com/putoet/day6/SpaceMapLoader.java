@@ -14,10 +14,10 @@ public class SpaceMapLoader {
     }
 
     public static SpaceMap loadMap(List<String> mapNotations) {
-        SpaceMap map = new SpaceMap();
+        assert mapNotations != null;
 
+        final SpaceMap map = new SpaceMap();
         mapNotations.forEach(notation -> createSpaceObjects(map, notation));
-
         return map;
     }
 
@@ -28,14 +28,14 @@ public class SpaceMapLoader {
         final String spaceObjectName = mapNotation.substring(4);
 
         final SpaceObject center = getOrCreateCenter(map, centerName);
-        log("Created " + centerName + ")" + spaceObjectName + " for " + mapNotation);
+        // log("Created " + centerName + ")" + spaceObjectName + " for " + mapNotation);
         map.add(spaceObjectName, center);
     }
 
     private static SpaceObject getOrCreateCenter(SpaceMap map, String centerName) {
         SpaceObject center = map.get(centerName);
         if (center == null) {
-            log("Create " + centerName + " temporarily orbiting around COM");
+            // log("Create " + centerName + " temporarily orbiting around COM");
             map.add(centerName, SpaceObject.COM());
         }
         center = map.get(centerName);
@@ -43,6 +43,8 @@ public class SpaceMapLoader {
     }
 
     private static void validateNotation(String mapNotation) {
+        assert mapNotation != null;
+
         if (!mapNotation.matches("[A-Z0-9]{3}\\)[A-Z0-9]{3}"))
             throw new IllegalArgumentException("Invalid map notation " + mapNotation);
     }

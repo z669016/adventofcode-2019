@@ -14,6 +14,9 @@ public class SpaceMap {
     }
 
     public void add(String spaceObjectName, SpaceObject center) {
+        assert spaceObjectName != null;
+        assert center != null;
+
         if (spaceObjects.containsKey(spaceObjectName)) {
             spaceObjects.get(spaceObjectName).reCenter(center);
         } else
@@ -21,18 +24,23 @@ public class SpaceMap {
     }
 
     public SpaceObject get(String spaceObjectName) {
+        assert spaceObjectName != null;
+
         return spaceObjects.get(spaceObjectName);
     }
 
     public int orbits() {
-        return spaceObjects.entrySet().stream().map(entry -> SpaceObject.orbitsToCom(entry.getValue())).reduce(0, Integer::sum);
+        return spaceObjects.values().stream().map(SpaceObject::orbitsToCom).reduce(0, Integer::sum);
     }
 
     public int distance(SpaceObject from, SpaceObject to) {
+        assert from != null;
+        assert to != null;
+
         final List<SpaceObject> routeFrom = SpaceObject.route(from);
         final List<SpaceObject> routeTo = SpaceObject.route(to);
 
-        final Optional<SpaceObject> firstIntersection = routeFrom.stream().filter(so -> routeTo.contains(so)).findFirst();
+        final Optional<SpaceObject> firstIntersection = routeFrom.stream().filter(routeTo::contains).findFirst();
         if (firstIntersection.isEmpty())
             throw new IllegalArgumentException("No intersection between the routes of " + from + " and " + to);
 

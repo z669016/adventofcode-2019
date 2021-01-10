@@ -20,10 +20,11 @@ public class SpaceObject {
     }
 
     public SpaceObject(String name, SpaceObject center) {
+        assert name != null && name.length() > 0;
+        assert center != null;
+
         if (name.equals("COM"))
             throw new IllegalArgumentException("COM cannot be instantiated");
-        if (center == null)
-            throw new IllegalArgumentException("Each space object must have a center");
 
         this.name = name;
         this.center = center;
@@ -38,11 +39,10 @@ public class SpaceObject {
     }
 
     public void reCenter(SpaceObject center) {
+        assert center != null;
+
         if (this.center == center)
             return;
-
-        if (center == null)
-            throw new IllegalArgumentException("Cannot recenter to null for " + this.name);
 
         if (this.center != COM)
             throw new IllegalStateException("Can only recenter from COM for " + this.name + " (current center is " + this.center.name + ")");
@@ -51,19 +51,23 @@ public class SpaceObject {
     }
 
     public static int orbitsToCom(SpaceObject spaceObject) {
+        assert spaceObject != null;
+
         if (spaceObject == COM)
             return 0;
 
         int count = 1;
-        SpaceObject center = spaceObject.center;
-        while (center != COM) {
+        while (spaceObject.center != COM) {
             count++;
-            center = center.center;
+            spaceObject = spaceObject.center;
         }
         return count;
     }
 
     public static int orbitsTo(SpaceObject from, SpaceObject to) {
+        assert from != null;
+        assert to != null;
+
         if (from == COM)
             throw new IllegalArgumentException("Cannot count orbits from COM");
 
@@ -84,8 +88,7 @@ public class SpaceObject {
     }
 
     public static List<SpaceObject> route(SpaceObject so) {
-        if (so == null)
-            throw new IllegalArgumentException("Cannot determine route to COM from null");
+        assert so != null;
 
         if (so == COM)
             return List.of();
