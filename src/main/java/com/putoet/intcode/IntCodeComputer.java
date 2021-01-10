@@ -3,9 +3,11 @@ package com.putoet.intcode;
 import java.io.PrintStream;
 import java.util.Queue;
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class IntCodeComputer implements IntCodeDevice {
+    private final CountDownLatch latch;
     private final BlockingDeque<Long> input;
     private final Queue<Long> output;
     private final Memory memory;
@@ -16,7 +18,7 @@ public class IntCodeComputer implements IntCodeDevice {
     private Address ip = Address.START;
 
     private IntCodeComputer(Memory memory, BlockingDeque<Long> input, Queue<Long> output,
-                            PrintStream printStream, int timeout, TimeUnit timeUnit) {
+                            PrintStream printStream, int timeout, TimeUnit timeUnit, CountDownLatch latch) {
         this.memory = memory;
         this.input = input;
         this.output = output;
@@ -29,6 +31,12 @@ public class IntCodeComputer implements IntCodeDevice {
             this.timeout = 100;
             this.timeUnit = TimeUnit.MILLISECONDS;
         }
+
+        this.latch = latch;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -39,10 +47,15 @@ public class IntCodeComputer implements IntCodeDevice {
             final Instruction instruction = interpreter.next();
             instruction.run();
         }
+
+        if (latch != null)
+            latch.countDown();
     }
 
     @Override
-    public Address ip() { return ip; }
+    public Address ip() {
+        return ip;
+    }
 
     @Override
     public void ip(long ip) {
@@ -59,17 +72,24 @@ public class IntCodeComputer implements IntCodeDevice {
     }
 
     @Override
-    public BlockingDeque<Long> input() { return input; }
+    public BlockingDeque<Long> input() {
+        return input;
+    }
 
     @Override
-    public Queue<Long> output() { return output; }
+    public Queue<Long> output() {
+        return output;
+    }
 
     @Override
-    public Memory memory() { return memory; }
+    public Memory memory() {
+        return memory;
+    }
 
     @Override
-    public PrintStream printStream() { return printStream; }
-
+    public PrintStream printStream() {
+        return printStream;
+    }
 
     @Override
     public int timeout() {
@@ -81,7 +101,10 @@ public class IntCodeComputer implements IntCodeDevice {
         return timeUnit;
     }
 
-    public static Builder builder() { return new Builder(); }
+    @Override
+    public CountDownLatch latch() {
+        return latch;
+    }
 
     public static class Builder {
         private Memory memory;
@@ -90,8 +113,10 @@ public class IntCodeComputer implements IntCodeDevice {
         private PrintStream printStream;
         private int timeout;
         private TimeUnit timeUnit;
+        private CountDownLatch latch;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder memory(Memory memory) {
             this.memory = memory;
@@ -119,8 +144,13 @@ public class IntCodeComputer implements IntCodeDevice {
             return this;
         }
 
+        public Builder latch(CountDownLatch latch) {
+            this.latch = latch;
+            return this;
+        }
+
         public IntCodeDevice build() {
-            return new IntCodeComputer(memory, input, output, printStream, timeout, timeUnit);
+            return new IntCodeComputer(memory, input, output, printStream, timeout, timeUnit, latch);
         }
     }
 }

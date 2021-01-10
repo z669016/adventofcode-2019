@@ -39,6 +39,31 @@ the passwords (codes) based on the provided min and max (puzzle input). The numb
 using the '''Iterator.forEachRemaining(Consumer<>)''' method, where the consumer only updates a simple counter to 
 obtain the answer.
 
+## Day 5
+Refactored the '''IntCodeDevice''' and its implementation '''IntCodeComputer''' to handle the input and out put 
+instructions, by using a '''Queue<Long>''' as input and output device. Added the comparison and jump instructions 
+similar  to all the other instructions. Now solving part 1 and two is simple. I deleted all the specific IntCode 
+classes originally developed for this puzzle.
+
+## Day 6
+
+## Day 7
+Due to deleting the IntCode classes of day5, made it necessary to also refactor day 7 (as it reused the day5 classes). 
+I changed the '''Queue<Long>''' of the input device into a '''BlockingDeque<Long>''', so it was able to wait for a 
+value to become available. I've added  the '''IntCodeDevice''' to the '''Interpreter''' as a property, as the number of
+properties needed for executing instructions was increasing. This required all static methods to become non-static, and 
+a ''Builder'' as part of the IntCodeComputer to limit the amount of constructors for creating different configurations
+of an '''IntCodeDevice'''.
+
+The AmplifierArray now became quite simple to implement using independent threads. The '''SimpleAmplifierArray''' uses 
+six queues, where the last one is the utput queue of the fifth amplifier. The '''FeedbackAmplifierArray''' uses five 
+queues, where the output queue of the fifth amplifier is set to the input queue of the first one. I added a 
+'''CountDownLatch''' to the Interpreter, so it was able to signal to any other waiting thread, that it was finished. 
+
+I reused the '''Permutator''' from my AOC project for the creation of the possible '''PhaseSetting'''.
+
+IMHO all in all quite fancy, and yet simple and straight forward.
+
 ## intcode
 An '''Address''' class is used to represent a memory address. 
 

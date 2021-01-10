@@ -351,13 +351,13 @@ public class Interpreter implements Iterator<Instruction> {
 
     static class NoInputAvailableException extends IllegalStateException {
         public NoInputAvailableException(Address ip) {
-            super("No input available for this device for IN at address " + ip);
+            super("No input channel available for this device for IN at address " + ip);
         }
     }
 
     static class NoOutputAvailableException extends IllegalStateException {
         public NoOutputAvailableException(Address ip) {
-            super("No output available for this device for OUT at address " + ip);
+            super("No output channel available for this device for OUT at address " + ip);
         }
     }
 }
