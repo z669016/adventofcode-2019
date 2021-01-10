@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
 public class Day7 {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         final List<Integer> intCodeProgram = CSV.list("/day7.txt", Integer::parseInt).get(0);
         final Permutator<Integer> permutator = new Permutator<>();
 
