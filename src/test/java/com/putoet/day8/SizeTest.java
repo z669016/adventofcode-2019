@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DimensionTest {
+public class SizeTest {
     @Test
     public void testSize() {
-        final Dimension dimension = Dimension.of(3, 7);
-        assertEquals(21, dimension.size());
+        final Size size = Size.of(3, 7);
+        assertEquals(21, size.size());
     }
 }

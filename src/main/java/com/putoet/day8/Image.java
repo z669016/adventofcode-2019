@@ -6,22 +6,22 @@ import java.util.List;
 import java.util.Optional;
 
 public class Image {
-    private final Dimension dimension;
+    private final Size size;
     private final List<Layer> layers;
 
-    public static Image of(Dimension dimension, List<Integer> pixels) {
-        assert (pixels.size() % dimension.size() == 0);
+    public static Image of(Size size, List<Integer> pixels) {
+        assert (pixels.size() % size.size() == 0);
 
         final List<Layer> layers = new ArrayList<>();
-        for (int idx = 0; idx < pixels.size(); idx += dimension.size()) {
-            layers.add(Layer.of(dimension, pixels.subList(idx, idx + dimension.size())));
+        for (int idx = 0; idx < pixels.size(); idx += size.size()) {
+            layers.add(Layer.of(size, pixels.subList(idx, idx + size.size())));
         }
 
-        return new Image(dimension, layers);
+        return new Image(size, layers);
     }
 
-    public Image(Dimension dimension, List<Layer> layers) {
-        this.dimension = dimension;
+    public Image(Size size, List<Layer> layers) {
+        this.size = size;
         this.layers = layers;
     }
 
@@ -36,13 +36,13 @@ public class Image {
     }
 
     public int size() {
-        return dimension.size() * layersCount();
+        return size.size() * layersCount();
     }
 
     public Layer decode() {
         final List<Integer> decodedLayer = new ArrayList<>();
-        for (int idy = 0; idy < dimension.y(); idy++) {
-            for (int idx = 0; idx < dimension.x(); idx++) {
+        for (int idy = 0; idy < size.height(); idy++) {
+            for (int idx = 0; idx < size.width(); idx++) {
                 final int finalIdx = idx;
                 final int finalIdy = idy;
                 decodedLayer.add(layers.stream()
@@ -50,10 +50,10 @@ public class Image {
                         .reduce(2, (p1, p2) -> p1 != 2 ? p1 : p2));
             }
         }
-        return Layer.of(dimension, decodedLayer);
+        return Layer.of(size, decodedLayer);
     }
 
     public Optional<Layer> findLayerWithLowerNumberOf(int pixelValue) {
-        return layers.stream().min(Comparator.comparingInt(l -> l.count(pixelValue)));
+        return layers.stream().min(Comparator.comparingInt(layer -> layer.count(pixelValue)));
     }
 }

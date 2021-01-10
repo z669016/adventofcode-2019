@@ -4,26 +4,26 @@ import java.util.Collections;
 import java.util.List;
 
 public class Layer {
-    private final Dimension dimension;
+    private final Size size;
     private final List<Integer> pixels;
 
-    public static Layer of(Dimension dimension, List<Integer> pixels) {
-        assert (dimension != null);
-        assert (pixels.size() == dimension.size());
+    public static Layer of(Size size, List<Integer> pixels) {
+        assert (size != null);
+        assert (pixels.size() == size.size());
 
-        return new Layer(dimension, pixels);
+        return new Layer(size, pixels);
     }
 
-    private Layer(Dimension dimension, List<Integer> pixels) {
-        this.dimension = dimension;
+    private Layer(Size size, List<Integer> pixels) {
+        this.size = size;
         this.pixels = pixels;
     }
 
-    public Dimension dimension() {
-        return dimension;
+    public Size dimension() {
+        return size;
     }
 
-    public int count(Integer pixelValue) {
+    public int count(int pixelValue) {
         return pixels.stream().reduce(0, (a, b) -> a + (b.equals(pixelValue) ? 1 : 0));
     }
 
@@ -31,20 +31,20 @@ public class Layer {
         return Collections.unmodifiableList(pixels);
     }
 
-    public Integer pixel(Integer x, Integer y) {
-        assert (x >= 0 && x < dimension.x());
-        assert (y >= 0 && y < dimension.y());
+    public Integer pixel(int x, int y) {
+        assert (x >= 0 && x < size.width());
+        assert (y >= 0 && y < size.height());
 
         return pixels.get(xyToOffset(x, y));
     }
 
     private int xyToOffset(int x, int y) {
-        return y * dimension.x() + x;
+        return y * size.width() + x;
     }
 
     public void dump() {
-        for (int idy = 0; idy < dimension.y(); idy++) {
-            for (int idx = 0; idx < dimension.x(); idx++) {
+        for (int idy = 0; idy < size.height(); idy++) {
+            for (int idx = 0; idx < size.width(); idx++) {
                 System.out.print(pixels.get(xyToOffset(idx, idy)));
             }
             System.out.println();
@@ -52,8 +52,8 @@ public class Layer {
     }
 
     public void dumpAsImage() {
-        for (int idy = 0; idy < dimension.y(); idy++) {
-            for (int idx = 0; idx < dimension.x(); idx++) {
+        for (int idy = 0; idy < size.height(); idy++) {
+            for (int idx = 0; idx < size.width(); idx++) {
                 System.out.print(pixels.get(xyToOffset(idx, idy)) == 0 ? ' ' : '#');
             }
             System.out.println();

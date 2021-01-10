@@ -73,6 +73,15 @@ I reused the '''Permutator''' from my AOC project for the creation of the possib
 
 IMHO all in all quite fancy, and yet simple and straight forward.
 
+## Day 8
+An '''Image''' has a specific '''Size''', and a number of '''Layer'''s. To create an '''Image''' fro the puzzle input, 
+simply split the list of integers into sub-lists based on the size of the image.
+
+For part 1, just stream over the layers, and find the one with the minimum count for the specified pixel value (0 in 
+my puzzle). The '''Layer''' class contains a '''count(int pixelValue)'''  method for that.
+
+For decoding an image, for each pixel, move down and reduce to the first non-2 value encountered.
+
 ## intcode
 An '''Address''' class is used to represent a memory address. 
 
