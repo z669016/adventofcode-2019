@@ -9,6 +9,7 @@ import java.util.Queue;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -81,5 +82,35 @@ class IntCodeDeviceTest {
         device.run();
         assertEquals(1,output.size());
         assertEquals(1001L, output.poll());
+    }
+
+    @Test
+    void day9Part1Sample1() {
+        final List<Integer> intCode = List.of(109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99);
+        final Memory memory = new ExpandableMemory(intCode);
+        final BlockingDeque<Long> input = new LinkedBlockingDeque<>();
+        final Queue<Long> output = new LinkedList<>();
+        final IntCodeDevice device = IntCodeComputer.builder().memory(memory).input(input).output(output).build();
+
+        device.run();
+
+        assertEquals(intCode, asListInteger(output));
+    }
+
+    @Test
+    void day9Part1Sample2() {
+        final List<Integer> intCode = List.of(1102,34915192,34915192,7,4,7,99,0);
+        final Memory memory = new ExpandableMemory(intCode);
+        final BlockingDeque<Long> input = new LinkedBlockingDeque<>();
+        final Queue<Long> output = new LinkedList<>();
+        final IntCodeDevice device = IntCodeComputer.builder().memory(memory).input(input).output(output).build();
+
+        device.run();
+
+        assertEquals(16, String.valueOf(output.poll()).length());
+    }
+
+    private List<Integer> asListInteger(Queue<Long> queue) {
+        return queue.stream().mapToInt(Math::toIntExact).boxed().collect(Collectors.toList());
     }
 }

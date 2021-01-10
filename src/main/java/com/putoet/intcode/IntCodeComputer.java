@@ -16,6 +16,7 @@ public class IntCodeComputer implements IntCodeDevice {
     private final TimeUnit timeUnit;
 
     private Address ip = Address.START;
+    private Address relativeBase = Address.START;
 
     private IntCodeComputer(Memory memory, BlockingDeque<Long> input, Queue<Long> output,
                             PrintStream printStream, int timeout, TimeUnit timeUnit, CountDownLatch latch) {
@@ -50,6 +51,18 @@ public class IntCodeComputer implements IntCodeDevice {
 
         if (latch != null)
             latch.countDown();
+    }
+
+    @Override
+    public Address relativeBase() {
+        return relativeBase;
+    }
+
+    @Override
+    public void relativeBase(long offset) {
+        assert offset >= Integer.MIN_VALUE && offset <= Integer.MAX_VALUE;
+
+        relativeBase = relativeBase.increase((int) offset);
     }
 
     @Override

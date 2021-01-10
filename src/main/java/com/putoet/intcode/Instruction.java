@@ -14,5 +14,6 @@ public interface Instruction extends Runnable {
     int JIF = 6;
     int LT = 7;
     int EQ = 8;
+    int RB = 9;
     int EXIT = 99;
 }

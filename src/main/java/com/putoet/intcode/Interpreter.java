@@ -1,18 +1,15 @@
 package com.putoet.intcode;
 
-import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 public class Interpreter implements Iterator<Instruction> {
-    private PrintStream printStream;
     private final IntCodeDevice device;
 
     public Interpreter(IntCodeDevice device) {
         this.device = device;
-        this.printStream = device.printStream();
     }
 
     @Override
@@ -39,12 +36,13 @@ public class Interpreter implements Iterator<Instruction> {
             case Instruction.JIF -> jif(opcode);
             case Instruction.LT -> lt(opcode);
             case Instruction.EQ -> eq(opcode);
+            case Instruction.RB -> rb(opcode);
             case Instruction.EXIT -> ex(opcode);
             default -> throw new InvalidInstructionOpcodeException(address, opcode);
         };
 
-        if (printStream != null)
-            printStream.println(instruction);
+        if (device.printStream() != null)
+            device.printStream().println(instruction);
 
         return instruction;
     }
@@ -52,7 +50,7 @@ public class Interpreter implements Iterator<Instruction> {
     private Instruction ex(Opcode opcode) {
         final Address address = device.ip();
 
-        return new AbstractInstruction(opcode) {
+        return new AbstractInstruction(opcode, device.relativeBase()) {
             @Override
             public int size() {
                 return 1;
@@ -75,7 +73,7 @@ public class Interpreter implements Iterator<Instruction> {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
-        return new AbstractInstruction(opcode) {
+        return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));
             final long p2 = memory.peek(address.increase(2));
             final long p3 = memory.peek(address.increase(3));
@@ -87,7 +85,7 @@ public class Interpreter implements Iterator<Instruction> {
 
             @Override
             public void run() {
-                setValue3(new Address(p3), memory, getValue1(p1, memory) + getValue2(p2, memory));
+                setValue3(p3, memory, getValue1(p1, memory) + getValue2(p2, memory));
                 next(device);
             }
 
@@ -107,7 +105,7 @@ public class Interpreter implements Iterator<Instruction> {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
-        return new AbstractInstruction(opcode) {
+        return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));
             final long p2 = memory.peek(address.increase(2));
             final long p3 = memory.peek(address.increase(3));
@@ -119,7 +117,7 @@ public class Interpreter implements Iterator<Instruction> {
 
             @Override
             public void run() {
-                setValue3(new Address(p3), memory, getValue1(p1, memory) * getValue2(p2, memory));
+                setValue3(p3, memory, getValue1(p1, memory) * getValue2(p2, memory));
                 next(device);
             }
 
@@ -140,7 +138,7 @@ public class Interpreter implements Iterator<Instruction> {
         final Memory memory = device.memory();
         final BlockingDeque<Long> input = device.input();
 
-        return new AbstractInstruction(opcode) {
+        return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));
 
             @Override
@@ -157,7 +155,7 @@ public class Interpreter implements Iterator<Instruction> {
                 try {
                     value = input.poll(device.timeout(), device.timeUnit());
                     if (value != null) {
-                        setValue1(new Address(p1), memory, value);
+                        setValue1(p1, memory, value);
                         next(device);
                         return;
                     }
@@ -181,7 +179,7 @@ public class Interpreter implements Iterator<Instruction> {
         final Memory memory = device.memory();
         final Queue<Long> output = device.output();
 
-        return new AbstractInstruction(opcode) {
+        return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));
 
             @Override
@@ -212,7 +210,7 @@ public class Interpreter implements Iterator<Instruction> {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
-        return new AbstractInstruction(opcode) {
+        return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));
             final long p2 = memory.peek(address.increase(2));
 
@@ -244,7 +242,7 @@ public class Interpreter implements Iterator<Instruction> {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
-        return new AbstractInstruction(opcode) {
+        return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));
             final long p2 = memory.peek(address.increase(2));
 
@@ -277,7 +275,7 @@ public class Interpreter implements Iterator<Instruction> {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
-        return new AbstractInstruction(opcode) {
+        return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));
             final long p2 = memory.peek(address.increase(2));
             final long p3 = memory.peek(address.increase(3));
@@ -289,7 +287,7 @@ public class Interpreter implements Iterator<Instruction> {
 
             @Override
             public void run() {
-                setValue3(new Address(p3), memory, getValue1(p1, memory) < getValue2(p2, memory) ? 1 : 0);
+                setValue3(p3, memory, getValue1(p1, memory) < getValue2(p2, memory) ? 1 : 0);
                 next(device);
             }
 
@@ -309,7 +307,7 @@ public class Interpreter implements Iterator<Instruction> {
         final Address address = device.ip();
         final Memory memory = device.memory();
 
-        return new AbstractInstruction(opcode) {
+        return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));
             final long p2 = memory.peek(address.increase(2));
             final long p3 = memory.peek(address.increase(3));
@@ -321,7 +319,7 @@ public class Interpreter implements Iterator<Instruction> {
 
             @Override
             public void run() {
-                setValue3(new Address(p3), memory, getValue1(p1, memory) == getValue2(p2, memory) ? 1 : 0);
+                setValue3(p3, memory, getValue1(p1, memory) == getValue2(p2, memory) ? 1 : 0);
                 next(device);
             }
 
@@ -332,6 +330,34 @@ public class Interpreter implements Iterator<Instruction> {
                         parameter(opcode.mode1(), p1),
                         parameter(opcode.mode2(), p2),
                         p3
+                );
+            }
+        };
+    }
+
+    private Instruction rb(Opcode opcode) {
+        final Address address = device.ip();
+        final Memory memory = device.memory();
+
+        return new AbstractInstruction(opcode, device.relativeBase()) {
+            final long p1 = memory.peek(address.increase(1));
+
+            @Override
+            public int size() {
+                return 2;
+            }
+
+            @Override
+            public void run() {
+                device.relativeBase(getValue1(p1, memory));
+                next(device);
+            }
+
+            @Override
+            public String toString() {
+                return String.format("%08d - rb %s",
+                        address.intValue(),
+                        parameter(opcode.mode1(), p1)
                 );
             }
         };
@@ -364,9 +390,11 @@ public class Interpreter implements Iterator<Instruction> {
 
 abstract class AbstractInstruction implements Instruction {
     protected final Opcode opcode;
+    protected final Address relativeBase;
 
-    protected AbstractInstruction(Opcode opcode) {
+    protected AbstractInstruction(Opcode opcode, Address relativeBase) {
         this.opcode = opcode;
+        this.relativeBase = relativeBase;
     }
 
     protected static String parameter(Mode mode, long value) {
@@ -390,24 +418,33 @@ abstract class AbstractInstruction implements Instruction {
         return getValue(opcode.mode3(), value, memory);
     }
 
-    protected void setValue1(Address address, Memory memory, long newValue) {
-        setValue(address, memory, newValue);
+    protected void setValue1(long value, Memory memory, long newValue) {
+        setValue(opcode.mode1(), value, memory, newValue);
     }
 
-    protected void setValue2(Address address, Memory memory, long newValue) {
-        setValue(address, memory, newValue);
+    protected void setValue2(long value, Memory memory, long newValue) {
+        setValue(opcode.mode2(), value, memory, newValue);
     }
 
-    protected void setValue3(Address address, Memory memory, long newValue) {
-        setValue(address, memory, newValue);
+    protected void setValue3(long value, Memory memory, long newValue) {
+        setValue(opcode.mode3(), value, memory, newValue);
     }
 
     private long getValue(Mode mode, long value, Memory memory) {
-        return mode == Mode.IMMEDIATE ? value : memory.peek(new Address(value));
+        return switch (mode) {
+            case IMMEDIATE -> value;
+            case POSITION -> memory.peek(new Address(value));
+            case RELATIVE -> memory.peek(relativeBase.increase((int) value));
+        };
     }
 
-    protected void setValue(Address address, Memory memory, long newValue) {
-        memory.poke(address, newValue);
+    protected void setValue(Mode mode, long value, Memory memory, long newValue) {
+        switch (mode) {
+            case IMMEDIATE -> throw new IllegalStateException("Cannot set memory position in immediate mode.");
+            case POSITION -> memory.poke(new Address(value), newValue);
+            case RELATIVE -> memory.poke(relativeBase.increase((int) value), newValue);
+        }
+        ;
     }
 
     @Override

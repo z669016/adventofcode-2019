@@ -5,11 +5,15 @@ public class Opcode {
     private final Mode[] mode = new Mode[3];
 
     public Opcode(long opcode) {
+        assert opcode > 0;
+
         this.opcode = (int) opcode % 100;
 
         opcode = opcode / 100;
         for (int  i = 0; i < 3; i++) {
-            mode[i] = opcode % 10 == 0 ? Mode.POSITION : Mode.IMMEDIATE;
+            assert opcode % 10 < Mode.values().length;
+
+            mode[i] = Mode.values()[(int) opcode % 10];
             opcode = opcode / 10;
         }
     }

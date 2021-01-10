@@ -1,11 +1,12 @@
 package com.putoet.intcode;
 
 public enum Mode {
+    POSITION,
     IMMEDIATE,
-    POSITION;
+    RELATIVE;
 
     @Override
     public String toString() {
-        return this == IMMEDIATE ? "1" : "0";
+        return String.valueOf(this.ordinal());
     }
 }

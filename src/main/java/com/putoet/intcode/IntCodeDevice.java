@@ -7,6 +7,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public interface IntCodeDevice extends Runnable {
+    Address relativeBase();
+    void relativeBase(long offset);
+
     Address ip();
     void ip(long ip);
 
