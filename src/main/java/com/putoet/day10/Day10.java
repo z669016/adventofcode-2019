@@ -9,22 +9,31 @@ import java.util.Set;
 
 public class Day10 {
     public static void main(String[] args) {
-        final AstroidMap astroidMap = AstroidMap.of(ResourceLines.list("/day10.txt"));
-        final Map<Astroid, LineOfSightMap> lineOfSightMaps = astroidMap.linesOfSightMaps();
-        final int max = lineOfSightMaps.entrySet().stream().mapToInt(entry -> entry.getValue().inLineOfSightCount()).max().getAsInt();
-        final Astroid astroid = lineOfSightMaps.entrySet().stream()
+        final SpaceArea spaceArea = SpaceArea.of(ResourceLines.list("/day10.txt"));
+        final Map<Asteroid, LineOfSightMap> lineOfSightMaps = spaceArea.linesOfSightMaps();
+        final int max = lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).max().getAsInt();
+
+        final Asteroid asteroid = part1(lineOfSightMaps, max);
+        part2(lineOfSightMaps, asteroid);
+    }
+
+    private static Asteroid part1(Map<Asteroid, LineOfSightMap> lineOfSightMaps, int max) {
+        final Asteroid asteroid = lineOfSightMaps.entrySet().stream()
                 .filter(entry -> entry.getValue().inLineOfSightCount() == max)
                 .findFirst()
                 .get()
                 .getKey();
 
-        System.out.printf("The best location for the monitoring station is at astroid %s with %d astroids in its direct line of sight%n", astroid, max);
+        System.out.printf("The best location for the monitoring station is at asteroid %s with %d asteroids in its direct line of sight%n", asteroid, max);
+        return asteroid;
+    }
 
-        final LineOfSightMap monitoringAstroid = lineOfSightMaps.get(astroid);
-        final Set<LineOfSight> linesOfSight = monitoringAstroid.map();
+    private static void part2(Map<Asteroid, LineOfSightMap> lineOfSightMaps, Asteroid asteroid) {
+        final LineOfSightMap monitoringAsteroid = lineOfSightMaps.get(asteroid);
+        final Set<LineOfSight> linesOfSight = monitoringAsteroid.map();
 
         Iterator<LineOfSight> iter = linesOfSight.iterator();
-        Optional<Astroid> result = Optional.empty();
+        Optional<Asteroid> result = Optional.empty();
         int count = 0;
         while (count < 200) {
             if (!iter.hasNext())
@@ -35,6 +44,6 @@ public class Day10 {
                 count++;
         }
 
-        System.out.println("200th atroid vaporized was " + result.get());
+        System.out.println("200th asteroid vaporized was " + result.get());
     }
 }

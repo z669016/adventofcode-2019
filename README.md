@@ -82,19 +82,33 @@ my puzzle). The '''Layer''' class contains a '''count(int pixelValue)'''  method
 
 For decoding an image, for each pixel, move down and reduce to the first non-2 value encountered.
 
+## Day 9
+Added relative mode to the '''Interpreter''' to solve part 1 and part 2. 
+
+## Day 10
+A nice challenge for day 10. The Asteroid class models a single asteroid at a specific location (reused the Point class 
+from my the AoC project). The SpaceArea creates a '''Map<Point,Asteroid>''' and provides some convenience methods, for 
+instance to create '''LineOfSightMap'''s, which contain all '''LineOfSight'''s for a single Asteroid (an entry for each 
+direction in which other Asteroids are visible in a line-of-sight). A line-if-sight is identified by a Vector (which 
+represents) the direction in which the other asteroids are positioned from the point of the origin of the 
+line-of-sight.
+
+Using these structured puzzle input classes, it's a piece of cake to solve part 1 and 2 for this day. 
+
 ## intcode
 An '''Address''' class is used to represent a memory address. 
 
-The '''Memory''' interface defines a '''peek(Address)''' and '''poke(address long value)''' mwthod. This interface is 
+The '''Memory''' interface defines a '''peek(Address)''' and '''poke(address long value)''' method. This interface is 
 implemented by '''FixedMemory''' class (with fixed length) and '''ExpandableMemory''' which grows when the peek or poke 
 method references an address out of range (beyond '''Memory.size()''').
 
 The '''Instruction''' interface defines methods on an Instruction instance like '''opcode()''' (to obtain the 
-intructions opcode), '''size()''' (which returns the length of the instruction, i.e. number of used memory positions), 
-and '''run()''' (whoch runs the instruction. The '''Interpreter''' creates an instruction instance for the operation at 
-a specific memory address. The factory menthod '''interpret(Address, Memory)''' will throw an exception when it 
-encounters an invalid (unknown) opcode at the specified memory location.
+instructions' opcode), '''size()''' (which returns the length of the instruction, i.e. number of used memory positions), 
+and '''run()''' (which runs the instruction). 
+
+The '''Interpreter''' implements '''Iterator<Instruction>''' that enables you to iterate over the instructions of the 
+program using the instruction pointer. 
 
 The '''IntCodDevice''' does the actual work. It takes a '''Memory''' instance on creation, and the '''run()''' method, 
 interprets all instructions and executes them (unless it encounters an exit instruction (opcode 99)). In between two  
-runs you cannot reset the memory, so be carefull.
+runs you cannot reset the memory, so be carefully.

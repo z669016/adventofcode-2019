@@ -1,27 +1,25 @@
 package com.putoet.day10;
 
+import com.putoet.grid.Point;
+
 import java.math.BigInteger;
 import java.util.Objects;
 
 public class Vector implements Comparable<Vector> {
-    private final int x;
-    private final int y;
+    public final int x;
+    public final int y;
 
     public Vector(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public int x() {
-        return x;
-    }
-
-    public int y() {
-        return y;
-    }
-
     public static Vector ofPoints(Point a, Point b) {
-        return new Vector(b.x() - a.x(), b.y() - a.y());
+        return new Vector(b.x - a.x, b.y - a.y);
+    }
+
+    private static int ggd(int a, int b) {
+        return BigInteger.valueOf(a).gcd(BigInteger.valueOf(b)).intValue();
     }
 
     public Vector direction() {
@@ -54,10 +52,6 @@ public class Vector implements Comparable<Vector> {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
-    }
-
-    private static int ggd(int a, int b) {
-        return BigInteger.valueOf(a).gcd(BigInteger.valueOf(b)).intValue();
     }
 
     @Override

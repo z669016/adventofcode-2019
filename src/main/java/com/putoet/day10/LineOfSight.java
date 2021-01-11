@@ -3,31 +3,35 @@ package com.putoet.day10;
 import java.util.*;
 
 public class LineOfSight implements Comparable<LineOfSight> {
-    private final Astroid origin;
+    private final Asteroid origin;
     private final Vector direction;
-    private Astroid visible;
-    private final TreeSet<Astroid> hidden = new TreeSet<>(new Comparator<Astroid>() {
+    private final TreeSet<Asteroid> hidden = new TreeSet<>(new Comparator<>() {
         @Override
-        public int compare(Astroid o1, Astroid o2) {
-            double distance1 = Vector.ofPoints(origin.location(), o1.location()).length();
-            double distance2 = Vector.ofPoints(origin.location(), o2.location()).length();
+        public int compare(Asteroid o1, Asteroid o2) {
+            double distance1 = origin.location().euclideanDistance(o1.location());
+            double distance2 = origin.location().euclideanDistance(o2.location());
             return Double.compare(distance1, distance2);
         }
     });
+    private Asteroid visible;
 
-    public LineOfSight(Astroid origin, Vector direction, Astroid visible) {
+    public LineOfSight(Asteroid origin, Vector direction, Asteroid visible) {
         this.origin = origin;
         this.visible = visible;
         this.direction = direction;
     }
 
-    public static LineOfSight of(Astroid origin, Astroid visible) {
+    public static LineOfSight of(Asteroid origin, Asteroid visible) {
         return new LineOfSight(origin,
                 Vector.ofPoints(origin.location(), visible.location()).direction(),
                 visible);
     }
 
-    public Astroid origin() {
+    private static double distanceTo(Asteroid a, Asteroid b) {
+        return a.location().euclideanDistance(b.location());
+    }
+
+    public Asteroid origin() {
         return origin;
     }
 
@@ -35,31 +39,27 @@ public class LineOfSight implements Comparable<LineOfSight> {
         return direction;
     }
 
-    public Optional<Astroid> inLineOfSight() {
+    public Optional<Asteroid> inLineOfSight() {
         return Optional.ofNullable(visible);
     }
 
-    public Set<Astroid> hidden() {
+    public Set<Asteroid> hidden() {
         return Collections.unmodifiableSet(hidden);
     }
 
-    public void add(Astroid astroid) {
-        if (origin.equals(astroid))
+    public void add(Asteroid asteroid) {
+        if (origin.equals(asteroid))
             return;
 
-        if (!direction.equals(Vector.ofPoints(origin.location(), astroid.location()).direction()))
+        if (!direction.equals(Vector.ofPoints(origin.location(), asteroid.location()).direction()))
             return;
 
-        if (distanceTo(origin, astroid) < distanceTo(origin, visible)) {
+        if (distanceTo(origin, asteroid) < distanceTo(origin, visible)) {
             hidden.add(visible);
-            visible = astroid;
+            visible = asteroid;
         } else {
-            hidden.add(astroid);
+            hidden.add(asteroid);
         }
-    }
-
-    private static double distanceTo(Astroid a, Astroid b) {
-        return a.location().distanceTo(b.location());
     }
 
     @Override
@@ -72,14 +72,14 @@ public class LineOfSight implements Comparable<LineOfSight> {
         return Double.compare(direction.degrees(), o.direction.degrees());
     }
 
-    public Optional<Astroid> vaporize() {
-        final Optional<Astroid> result = Optional.ofNullable(visible);
+    public Optional<Asteroid> vaporize() {
+        final Optional<Asteroid> result = Optional.ofNullable(visible);
 
         if (result.isPresent()) {
-            System.out.println("Vaporized astroid at " + result.get().location() + " at angle " + direction.degrees());
+            // System.out.println("Vaporized asteroid at " + result.get().location() + " at angle " + direction.degrees());
 
             try {
-                final Astroid head = hidden.first();
+                final Asteroid head = hidden.first();
                 hidden.remove(head);
                 visible = head;
             } catch (NoSuchElementException exc) {
