@@ -3,9 +3,9 @@ package com.putoet.day12;
 import java.util.Objects;
 
 public class Velocity {
-    private final int x;
-    private final int y;
-    private final int z;
+    public final int x;
+    public final int y;
+    public final int z;
 
     public Velocity(int x, int y, int z) {
         this.x = x;
@@ -13,23 +13,11 @@ public class Velocity {
         this.z = z;
     }
 
-    public int x() {
-        return x;
-    }
-
-    public int y() {
-        return y;
-    }
-
-    public int z() {
-        return z;
-    }
-
     public Velocity applyGravity(Position myPosition, Position other) {
         return new Velocity(
-                x + Integer.compare(other.x(), myPosition.x()),
-                y + Integer.compare(other.y(), myPosition.y()),
-                z + Integer.compare(other.z(), myPosition.z())
+                x + Integer.compare(other.x, myPosition.x),
+                y + Integer.compare(other.y, myPosition.y),
+                z + Integer.compare(other.z, myPosition.z)
         );
     }
 
@@ -54,6 +42,6 @@ public class Velocity {
 
     @Override
     public String toString() {
-        return String.format("<x=%d, y=%d, z=%d>", x(), y(), z());
+        return String.format("<x=%d, y=%d, z=%d>", x, y, z);
     }
 }

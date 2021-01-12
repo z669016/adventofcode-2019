@@ -10,7 +10,7 @@ public class MoonMapTest {
 
     @Test
     public void testLoadFile() {
-        final Map<String, Moon> moons = MoonMap.loadFile("day12.txt");
+        final Map<String, Moon> moons = MoonMap.loadFile("/day12.txt");
         assertTrue(moons.containsKey("Io"));
         assertTrue(moons.containsKey("Europa"));
         assertTrue(moons.containsKey("Ganymede"));

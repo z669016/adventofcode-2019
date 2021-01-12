@@ -134,35 +134,19 @@ public class Surface {
 
     public void turnRobotLeft() {
         switch (robotDirection) {
-            case UP:
-                robotDirection = Direction.LEFT;
-                break;
-            case LEFT:
-                robotDirection = Direction.DOWN;
-                break;
-            case RIGHT:
-                robotDirection = Direction.UP;
-                break;
-            case DOWN:
-                robotDirection = Direction.RIGHT;
-                break;
+            case UP -> robotDirection = Direction.LEFT;
+            case LEFT -> robotDirection = Direction.DOWN;
+            case RIGHT -> robotDirection = Direction.UP;
+            case DOWN -> robotDirection = Direction.RIGHT;
         }
     }
 
     public void turnRobotRight() {
         switch (robotDirection) {
-            case UP:
-                robotDirection = Direction.RIGHT;
-                break;
-            case LEFT:
-                robotDirection = Direction.UP;
-                break;
-            case RIGHT:
-                robotDirection = Direction.DOWN;
-                break;
-            case DOWN:
-                robotDirection = Direction.LEFT;
-                break;
+            case UP -> robotDirection = Direction.RIGHT;
+            case LEFT -> robotDirection = Direction.UP;
+            case RIGHT -> robotDirection = Direction.DOWN;
+            case DOWN -> robotDirection = Direction.LEFT;
         }
     }
 }

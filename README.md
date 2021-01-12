@@ -95,6 +95,30 @@ line-of-sight.
 
 Using these structured puzzle input classes, it's a piece of cake to solve part 1 and 2 for this day. 
 
+## Day 11
+The idea is that a robot running an IntCode program navigates across a surface to paint panels, so I started with
+a simple '''Panel''' class, and an extensible '''Surface''' that "grows" as soon as the robot navigates across its 
+boundary (in any direction). The '''Panel''' class remembers if it has been painted of not, and the '''Surface''' 
+keeps track of the position of the robot. 
+
+The '''InputDevice''' is a '''Camera''' that returns a value for the color of the panel at which the robot is 
+positioned at that point in time. The '''Painter''' is the '''OutputDevice''' for the '''IntCodeDevice''', and on 
+instruction of the int code computer, it paints a panel on the surface and moves the robot to the next position. 
+
+For part 1, run the intcode program, and count the number of painted panels on the surface. For part two, first 
+paint the starting panel, than run the int code program and then print/visualize the surface.
+
+## Day 12
+A '''Moon''' class helps to keep track of the individual moons. A moon has a name, a position, and a velocity. The 
+'''Position''' and '''Velocity''' classes do the simple math of applying gravity and velocity to the position, and 
+calculating the energy. The '''MoonMap''' class loads the puzzle input in a map.
+
+Part 1 is straight forward, just apply the rules 1000 and sum the total energy in the system. Part 2 however is more 
+nasty. Yes, the trick is in finding repetition, but the repetition is not in an individual moons' position and 
+velocity, but in the combination of the X-values, the Y-values and Z-values for position and velocity of all moons at 
+a point in time. When you found the repetition in each of these separately,you can calculate the moment of repetition 
+by finding the least-common-multiple for the three values. 
+
 ## intcode
 An '''Address''' class is used to represent a memory address. 
 

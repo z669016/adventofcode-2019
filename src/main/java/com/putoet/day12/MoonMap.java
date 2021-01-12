@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class MoonMap {
     public static Map<String, Moon> loadFile(String fileName) {
         final List<String> moons = List.of("Io", "Europa", "Ganymede", "Callisto");
-        final List<Position> positions = ResourceLines.stream("/day12.txt")
+        final List<Position> positions = ResourceLines.stream(fileName)
                 .map(Position::of)
                 .collect(Collectors.toList());
 
@@ -24,11 +24,5 @@ public class MoonMap {
         }
 
         return moonMap;
-    }
-
-    public static String snapshot(Map<String, Moon> moons) {
-        final StringBuilder sb = new StringBuilder();
-        moons.values().forEach(moon -> sb.append(moon.position().toString()).append(moon.velocity().toString()));
-        return sb.toString();
     }
 }

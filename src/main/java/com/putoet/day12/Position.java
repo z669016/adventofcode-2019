@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
 public class Position {
     private static final Pattern pattern = Pattern.compile("<x=(-?\\d+), y=(-?\\d+), z=(-?\\d+)>");
 
-    private final int x;
-    private final int y;
-    private final int z;
+    public final int x;
+    public final int y;
+    public final int z;
 
     public Position(int x, int y, int z) {
         this.x = x;
@@ -25,20 +25,8 @@ public class Position {
         throw new IllegalArgumentException("Invalid coordinates format('" + coordinates + "')");
     }
 
-    public int x() {
-        return x;
-    }
-
-    public int y() {
-        return y;
-    }
-
-    public int z() {
-        return z;
-    }
-
     public Position applyVelocity(Velocity velocity) {
-        return new Position(x + velocity.x(), y + velocity.y(), z + velocity.z());
+        return new Position(x + velocity.x, y + velocity.y, z + velocity.z);
     }
 
     public int energy() {
@@ -62,6 +50,6 @@ public class Position {
 
     @Override
     public String toString() {
-        return String.format("<x=%d, y=%d, z=%d>", x(), y(), z());
+        return String.format("<x=%d, y=%d, z=%d>", x, y, z);
     }
 }
