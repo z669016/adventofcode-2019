@@ -1,15 +1,13 @@
 package com.putoet.intcode;
 
 import java.io.PrintStream;
-import java.util.Queue;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class IntCodeComputer implements IntCodeDevice {
     private final CountDownLatch latch;
-    private final BlockingDeque<Long> input;
-    private final Queue<Long> output;
+    private final InputDevice input;
+    private final OutputDevice output;
     private final Memory memory;
     private final PrintStream printStream;
     private final int timeout;
@@ -18,8 +16,13 @@ public class IntCodeComputer implements IntCodeDevice {
     private Address ip = Address.START;
     private Address relativeBase = Address.START;
 
-    private IntCodeComputer(Memory memory, BlockingDeque<Long> input, Queue<Long> output,
-                            PrintStream printStream, int timeout, TimeUnit timeUnit, CountDownLatch latch) {
+    private IntCodeComputer(Memory memory,
+                            InputDevice input,
+                            OutputDevice output,
+                            PrintStream printStream,
+                            int timeout,
+                            TimeUnit timeUnit,
+                            CountDownLatch latch) {
         this.memory = memory;
         this.input = input;
         this.output = output;
@@ -85,12 +88,12 @@ public class IntCodeComputer implements IntCodeDevice {
     }
 
     @Override
-    public BlockingDeque<Long> input() {
+    public InputDevice input() {
         return input;
     }
 
     @Override
-    public Queue<Long> output() {
+    public OutputDevice output() {
         return output;
     }
 
@@ -121,8 +124,8 @@ public class IntCodeComputer implements IntCodeDevice {
 
     public static class Builder {
         private Memory memory;
-        private BlockingDeque<Long> input;
-        private Queue<Long> output;
+        private InputDevice input;
+        private OutputDevice output;
         private PrintStream printStream;
         private int timeout;
         private TimeUnit timeUnit;
@@ -136,12 +139,12 @@ public class IntCodeComputer implements IntCodeDevice {
             return this;
         }
 
-        public Builder input(BlockingDeque<Long> input) {
+        public Builder input(InputDevice input) {
             this.input = input;
             return this;
         }
 
-        public Builder output(Queue<Long> output) {
+        public Builder output(OutputDevice output) {
             this.output = output;
             return this;
         }

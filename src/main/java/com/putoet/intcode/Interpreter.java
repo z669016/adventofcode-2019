@@ -1,8 +1,7 @@
 package com.putoet.intcode;
 
 import java.util.Iterator;
-import java.util.Queue;
-import java.util.concurrent.BlockingDeque;
+import java.util.OptionalLong;
 import java.util.concurrent.TimeUnit;
 
 public class Interpreter implements Iterator<Instruction> {
@@ -136,7 +135,7 @@ public class Interpreter implements Iterator<Instruction> {
     private Instruction in(Opcode opcode) {
         final Address address = device.ip();
         final Memory memory = device.memory();
-        final BlockingDeque<Long> input = device.input();
+        final InputDevice input = device.input();
 
         return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));
@@ -151,16 +150,13 @@ public class Interpreter implements Iterator<Instruction> {
                 if (input == null)
                     throw new NoInputAvailableException(address);
 
-                final Long value;
-                try {
-                    value = input.poll(device.timeout(), device.timeUnit());
-                    if (value != null) {
-                        setValue1(p1, memory, value);
-                        next(device);
-                        return;
-                    }
-                } catch (InterruptedException ignored) {
+                final OptionalLong value = input.poll(device.timeout(), device.timeUnit());
+                if (value.isPresent()) {
+                    setValue1(p1, memory, value.getAsLong());
+                    next(device);
+                    return;
                 }
+
                 throw new NoInputSignalAvailableException(address, device.timeout(), device.timeUnit());
             }
 
@@ -177,7 +173,7 @@ public class Interpreter implements Iterator<Instruction> {
     private Instruction out(Opcode opcode) {
         final Address address = device.ip();
         final Memory memory = device.memory();
-        final Queue<Long> output = device.output();
+        final OutputDevice output = device.output();
 
         return new AbstractInstruction(opcode, device.relativeBase()) {
             final long p1 = memory.peek(address.increase(1));

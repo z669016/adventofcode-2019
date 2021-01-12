@@ -3,6 +3,7 @@ package com.putoet.day7;
 import com.putoet.intcode.FixedMemory;
 import com.putoet.intcode.IntCodeComputer;
 import com.putoet.intcode.IntCodeDevice;
+import com.putoet.intcode.IntCodeInputOutputDevice;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,14 +18,15 @@ public class FeedbackAmplifierArray implements AmplifierArray {
 
     private final CountDownLatch latch = new CountDownLatch(ARRAY_SIZE);
     private final IntCodeDevice[] amplifiers = new IntCodeDevice[ARRAY_SIZE];
-    private final BlockingDeque<Long>[] input = new BlockingDeque[]{
-            new LinkedBlockingDeque<Long>(),
-            new LinkedBlockingDeque<Long>(),
-            new LinkedBlockingDeque<Long>(),
-            new LinkedBlockingDeque<Long>(),
-            new LinkedBlockingDeque<Long>()
+    private final IntCodeInputOutputDevice[] input = new IntCodeInputOutputDevice[]{
+            new IntCodeInputOutputDevice(),
+            new IntCodeInputOutputDevice(),
+            new IntCodeInputOutputDevice(),
+            new IntCodeInputOutputDevice(),
+            new IntCodeInputOutputDevice()
     };
-    private final BlockingDeque<Long> output;
+
+    private final IntCodeInputOutputDevice output;
 
     public FeedbackAmplifierArray(List<Integer> intCodeProgram, PhaseSetting phaseSetting) {
         assert phaseSetting.size() == ARRAY_SIZE;
@@ -62,11 +64,6 @@ public class FeedbackAmplifierArray implements AmplifierArray {
 
     @Override
     public OptionalLong output(int timeout, TimeUnit timeUnit) {
-        try {
-            return OptionalLong.of(Objects.requireNonNull(output.poll(timeout, timeUnit)));
-        } catch (InterruptedException ignored) {
-        }
-
-        return OptionalLong.empty();
+        return output.poll(timeout, timeUnit);
     }
 }

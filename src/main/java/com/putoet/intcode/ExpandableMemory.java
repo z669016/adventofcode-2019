@@ -49,7 +49,6 @@ public class ExpandableMemory implements Memory {
 
     protected void checkAddress(Address address) {
         if (address.intValue() >= size()) {
-            System.out.println("Increasing memory to include address " + address);
             memory = extend(memory, address.intValue() + 10);
         }
     }

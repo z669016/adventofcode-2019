@@ -3,28 +3,26 @@ package com.putoet.day7;
 import com.putoet.intcode.FixedMemory;
 import com.putoet.intcode.IntCodeComputer;
 import com.putoet.intcode.IntCodeDevice;
+import com.putoet.intcode.IntCodeInputOutputDevice;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.OptionalLong;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 public class SimpleAmplifierArray implements AmplifierArray {
     private static final int ARRAY_SIZE = 5;
 
     private final IntCodeDevice[] amplifiers = new IntCodeDevice[ARRAY_SIZE];
-    private final BlockingDeque<Long>[] input = new BlockingDeque[]{
-            new LinkedBlockingDeque<Long>(),
-            new LinkedBlockingDeque<Long>(),
-            new LinkedBlockingDeque<Long>(),
-            new LinkedBlockingDeque<Long>(),
-            new LinkedBlockingDeque<Long>(),
-            new LinkedBlockingDeque<Long>()
+    private final IntCodeInputOutputDevice[] input = new IntCodeInputOutputDevice[]{
+            new IntCodeInputOutputDevice(),
+            new IntCodeInputOutputDevice(),
+            new IntCodeInputOutputDevice(),
+            new IntCodeInputOutputDevice(),
+            new IntCodeInputOutputDevice(),
+            new IntCodeInputOutputDevice()
     };
 
-    private final BlockingDeque<Long> output;
+    private final IntCodeInputOutputDevice output;
 
     public SimpleAmplifierArray(List<Integer> intCodeProgram, PhaseSetting phaseSetting) {
         assert phaseSetting.size() == ARRAY_SIZE;
@@ -37,7 +35,7 @@ public class SimpleAmplifierArray implements AmplifierArray {
                     .timeout(100, TimeUnit.MILLISECONDS)
                     .build();
 
-            input[i].offer((long) phaseSetting.get(i));
+            input[i].offer(phaseSetting.get(i));
         }
         output = input[input.length - 1];
     }
@@ -57,11 +55,6 @@ public class SimpleAmplifierArray implements AmplifierArray {
 
     @Override
     public OptionalLong output(int timeout, TimeUnit timeUnit) {
-        try {
-            return OptionalLong.of(Objects.requireNonNull(output.poll(timeout, timeUnit)));
-        } catch (InterruptedException ignored) {
-        }
-
-        return OptionalLong.empty();
+        return output.poll(timeout, timeUnit);
     }
 }
