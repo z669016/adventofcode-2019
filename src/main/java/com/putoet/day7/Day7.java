@@ -3,7 +3,6 @@ package com.putoet.day7;
 import com.putoet.resources.CSV;
 import com.putoet.statistics.Permutator;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +10,7 @@ import java.util.function.BiFunction;
 
 public class Day7 {
     public static void main(String[] args) {
-        final List<Integer> intCodeProgram = CSV.list("/day7.txt", Integer::parseInt).get(0);
+        final List<Long> intCodeProgram = CSV.list("/day7.txt", Long::parseLong).get(0);
         final Permutator<Integer> permutator = new Permutator<>();
 
         List<List<Integer>> phaseSettings = permutator.permute(List.of(0, 1, 2, 3, 4));
@@ -21,10 +20,10 @@ public class Day7 {
         part(intCodeProgram, phaseSettings, "feedback amplifier", Day7::feedbackAmplifier);
     }
 
-    private static void part(List<Integer> intCodeProgram,
+    private static void part(List<Long> intCodeProgram,
                              List<List<Integer>> phaseSettings,
                              String name,
-                             BiFunction<List<Integer>, PhaseSetting, OptionalLong> applifier) {
+                             BiFunction<List<Long>, PhaseSetting, OptionalLong> applifier) {
         final OptionalLong max = phaseSettings.stream()
                 .map(PhaseSetting::new)
                 .map(phaseSetting -> applifier.apply(intCodeProgram, phaseSetting))
@@ -39,7 +38,7 @@ public class Day7 {
             System.out.println("No max available...");
     }
 
-    public static OptionalLong simpleAmplifier(List<Integer> intCodeProgram, PhaseSetting phaseSetting) {
+    public static OptionalLong simpleAmplifier(List<Long> intCodeProgram, PhaseSetting phaseSetting) {
         final AmplifierArray amplifierArray = new SimpleAmplifierArray(intCodeProgram, phaseSetting);
 
         amplifierArray.input(0);
@@ -48,7 +47,7 @@ public class Day7 {
         return amplifierArray.output(100, TimeUnit.MILLISECONDS);
     }
 
-    public static OptionalLong feedbackAmplifier(List<Integer> intCodeProgram, PhaseSetting phaseSetting) {
+    public static OptionalLong feedbackAmplifier(List<Long> intCodeProgram, PhaseSetting phaseSetting) {
         final AmplifierArray amplifierArray = new FeedbackAmplifierArray(intCodeProgram, phaseSetting);
 
         amplifierArray.input(0);

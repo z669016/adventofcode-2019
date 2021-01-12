@@ -24,7 +24,7 @@ public class SimpleAmplifierArray implements AmplifierArray {
 
     private final IntCodeInputOutputDevice output;
 
-    public SimpleAmplifierArray(List<Integer> intCodeProgram, PhaseSetting phaseSetting) {
+    public SimpleAmplifierArray(List<Long> intCodeProgram, PhaseSetting phaseSetting) {
         assert phaseSetting.size() == ARRAY_SIZE;
 
         for (int i = 0; i < amplifiers.length; i++) {

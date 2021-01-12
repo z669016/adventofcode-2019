@@ -13,17 +13,17 @@ class IntCodeDeviceTest {
 
     @Test
     void runDay2Sample() {
-        final List<Integer> intCode = CSV.flatList("/day2.txt", Integer::parseInt);
+        final List<Long> intCode = CSV.flatList("/day2.txt", Long::parseLong);
         final Memory memory = new FixedMemory(intCode);
         final IntCodeDevice device = IntCodeComputer.builder().memory(memory).build();
 
         device.run();
-        assertEquals(3500, memory.peek(new Address(0)));
+        assertEquals(3500L, memory.peek(new Address(0)));
     }
 
     @Test
     void runDay5ModeSample() {
-        final List<Integer> intCode = List.of(1002, 4, 3, 4, 33);
+        final List<Long> intCode = List.of(1002L, 4L, 3L, 4L, 33L);
         final Memory memory = new FixedMemory(intCode);
         final IntCodeDevice device = IntCodeComputer.builder().memory(memory).build();
         device.run();
@@ -31,7 +31,7 @@ class IntCodeDeviceTest {
 
     @Test
     void day5InOutSample() {
-        final List<Integer> intCode = List.of(3, 0, 4, 0, 99);
+        final List<Long> intCode = List.of(3L, 0L, 4L, 0L, 99L);
         final Memory memory = new FixedMemory(intCode);
         final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
         final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
@@ -39,13 +39,13 @@ class IntCodeDeviceTest {
 
         input.offer(7L);
         device.run();
-        assertEquals(1, output.size());
+        assertEquals(1L, output.size());
         assertEquals(7L, output.poll().getAsLong());
     }
 
     @Test
     void day5BlockingInOutSample() throws InterruptedException {
-        final List<Integer> intCode = List.of(3, 0, 4, 0, 99);
+        final List<Long> intCode = List.of(3L, 0L, 4L, 0L, 99L);
         final Memory memory = new FixedMemory(intCode);
         final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
         final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
@@ -66,9 +66,9 @@ class IntCodeDeviceTest {
 
     @Test
     void day5Part2Samples() {
-        final List<Integer> intCode = List.of(3, 21, 1008, 21, 8, 20, 1005, 20, 22, 107, 8, 21, 20, 1006, 20, 31,
-                1106, 0, 36, 98, 0, 0, 1002, 21, 125, 20, 4, 20, 1105, 1, 46, 104,
-                999, 1105, 1, 46, 1101, 1000, 1, 20, 4, 20, 1105, 1, 46, 98, 99);
+        final List<Long> intCode = List.of(3L, 21L, 1008L, 21L, 8L, 20L, 1005L, 20L, 22L, 107L, 8L, 21L, 20L, 1006L, 20L, 31L,
+                1106L, 0L, 36L, 98L, 0L, 0L, 1002L, 21L, 125L, 20L, 4L, 20L, 1105L, 1L, 46L, 104L,
+                999L, 1105L, 1L, 46L, 1101L, 1000L, 1L, 20L, 4L, 20L, 1105L, 1L, 46L, 98L, 99L);
         final Memory memory = new FixedMemory(intCode);
         final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
         final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
@@ -76,13 +76,13 @@ class IntCodeDeviceTest {
 
         input.offer(9L);
         device.run();
-        assertEquals(1, output.size());
+        assertEquals(1L, output.size());
         assertEquals(1001L, output.poll().getAsLong());
     }
 
     @Test
     void day9Part1Sample1() {
-        final List<Integer> intCode = List.of(109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99);
+        final List<Long> intCode = List.of(109L, 1L, 204L, -1L, 1001L, 100L, 1L, 100L, 1008L, 100L, 16L, 101L, 1006L, 101L, 0L, 99L);
         final Memory memory = new ExpandableMemory(intCode);
         final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
         final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
@@ -90,12 +90,12 @@ class IntCodeDeviceTest {
 
         device.run();
 
-        assertEquals(intCode, asListInteger(output.asList()));
+        assertEquals(intCode, output.asList());
     }
 
     @Test
     void day9Part1Sample2() {
-        final List<Integer> intCode = List.of(1102, 34915192, 34915192, 7, 4, 7, 99, 0);
+        final List<Long> intCode = List.of(1102L, 34915192L, 34915192L, 7L, 4L, 7L, 99L, 0L);
         final Memory memory = new ExpandableMemory(intCode);
         final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
         final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
@@ -103,10 +103,6 @@ class IntCodeDeviceTest {
 
         device.run();
 
-        assertEquals(16, String.valueOf(output.poll().getAsLong()).length());
-    }
-
-    private List<Integer> asListInteger(List<Long> list) {
-        return list.stream().mapToInt(Math::toIntExact).boxed().collect(Collectors.toList());
+        assertEquals(16L, String.valueOf(output.poll().getAsLong()).length());
     }
 }

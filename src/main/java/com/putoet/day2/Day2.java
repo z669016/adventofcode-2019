@@ -8,13 +8,13 @@ import java.util.List;
 
 public class Day2 {
     public static void main(String[] args) throws IOException {
-        final List<Integer> intCode = CSV.flatList("/day2.txt", Integer::parseInt);
+        final List<Long> intCode = CSV.flatList("/day2.txt", Long::parseLong);
 
         part1(intCode);
         part2(intCode);
     }
 
-    private static void part1(List<Integer> intCode) {
+    private static void part1(List<Long> intCode) {
         final Memory memory = new FixedMemory(intCode);
         final IntCodeDevice device = IntCodeComputer.builder().memory(memory).build();
 
@@ -25,7 +25,7 @@ public class Day2 {
         System.out.println("The value at position 0 after running the program is " + memory.peek(new Address(0)));
     }
 
-    private static void part2(List<Integer> intCode) {
+    private static void part2(List<Long> intCode) {
         final Address nounAddress = new Address(1);
         final Address verbAddress = new Address(2);
 

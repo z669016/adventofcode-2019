@@ -9,7 +9,7 @@ public interface Memory {
     long[] toArray();
 
     class InvalidMemoryInitializer extends IllegalArgumentException {
-        public InvalidMemoryInitializer(List<Integer> memory) {
+        public InvalidMemoryInitializer(List<Long> memory) {
             super("Invalid memory initializer: " + memory);
         }
     }

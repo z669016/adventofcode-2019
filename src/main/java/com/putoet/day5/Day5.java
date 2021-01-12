@@ -11,13 +11,13 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class Day5 {
     public static void main(String[] args) {
-        final List<Integer> intCode = CSV.list("/day5.txt", Integer::parseInt).get(0);
+        final List<Long> intCode = CSV.list("/day5.txt", Long::parseLong).get(0);
 
         part1(intCode);
         part2(intCode);
     }
 
-    private static void part1(List<Integer> intCode) {
+    private static void part1(List<Long> intCode) {
         final Memory memory = new FixedMemory(intCode);
         final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
         final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
@@ -29,7 +29,7 @@ public class Day5 {
 
     }
 
-    private static void part2(List<Integer> intCode) {
+    private static void part2(List<Long> intCode) {
         final Memory memory = new FixedMemory(intCode);
         final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
         final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();

@@ -12,7 +12,7 @@ class FixedMemoryTest {
 
     @BeforeEach
     void setup() {
-        memory = new FixedMemory(List.of(1, 2));
+        memory = new FixedMemory(List.of(1L, 2L));
     }
 
 

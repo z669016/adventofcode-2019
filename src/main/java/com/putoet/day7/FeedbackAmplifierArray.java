@@ -28,7 +28,7 @@ public class FeedbackAmplifierArray implements AmplifierArray {
 
     private final IntCodeInputOutputDevice output;
 
-    public FeedbackAmplifierArray(List<Integer> intCodeProgram, PhaseSetting phaseSetting) {
+    public FeedbackAmplifierArray(List<Long> intCodeProgram, PhaseSetting phaseSetting) {
         assert phaseSetting.size() == ARRAY_SIZE;
 
         for (int i = 0; i < amplifiers.length; i++) {

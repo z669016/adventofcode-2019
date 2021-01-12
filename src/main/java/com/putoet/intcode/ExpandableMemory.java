@@ -5,13 +5,13 @@ import java.util.List;
 public class ExpandableMemory implements Memory {
     private long[] memory;
 
-    public ExpandableMemory(List<Integer> memory) {
+    public ExpandableMemory(List<Long> memory) {
         if ((memory == null) || memory.size() == 0) throw new Memory.InvalidMemoryInitializer(memory);
 
         this.memory = copy(memory);
     }
 
-    private static long[] copy(List<Integer> memory) {
+    private static long[] copy(List<Long> memory) {
         final long[] array = new long[memory.size()];
         for (int idx = 0; idx < memory.size(); idx++)
             array[idx] = memory.get(idx);

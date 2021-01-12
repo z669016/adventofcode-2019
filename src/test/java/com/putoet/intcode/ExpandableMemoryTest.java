@@ -16,7 +16,7 @@ class ExpandableMemoryTest {
 
     @BeforeEach
     void setup() {
-        memory = new ExpandableMemory(List.of(1, 2));
+        memory = new ExpandableMemory(List.of(1L, 2L));
     }
 
     @Test

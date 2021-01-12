@@ -3,7 +3,7 @@ package com.putoet.intcode;
 import java.util.List;
 
 public class FixedMemory extends ExpandableMemory {
-    public FixedMemory(List<Integer> memory) {
+    public FixedMemory(List<Long> memory) {
         super(memory);
     }
 
