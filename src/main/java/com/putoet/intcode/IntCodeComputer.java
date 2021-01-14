@@ -45,6 +45,7 @@ public class IntCodeComputer implements IntCodeDevice {
 
     @Override
     public void run() {
+        ip = Address.START;
         final Interpreter interpreter = new Interpreter(this);
 
         while (interpreter.hasNext()) {

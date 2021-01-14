@@ -119,6 +119,16 @@ velocity, but in the combination of the X-values, the Y-values and Z-values for 
 a point in time. When you found the repetition in each of these separately,you can calculate the moment of repetition 
 by finding the least-common-multiple for the three values. 
 
+## Day 13
+Again we have an int code computer game. No changes to the computer are required though. A '''Game''' class contains 
+the man functionality. The game object creates and runs the int code computer program (using itself as the 
+'''OutputDevice'''), and processes the output. The game uses an '''ExtendableSurface''' (which is basically a grid of 
+'''Tile''' objects that grows if a point is set that's off the grid), which gets updated based on the output.
+A '''Joystick''' class is being used as '''InputDevice''' and depending on the x-axis of the ball compared to the x-axis
+of the paddle, the joystick returns -1 (move left), 0 (neutral), or +1 (move right) to the int code device.
+
+That IntCodeDevice is really an amazing piece of hardware ...
+
 ## intcode
 An '''Address''' class is used to represent a memory address. 
 

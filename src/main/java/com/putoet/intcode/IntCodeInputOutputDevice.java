@@ -6,8 +6,6 @@ import java.util.OptionalLong;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class IntCodeInputOutputDevice implements InputDevice, OutputDevice {
     private final BlockingDeque<Long> queue = new LinkedBlockingDeque<>();
@@ -23,7 +21,8 @@ public class IntCodeInputOutputDevice implements InputDevice, OutputDevice {
         try {
             final Long value = queue.poll(timeout, timeUnit);
             return value != null ? OptionalLong.of(value) : OptionalLong.empty();
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {
+        }
 
         return OptionalLong.empty();
     }
