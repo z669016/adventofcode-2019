@@ -17,7 +17,7 @@ Also uses the algorithms library, which contains generic classes for addressing 
 It was never my intention to create the shortest program possible. I did try to create clear and simple implementations.
 
 ## Day 1
-Pretty straight forward: parse the stream, do some math (using type save '''Mass''' and '''Fuel''' classes).
+Pretty straight forward: parse the stream, do some math (using type save ```Mass``` and ```Fuel``` classes).
 
 ## Day 2
 Based on learnings from other years and knowing the IntCodeDevice would be heavily reused, I decided to put those 
@@ -25,70 +25,70 @@ reusable classes in a generic package (intcode) to be enhanced later. The origin
 implemented the operations was way too complex.
 
 ## Day 3
-Based on the description I decided to create a '''Route''' from the route description (puzzle input) containing all 
+Based on the description I decided to create a ```Route``` from the route description (puzzle input) containing all 
 points visited. The intersection contains all the points which are on both routes, and those can be easily determined 
-using a filter. By reusing the '''Point''' class from the aoc project it's pretty easy.
+using a filter. By reusing the ```Point``` class from the aoc project it's pretty easy.
 
 The processing of the puzzle input (constructing the routes, and find the intersections) takes a while (as both routes 
 contain about 150.000 steps). A faster algorithm would only record the locations of the turns in the route, which would 
 make the data set way smaller, but the calculation of the intersections a bit harder. 
 
 ## Day 4
-Created two generators (one for part 1 and another for part 2) which implement '''Iterator<String>''' to generate valid 
+Created two generators (one for part 1 and another for part 2) which implement ```Iterator<String>``` to generate valid 
 the passwords (codes) based on the provided min and max (puzzle input). The number of genarated values is counted 
-using the '''Iterator.forEachRemaining(Consumer<>)''' method, where the consumer only updates a simple counter to 
+using the ```Iterator.forEachRemaining(Consumer<>)``` method, where the consumer only updates a simple counter to 
 obtain the answer.
 
 ## Day 5
-Refactored the '''IntCodeDevice''' and its implementation '''IntCodeComputer''' to handle the input and out put 
-instructions, by using a '''Queue<Long>''' as input and output device. Added the comparison and jump instructions 
+Refactored the ```IntCodeDevice``` and its implementation ```IntCodeComputer``` to handle the input and out put 
+instructions, by using a ```Queue<Long>``` as input and output device. Added the comparison and jump instructions 
 similar  to all the other instructions. Now solving part 1 and two is simple. I deleted all the specific IntCode 
 classes originally developed for this puzzle.
 
 ## Day 6
-Collect info about space objects in orbit of other space objects ... The '''SpaceObject''' class models a space object 
+Collect info about space objects in orbit of other space objects ... The ```SpaceObject``` class models a space object 
 (which has a name, and another space object as its center), and has some convenience methods to find the route to the 
 absolute center (a space object called COM), or the number of steps to take towards another space object on the 
 route towards the center.
 
-The '''SpaceMap''' contains a map of all the space objects and methods to count the total number of orbits, and the 
+The ```SpaceMap``` contains a map of all the space objects and methods to count the total number of orbits, and the 
 distance between two arbitrary space objects on the map.
 
-The '''SpaceMapLoader''' loads the puzzle input and creates the '''SpaceMap'''.
+The ```SpaceMapLoader``` loads the puzzle input and creates the ```SpaceMap```.
 
 ## Day 7
 Due to deleting the IntCode classes of day5, made it necessary to also refactor day 7 (as it reused the day5 classes). 
-I changed the '''Queue<Long>''' of the input device into a '''BlockingDeque<Long>''', so it was able to wait for a 
-value to become available. I've added  the '''IntCodeDevice''' to the '''Interpreter''' as a property, as the number of
+I changed the ```Queue<Long>``` of the input device into a ```BlockingDeque<Long>```, so it was able to wait for a 
+value to become available. I've added  the ```IntCodeDevice``` to the ```Interpreter``` as a property, as the number of
 properties needed for executing instructions was increasing. This required all static methods to become non-static, and 
 a ''Builder'' as part of the IntCodeComputer to limit the amount of constructors for creating different configurations
-of an '''IntCodeDevice'''.
+of an ```IntCodeDevice```.
 
-The AmplifierArray now became quite simple to implement using independent threads. The '''SimpleAmplifierArray''' uses 
-six queues, where the last one is the utput queue of the fifth amplifier. The '''FeedbackAmplifierArray''' uses five 
+The AmplifierArray now became quite simple to implement using independent threads. The ```SimpleAmplifierArray``` uses 
+six queues, where the last one is the utput queue of the fifth amplifier. The ```FeedbackAmplifierArray``` uses five 
 queues, where the output queue of the fifth amplifier is set to the input queue of the first one. I added a 
-'''CountDownLatch''' to the Interpreter, so it was able to signal to any other waiting thread, that it was finished. 
+```CountDownLatch``` to the Interpreter, so it was able to signal to any other waiting thread, that it was finished. 
 
-I reused the '''Permutator''' from my AOC project for the creation of the possible '''PhaseSetting'''.
+I reused the ```Permutator``` from my AOC project for the creation of the possible ```PhaseSetting```.
 
 IMHO all in all quite fancy, and yet simple and straight forward.
 
 ## Day 8
-An '''Image''' has a specific '''Size''', and a number of '''Layer'''s. To create an '''Image''' fro the puzzle input, 
+An ```Image``` has a specific ```Size```, and a number of ```Layer```s. To create an ```Image``` fro the puzzle input, 
 simply split the list of integers into sub-lists based on the size of the image.
 
 For part 1, just stream over the layers, and find the one with the minimum count for the specified pixel value (0 in 
-my puzzle). The '''Layer''' class contains a '''count(int pixelValue)'''  method for that.
+my puzzle). The ```Layer``` class contains a ```count(int pixelValue)```  method for that.
 
 For decoding an image, for each pixel, move down and reduce to the first non-2 value encountered.
 
 ## Day 9
-Added relative mode to the '''Interpreter''' to solve part 1 and part 2. 
+Added relative mode to the ```Interpreter``` to solve part 1 and part 2. 
 
 ## Day 10
 A nice challenge for day 10. The Asteroid class models a single asteroid at a specific location (reused the Point class 
-from my the AoC project). The SpaceArea creates a '''Map<Point,Asteroid>''' and provides some convenience methods, for 
-instance to create '''LineOfSightMap'''s, which contain all '''LineOfSight'''s for a single Asteroid (an entry for each 
+from my the AoC project). The SpaceArea creates a ```Map<Point,Asteroid>``` and provides some convenience methods, for 
+instance to create ```LineOfSightMap```s, which contain all ```LineOfSight```s for a single Asteroid (an entry for each 
 direction in which other Asteroids are visible in a line-of-sight). A line-if-sight is identified by a Vector (which 
 represents) the direction in which the other asteroids are positioned from the point of the origin of the 
 line-of-sight.
@@ -97,21 +97,21 @@ Using these structured puzzle input classes, it's a piece of cake to solve part 
 
 ## Day 11
 The idea is that a robot running an IntCode program navigates across a surface to paint panels, so I started with
-a simple '''Panel''' class, and an extensible '''Surface''' that "grows" as soon as the robot navigates across its 
-boundary (in any direction). The '''Panel''' class remembers if it has been painted of not, and the '''Surface''' 
+a simple ```Panel``` class, and an extensible ```Surface``` that "grows" as soon as the robot navigates across its 
+boundary (in any direction). The ```Panel``` class remembers if it has been painted of not, and the ```Surface``` 
 keeps track of the position of the robot. 
 
-The '''InputDevice''' is a '''Camera''' that returns a value for the color of the panel at which the robot is 
-positioned at that point in time. The '''Painter''' is the '''OutputDevice''' for the '''IntCodeDevice''', and on 
+The ```InputDevice``` is a ```Camera``` that returns a value for the color of the panel at which the robot is 
+positioned at that point in time. The ```Painter``` is the ```OutputDevice``` for the ```IntCodeDevice```, and on 
 instruction of the int code computer, it paints a panel on the surface and moves the robot to the next position. 
 
 For part 1, run the intcode program, and count the number of painted panels on the surface. For part two, first 
 paint the starting panel, than run the int code program and then print/visualize the surface.
 
 ## Day 12
-A '''Moon''' class helps to keep track of the individual moons. A moon has a name, a position, and a velocity. The 
-'''Position''' and '''Velocity''' classes do the simple math of applying gravity and velocity to the position, and 
-calculating the energy. The '''MoonMap''' class loads the puzzle input in a map.
+A ```Moon``` class helps to keep track of the individual moons. A moon has a name, a position, and a velocity. The 
+```Position``` and ```Velocity``` classes do the simple math of applying gravity and velocity to the position, and 
+calculating the energy. The ```MoonMap``` class loads the puzzle input in a map.
 
 Part 1 is straight forward, just apply the rules 1000 and sum the total energy in the system. Part 2 however is more 
 nasty. Yes, the trick is in finding repetition, but the repetition is not in an individual moons' position and 
@@ -120,29 +120,29 @@ a point in time. When you found the repetition in each of these separately,you c
 by finding the least-common-multiple for the three values. 
 
 ## Day 13
-Again we have an int code computer game. No changes to the computer are required though. A '''Game''' class contains 
+Again we have an int code computer game. No changes to the computer are required though. A ```Game``` class contains 
 the man functionality. The game object creates and runs the int code computer program (using itself as the 
-'''OutputDevice'''), and processes the output. The game uses an '''ExtendableSurface''' (which is basically a grid of 
-'''Tile''' objects that grows if a point is set that's off the grid), which gets updated based on the output.
-A '''Joystick''' class is being used as '''InputDevice''' and depending on the x-axis of the ball compared to the x-axis
+```OutputDevice```), and processes the output. The game uses an ```ExtendableSurface``` (which is basically a grid of 
+```Tile``` objects that grows if a point is set that's off the grid), which gets updated based on the output.
+A ```Joystick``` class is being used as ```InputDevice``` and depending on the x-axis of the ball compared to the x-axis
 of the paddle, the joystick returns -1 (move left), 0 (neutral), or +1 (move right) to the int code device.
 
 That IntCodeDevice is really an amazing piece of hardware ...
 
 ## intcode
-An '''Address''' class is used to represent a memory address. 
+An ```Address``` class is used to represent a memory address. 
 
-The '''Memory''' interface defines a '''peek(Address)''' and '''poke(address long value)''' method. This interface is 
-implemented by '''FixedMemory''' class (with fixed length) and '''ExpandableMemory''' which grows when the peek or poke 
-method references an address out of range (beyond '''Memory.size()''').
+The ```Memory``` interface defines a ```peek(Address)``` and ```poke(address long value)``` method. This interface is 
+implemented by ```FixedMemory``` class (with fixed length) and ```ExpandableMemory``` which grows when the peek or poke 
+method references an address out of range (beyond ```Memory.size()```).
 
-The '''Instruction''' interface defines methods on an Instruction instance like '''opcode()''' (to obtain the 
-instructions' opcode), '''size()''' (which returns the length of the instruction, i.e. number of used memory positions), 
-and '''run()''' (which runs the instruction). 
+The ```Instruction``` interface defines methods on an Instruction instance like ```opcode()``` (to obtain the 
+instructions' opcode), ```size()``` (which returns the length of the instruction, i.e. number of used memory positions), 
+and ```run()``` (which runs the instruction). 
 
-The '''Interpreter''' implements '''Iterator<Instruction>''' that enables you to iterate over the instructions of the 
+The ```Interpreter``` implements ```Iterator<Instruction>``` that enables you to iterate over the instructions of the 
 program using the instruction pointer. 
 
-The '''IntCodDevice''' does the actual work. It takes a '''Memory''' instance on creation, and the '''run()''' method, 
+The ```IntCodDevice``` does the actual work. It takes a ```Memory``` instance on creation, and the ```run()``` method, 
 interprets all instructions and executes them (unless it encounters an exit instruction (opcode 99)). In between two  
 runs you cannot reset the memory, so be carefully.
