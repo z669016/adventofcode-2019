@@ -28,4 +28,10 @@ public interface IntCodeDevice extends Runnable {
     TimeUnit timeUnit();
 
     CountDownLatch latch();
+
+    boolean resumable();
+
+    void blockForInput();
+
+    boolean isBlockedForInput();
 }

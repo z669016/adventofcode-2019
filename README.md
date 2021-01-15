@@ -150,6 +150,22 @@ rest of ORE, redo this process until the remainder of ORE is not enough to creat
 
 All in all not too difficult but it does require a careful breakdown of the process in small steps.
 
+## Day 15
+Part 1 must be a BFS (breadth first search) problem, but now using an IntCodeDevice as part of the state of the search
+algorithm.
+
+RepairDroid runs an IntCode program. It implements InputDevice and OutputDevice to get the data. The IntCodeDevice of 
+the RepairDroid must stop when no input is available, and be able to resume later. This requires some refactoring
+on the IntCodeComputer we developed so far, and it enables the use of the generic bfs() of the algorithms project.
+
+The starting state is at Point.ORIGIN, and an empty set of visited locations. The next states will be 4 different 
+commands and point.ORIGIN added to the set of visited places. Even dead-ends are recorded as visited, but those Node 
+paths will stop and will not be explored any further. The success state will have the value 2 as it's last 
+output value. The puzzle answer is the length of the Node path.
+
+
+
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 

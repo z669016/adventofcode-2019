@@ -157,6 +157,11 @@ public class Interpreter implements Iterator<Instruction> {
                     return;
                 }
 
+                if (device.resumable()) {
+                    device.blockForInput();
+                    return;
+                }
+
                 throw new NoInputSignalAvailableException(address, device.timeout(), device.timeUnit());
             }
 

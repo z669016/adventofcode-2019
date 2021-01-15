@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class IntCodeDeviceTest {
 
@@ -104,5 +105,21 @@ class IntCodeDeviceTest {
         device.run();
 
         assertEquals(16L, String.valueOf(output.poll().getAsLong()).length());
+    }
+
+    @Test
+    void resumableTest() {
+        final List<Long> intCode = List.of(3L, 5L, 4L, 5L, 99L, 0L);
+        final Memory memory = new ExpandableMemory(intCode);
+        final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
+        final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
+        final IntCodeDevice device = IntCodeComputer.builder().memory(memory).input(input).output(output).resumable().build();
+
+        device.run();
+        assertFalse(output.poll().isPresent());
+
+        input.offer(11);
+        device.run();
+        assertEquals(11L, output.poll().getAsLong());
     }
 }

@@ -12,9 +12,12 @@ public class IntCodeComputer implements IntCodeDevice {
     private final PrintStream printStream;
     private final int timeout;
     private final TimeUnit timeUnit;
+    private final boolean resumable;
 
     private Address ip = Address.START;
     private Address relativeBase = Address.START;
+    private boolean blockedForInput = false;
+    private Interpreter interpreter;
 
     private IntCodeComputer(Memory memory,
                             InputDevice input,
@@ -22,7 +25,8 @@ public class IntCodeComputer implements IntCodeDevice {
                             PrintStream printStream,
                             int timeout,
                             TimeUnit timeUnit,
-                            CountDownLatch latch) {
+                            CountDownLatch latch,
+                            boolean resumable) {
         this.memory = memory;
         this.input = input;
         this.output = output;
@@ -37,6 +41,7 @@ public class IntCodeComputer implements IntCodeDevice {
         }
 
         this.latch = latch;
+        this.resumable = resumable;
     }
 
     public static Builder builder() {
@@ -45,15 +50,18 @@ public class IntCodeComputer implements IntCodeDevice {
 
     @Override
     public void run() {
-        ip = Address.START;
-        final Interpreter interpreter = new Interpreter(this);
+        if (interpreter == null || !blockedForInput) {
+            ip = Address.START;
+            interpreter = new Interpreter(this);
+        }
+        blockedForInput = false;
 
-        while (interpreter.hasNext()) {
+        while (interpreter.hasNext() && !blockedForInput) {
             final Instruction instruction = interpreter.next();
             instruction.run();
         }
 
-        if (latch != null)
+        if (latch != null && !blockedForInput)
             latch.countDown();
     }
 
@@ -123,6 +131,21 @@ public class IntCodeComputer implements IntCodeDevice {
         return latch;
     }
 
+    @Override
+    public boolean resumable() {
+        return resumable;
+    }
+
+    @Override
+    public void blockForInput() {
+        this.blockedForInput = true;
+    }
+
+    @Override
+    public boolean isBlockedForInput() {
+        return blockedForInput;
+    }
+
     public static class Builder {
         private Memory memory;
         private InputDevice input;
@@ -131,6 +154,7 @@ public class IntCodeComputer implements IntCodeDevice {
         private int timeout;
         private TimeUnit timeUnit;
         private CountDownLatch latch;
+        private boolean resumable = false;
 
         private Builder() {
         }
@@ -166,8 +190,13 @@ public class IntCodeComputer implements IntCodeDevice {
             return this;
         }
 
+        public Builder resumable() {
+            this.resumable = true;
+            return this;
+        }
+
         public IntCodeDevice build() {
-            return new IntCodeComputer(memory, input, output, printStream, timeout, timeUnit, latch);
+            return new IntCodeComputer(memory, input, output, printStream, timeout, timeUnit, latch, resumable);
         }
     }
 }
