@@ -8,117 +8,110 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FuelReactionsTest {
+public class NanoFactoryTest {
 
     @Test
     public void testLoadFile() {
-        final List<ChemicalReaction> reactions = FuelReactions.loadFile("/day14.txt");
-        final FuelReactions fuelReactions = new FuelReactions(reactions);
-        assertEquals(reactions.size(), fuelReactions.chemicalReactions().size());
+        final List<ChemicalReaction> reactions = NanoFactory.loadFile("/day14.txt");
+        final NanoFactory nanoFactory = new NanoFactory(reactions);
+        assertEquals(reactions.size(), nanoFactory.chemicalReactions().size());
 
-        final Optional<ChemicalReaction> reaction = fuelReactions.reactionFor(Chemical.FUEL);
+        final Optional<ChemicalReaction> reaction = nanoFactory.reactionFor(Chemical.FUEL);
         assertTrue(reaction.isPresent());
         // System.out.println(reaction.get());
     }
 
     @Test
     public void testChemicalToReplaceNext() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample1());
-        final Optional<ChemicalReaction> reaction = fuelReactions.reactionForFuel();
-        assertTrue(reaction.isPresent());
-        final Optional<Chemical> toReplace = fuelReactions.nextToReplace(reaction.get());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample1());
+        final ChemicalReaction reaction = nanoFactory.reactionForFuel();
+        final Optional<Chemical> toReplace = nanoFactory.nextToReplace(reaction);
         assertTrue(toReplace.isPresent());
         assertEquals(toReplace.get(), new Chemical("E"));
     }
 
     @Test
     public void testReplaceChemical() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample1());
-        final Optional<ChemicalReaction> reaction = fuelReactions.reactionForFuel();
-        assertTrue(reaction.isPresent());
-        final Optional<ChemicalReaction> newReaction = fuelReactions.replaceChemicalInReaction(reaction.get(), new Chemical("E"));
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample1());
+        final ChemicalReaction reaction = nanoFactory.reactionForFuel();
+        final Optional<ChemicalReaction> newReaction = nanoFactory.replaceChemicalInReaction(reaction, new Chemical("E"));
         assertTrue(newReaction.isPresent());
         assertEquals("14 A, 1 D => 1 FUEL", newReaction.get().toString());
     }
 
     @Test
     public void testSimplifyChemicalReaction() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample1());
-        final Optional<ChemicalReaction> reaction = fuelReactions.reactionFor(Chemical.FUEL);
-        assertTrue(reaction.isPresent());
-        final Optional<ChemicalReaction> newReaction = fuelReactions.simplifyChemicalReaction(reaction.get());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample1());
+        final ChemicalReaction reaction = nanoFactory.reactionForFuel();
+        final Optional<ChemicalReaction> newReaction = nanoFactory.simplifyChemicalReaction(reaction);
         assertTrue(newReaction.isPresent());
         assertEquals("31 ORE => 1 FUEL", newReaction.get().toString());
     }
 
     @Test
     public void testBaseChemicalsSample1() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample1());
-        final Set<Chemical> baseChemicals = fuelReactions.baseChemicals();
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample1());
+        final Set<Chemical> baseChemicals = nanoFactory.baseChemicals();
         assertEquals("[A, B]", baseChemicals.toString());
     }
 
     @Test
     public void testBaseChemicalsSample2() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample2());
-        final Set<Chemical> baseChemicals = fuelReactions.baseChemicals();
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample2());
+        final Set<Chemical> baseChemicals = nanoFactory.baseChemicals();
         assertEquals("[A, B, C]", baseChemicals.toString());
     }
 
     @Test
     public void testReactionForFuel2() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample2());
-        final Optional<ChemicalReaction> reaction = fuelReactions.reactionForFuel();
-        assertTrue(reaction.isPresent());
-        final Optional<ChemicalReaction> newReaction = fuelReactions.simplifyChemicalReaction(reaction.get());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample2());
+        final ChemicalReaction reaction = nanoFactory.reactionForFuel();
+        final Optional<ChemicalReaction> newReaction = nanoFactory.simplifyChemicalReaction(reaction);
         assertTrue(newReaction.isPresent());
         assertEquals(165, newReaction.get().ingredients().get(0).amount());
     }
 
     @Test
     public void testReactionForFuel3() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample3());
-        final Optional<ChemicalReaction> reaction = fuelReactions.reactionForFuel();
-        assertTrue(reaction.isPresent());
-        final Optional<ChemicalReaction> newReaction = fuelReactions.simplifyChemicalReaction(reaction.get());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample3());
+        final ChemicalReaction reaction = nanoFactory.reactionForFuel();
+        final Optional<ChemicalReaction> newReaction = nanoFactory.simplifyChemicalReaction(reaction);
         assertTrue(newReaction.isPresent());
         assertEquals(13312, newReaction.get().ingredients().get(0).amount());
     }
 
     @Test
     public void testReactionForFuel4() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample4());
-        final Optional<ChemicalReaction> reaction = fuelReactions.reactionForFuel();
-        assertTrue(reaction.isPresent());
-        final Optional<ChemicalReaction> newReaction = fuelReactions.simplifyChemicalReaction(reaction.get());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample4());
+        final ChemicalReaction reaction = nanoFactory.reactionForFuel();
+        final Optional<ChemicalReaction> newReaction = nanoFactory.simplifyChemicalReaction(reaction);
         assertTrue(newReaction.isPresent());
         assertEquals(180697, newReaction.get().ingredients().get(0).amount());
     }
 
     @Test
     public void testReactionForFuel5() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample5());
-        final Optional<ChemicalReaction> reaction = fuelReactions.reactionForFuel();
-        assertTrue(reaction.isPresent());
-        final Optional<ChemicalReaction> newReaction = fuelReactions.simplifyChemicalReaction(reaction.get());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample5());
+        final ChemicalReaction reaction = nanoFactory.reactionForFuel();
+        final Optional<ChemicalReaction> newReaction = nanoFactory.simplifyChemicalReaction(reaction);
         assertTrue(newReaction.isPresent());
         assertEquals(2210736, newReaction.get().ingredients().get(0).amount());
     }
 
     @Test
     public void testMaxFuelForTooLittle() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample3());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample3());
 
         final long availableOre = 1_000L;
-        assertThrows(IllegalArgumentException.class, () -> fuelReactions.maxFuelReactionFor(availableOre));
+        assertThrows(IllegalArgumentException.class, () -> nanoFactory.maxFuelReactionFor(availableOre));
     }
 
     @Test
     public void testMaxFuelFor1() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample3());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample3());
 
         final long availableOre = 1_000_000_000_000L;
-        final Optional<ChemicalReaction> maxReaction = fuelReactions.maxFuelReactionFor(availableOre);
+        final Optional<ChemicalReaction> maxReaction = nanoFactory.maxFuelReactionFor(availableOre);
         assertTrue(maxReaction.isPresent());
         System.out.println(maxReaction);
         assertEquals(82892753L, maxReaction.get().result().amount());
@@ -126,10 +119,10 @@ public class FuelReactionsTest {
 
     @Test
     public void testMaxFuelFor2() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample4());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample4());
 
         final long availableOre = 1_000_000_000_000L;
-        final Optional<ChemicalReaction> maxReaction = fuelReactions.maxFuelReactionFor(availableOre);
+        final Optional<ChemicalReaction> maxReaction = nanoFactory.maxFuelReactionFor(availableOre);
         assertTrue(maxReaction.isPresent());
         System.out.println(maxReaction);
         assertEquals(5586022L, maxReaction.get().result().amount());
@@ -137,10 +130,10 @@ public class FuelReactionsTest {
 
     @Test
     public void testMaxFuelFor3() {
-        final FuelReactions fuelReactions = new FuelReactions(createFuelReactionsSample5());
+        final NanoFactory nanoFactory = new NanoFactory(createFuelReactionsSample5());
 
         final long availableOre = 1_000_000_000_000L;
-        final Optional<ChemicalReaction> maxReaction = fuelReactions.maxFuelReactionFor(availableOre);
+        final Optional<ChemicalReaction> maxReaction = nanoFactory.maxFuelReactionFor(availableOre);
         assertTrue(maxReaction.isPresent());
         System.out.println(maxReaction);
         assertEquals(460664L, maxReaction.get().result().amount());

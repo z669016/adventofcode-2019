@@ -2,19 +2,19 @@ package com.putoet.day14;
 
 import com.putoet.resources.ResourceLines;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class FuelReactions {
+public class NanoFactory {
     private final Map<Chemical, ChemicalReaction> map = new HashMap<>();
 
-    public FuelReactions(List<ChemicalReaction> chemicalReactions) {
+    public NanoFactory(List<ChemicalReaction> chemicalReactions) {
         chemicalReactions.forEach(reaction -> map.put(reaction.result().chemical(), reaction));
+        if (!map.containsKey(Chemical.FUEL)) {
+            throw new AssertionError("List of chemicals must contain a chemical reaction fro FUEL");
+        }
     }
 
     public static List<ChemicalReaction> loadFile(String fileName) {
@@ -29,8 +29,8 @@ public class FuelReactions {
         return Optional.ofNullable(map.get(chemical));
     }
 
-    public Optional<ChemicalReaction> reactionForFuel() {
-        return Optional.of(map.get(Chemical.FUEL));
+    public ChemicalReaction reactionForFuel() {
+        return map.get(Chemical.FUEL);
     }
 
     public Set<Chemical> baseChemicals() {
@@ -58,7 +58,11 @@ public class FuelReactions {
         final Set<Chemical> topLevelChemicals = reaction.chemicals().stream()
                 .filter(chemical -> !chemical.equals(Chemical.ORE))
                 .collect(Collectors.toSet());
-        final Set<Chemical> independentChemicals = topLevelChemicals.stream().filter(chemical -> noneIsDependingOn(topLevelChemicals, chemical)).collect(Collectors.toSet());
+
+        final Set<Chemical> independentChemicals = topLevelChemicals.stream()
+                .filter(chemical -> noneIsDependingOn(topLevelChemicals, chemical))
+                .collect(Collectors.toSet());
+
         return independentChemicals.stream().findFirst();
     }
 
@@ -66,8 +70,7 @@ public class FuelReactions {
         return chemicals.stream()
                 .filter(c -> !c.equals(chemical) && !c.equals(Chemical.FUEL) && !c.equals(Chemical.ORE))
                 .map(this::reactionFor)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .flatMap(Optional::stream)
                 .noneMatch(cr -> cr.chemicals().contains(chemical) || !noneIsDependingOn(cr.chemicals(), chemical));
     }
 
@@ -122,30 +125,34 @@ public class FuelReactions {
         return sb.toString();
     }
 
-    public Optional<ChemicalReaction> maxFuelReactionFor(long availableOre) {
-        final Optional<ChemicalReaction> fuelReaction = reactionForFuel();
-        if (fuelReaction.isEmpty())
-            throw new IllegalStateException("No reaction for fuel available.");
+    public long minimalOreForFuel() {
+        final ChemicalReaction fuelReaction = reactionForFuel();
 
-         final Optional<ChemicalReaction> simplifiedFuelReaction = simplifyChemicalReaction(fuelReaction.get());
-         if (simplifiedFuelReaction.isEmpty())
-             throw new IllegalStateException("Cannot determine max fuel without simplified chemicsl reaction for fuel");
-         final long minimalOreForFuel = simplifiedFuelReaction.get().ingredients().get(0).amount();
+        final Optional<ChemicalReaction> simplifiedFuelReaction = simplifyChemicalReaction(fuelReaction);
+        if (simplifiedFuelReaction.isEmpty())
+            throw new IllegalStateException("Cannot determine max fuel without simplified chemical reaction for fuel");
 
-         if (availableOre < minimalOreForFuel)
-             throw new IllegalArgumentException("Insufficient fuel for 1 fuel, you need a minimum of " + minimalOreForFuel + " ORE.");
-
-        return maxFuelFor(availableOre, minimalOreForFuel, fuelReaction.get());
+        return simplifiedFuelReaction.get().ingredients().get(0).amount();
     }
 
-    private Optional<ChemicalReaction> maxFuelFor(long availableOre, long minimalOreForFuel, ChemicalReaction fuelReaction) {
+    public Optional<ChemicalReaction> maxFuelReactionFor(long availableOre) {
+        final long minimalOreForFuel = minimalOreForFuel();
+
+        if (availableOre < minimalOreForFuel)
+            throw new IllegalArgumentException("Insufficient fuel for 1 fuel, you need a minimum of " + minimalOreForFuel + " ORE.");
+
+        return maxFuelFor(availableOre, minimalOreForFuel);
+    }
+
+    private Optional<ChemicalReaction> maxFuelFor(long availableOre, long minimalOreForFuel) {
+        final ChemicalReaction fuelReaction = reactionForFuel();
         Optional<ChemicalReaction> maxReaction = Optional.empty();
         long max = 0;
         long used = 0;
         long rest = availableOre - used;
 
         while (rest > minimalOreForFuel) {
-            final ChemicalReaction reaction = fuelReaction.multiplyBy(max + ((availableOre - used)/minimalOreForFuel));
+            final ChemicalReaction reaction = fuelReaction.multiplyBy(max + ((availableOre - used) / minimalOreForFuel));
             maxReaction = simplifyChemicalReaction(reaction);
             if (maxReaction.isEmpty())
                 return Optional.empty();

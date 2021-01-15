@@ -5,19 +5,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ChemicalReaction {
-    private final List<Ingredient> ingredients;
-    private final Ingredient result;
+    private final List<Ingredient> inputChemicals;
+    private final Ingredient outputChemical;
 
-    public ChemicalReaction(Ingredient result, List<Ingredient> ingredients) {
-        this.result = result;
-        this.ingredients = ingredients;
+    public ChemicalReaction(Ingredient outputChemical, List<Ingredient> inputChemicals) {
+        this.outputChemical = outputChemical;
+        this.inputChemicals = inputChemicals;
     }
 
-    public Ingredient result() { return result; }
+    public Ingredient result() { return outputChemical; }
 
-    public List<Ingredient> ingredients() { return ingredients; }
+    public List<Ingredient> ingredients() { return inputChemicals; }
 
-    public Set<Chemical> chemicals() { return ingredients.stream().map(Ingredient::chemical).collect(Collectors.toSet()); }
+    public Set<Chemical> chemicals() { return inputChemicals.stream().map(Ingredient::chemical).collect(Collectors.toSet()); }
 
     public static ChemicalReaction of(String reaction) {
         final String[] parts = reaction.split(" => ");
@@ -40,11 +40,11 @@ public class ChemicalReaction {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        ingredients.forEach(ingredient -> sb.append(ingredient.amount()).append(" ").append(ingredient.chemical()).append(", "));
-        return sb.toString().substring(0, sb.length() - 2) + " => " + result.amount() + " " + result.chemical();
+        inputChemicals.forEach(ingredient -> sb.append(ingredient.amount()).append(" ").append(ingredient.chemical()).append(", "));
+        return sb.toString().substring(0, sb.length() - 2) + " => " + outputChemical.amount() + " " + outputChemical.chemical();
     }
 
     public ChemicalReaction multiplyBy(long factor) {
-        return new ChemicalReaction(result.multiplyBy(factor), ingredients.stream().map(i -> i.multiplyBy(factor)).collect(Collectors.toList()));
+        return new ChemicalReaction(outputChemical.multiplyBy(factor), inputChemicals.stream().map(i -> i.multiplyBy(factor)).collect(Collectors.toList()));
     }
 }

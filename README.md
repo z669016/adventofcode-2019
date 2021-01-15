@@ -129,6 +129,27 @@ of the paddle, the joystick returns -1 (move left), 0 (neutral), or +1 (move rig
 
 That IntCodeDevice is really an amazing piece of hardware ...
 
+## Day 14
+This feels like a puzzle which requires a straight forward but step-by-step approach. From the description, I've 
+identified a ```Chemical``` (e.g. ORE, or FWMGM), an ```Ingredient``` (which is a certain amount of one chemical, e.g. 
+1 STKFG) and input chemicals and output chemicals are ingredients by itself, and finally a ```ChemicalReaction```. The 
+first step is to construct the nanofactory which contains a list of chemical reactions from the puzzle input. As there 
+is at most one chemical reaction to create another chemical, the reactions  are simply stored in a 
+```Map<Chemical,ChemicalReaction>```.
+
+For part 1, take the chemical reaction for the chemical FUEL and simplify it. To symplify the chemical reaction, 
+just keep replacing chemicals with their chemical reaction that creates them, until you only have ORE's left. Each time
+You replace a chemical that has no dependencies on any of the other chemicals in the ingredient list and after 
+replacement you combine the ingredients with identical chemicals. Repeat that step until there is nothing to replace 
+(and only ORE will be left). 
+
+For solving part 2, you take the minimal amount of ORE for 1 fuel, calculate the max amount fuel you can make from it. 
+As there is quite some waste, you then simplify that max amount of fuel reaction back to ORE. The amout of ORE actually
+used will be less than you originally estimated (due to waste), so you calculate the amount of ORE left , and for that 
+rest of ORE, redo this process until the remainder of ORE is not enough to create one more fuel.   
+
+All in all not too difficult but it does require a careful breakdown of the process in small steps.
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 
