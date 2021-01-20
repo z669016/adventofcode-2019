@@ -118,6 +118,9 @@ class IntCodeDeviceTest {
         device.run();
         assertFalse(output.poll().isPresent());
 
+        device.run();
+        assertFalse(output.poll().isPresent());
+
         input.offer(11);
         device.run();
         assertEquals(11L, output.poll().getAsLong());

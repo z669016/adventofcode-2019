@@ -11,5 +11,10 @@ public class FixedMemory extends ExpandableMemory {
         if (address.intValue() >= size())
             throw new Memory.InvalidMemoryAddress(address, size());
     }
+
+    @Override
+    public FixedMemory copy() {
+        return new FixedMemory(toList());
+    }
 }
 

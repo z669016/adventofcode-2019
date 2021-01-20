@@ -11,6 +11,8 @@ public class Interpreter implements Iterator<Instruction> {
         this.device = device;
     }
 
+
+
     @Override
     public boolean hasNext() {
         final Memory memory = device.memory();

@@ -1,14 +1,12 @@
 package com.putoet.intcode;
 
 import java.io.PrintStream;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class IntCodeComputer implements IntCodeDevice {
-    private final CountDownLatch latch;
-    private final InputDevice input;
-    private final OutputDevice output;
     private final Memory memory;
+    private InputDevice input;
+    private OutputDevice output;
     private final PrintStream printStream;
     private final int timeout;
     private final TimeUnit timeUnit;
@@ -19,14 +17,29 @@ public class IntCodeComputer implements IntCodeDevice {
     private boolean blockedForInput = false;
     private Interpreter interpreter;
 
-    private IntCodeComputer(Memory memory,
-                            InputDevice input,
-                            OutputDevice output,
-                            PrintStream printStream,
-                            int timeout,
-                            TimeUnit timeUnit,
-                            CountDownLatch latch,
-                            boolean resumable) {
+    private IntCodeComputer(IntCodeComputer device) {
+
+        this.memory = device.memory.copy();
+        this.input = device.input;
+        this.output = device.output;
+        this.printStream = device.printStream;
+        this.timeout = device.timeout;
+        this.timeUnit = device.timeUnit;
+        this.resumable = device.resumable;
+
+        this.ip = device.ip;
+        this.relativeBase = device.relativeBase;
+        this.blockedForInput = device.blockedForInput;
+        this.interpreter = null;
+    }
+
+    IntCodeComputer(Memory memory,
+                    InputDevice input,
+                    OutputDevice output,
+                    PrintStream printStream,
+                    int timeout,
+                    TimeUnit timeUnit,
+                    boolean resumable) {
         this.memory = memory;
         this.input = input;
         this.output = output;
@@ -40,12 +53,15 @@ public class IntCodeComputer implements IntCodeDevice {
             this.timeUnit = TimeUnit.MILLISECONDS;
         }
 
-        this.latch = latch;
         this.resumable = resumable;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public IntCodeComputer copy() {
+        return new IntCodeComputer(this);
+    }
+
+    public static IntCodeDeviceFactory builder() {
+        return new IntCodeDeviceFactory();
     }
 
     @Override
@@ -60,9 +76,6 @@ public class IntCodeComputer implements IntCodeDevice {
             final Instruction instruction = interpreter.next();
             instruction.run();
         }
-
-        if (latch != null && !blockedForInput)
-            latch.countDown();
     }
 
     @Override
@@ -102,8 +115,18 @@ public class IntCodeComputer implements IntCodeDevice {
     }
 
     @Override
+    public void input(InputDevice input) {
+        this.input = input;
+    }
+
+    @Override
     public OutputDevice output() {
         return output;
+    }
+
+    @Override
+    public void output(OutputDevice output) {
+        this.output = output;
     }
 
     @Override
@@ -127,11 +150,6 @@ public class IntCodeComputer implements IntCodeDevice {
     }
 
     @Override
-    public CountDownLatch latch() {
-        return latch;
-    }
-
-    @Override
     public boolean resumable() {
         return resumable;
     }
@@ -146,57 +164,4 @@ public class IntCodeComputer implements IntCodeDevice {
         return blockedForInput;
     }
 
-    public static class Builder {
-        private Memory memory;
-        private InputDevice input;
-        private OutputDevice output;
-        private PrintStream printStream;
-        private int timeout;
-        private TimeUnit timeUnit;
-        private CountDownLatch latch;
-        private boolean resumable = false;
-
-        private Builder() {
-        }
-
-        public Builder memory(Memory memory) {
-            this.memory = memory;
-            return this;
-        }
-
-        public Builder input(InputDevice input) {
-            this.input = input;
-            return this;
-        }
-
-        public Builder output(OutputDevice output) {
-            this.output = output;
-            return this;
-        }
-
-        public Builder printStream(PrintStream printStream) {
-            this.printStream = printStream;
-            return this;
-        }
-
-        public Builder timeout(int timeout, TimeUnit timeUnit) {
-            this.timeout = timeout;
-            this.timeUnit = timeUnit;
-            return this;
-        }
-
-        public Builder latch(CountDownLatch latch) {
-            this.latch = latch;
-            return this;
-        }
-
-        public Builder resumable() {
-            this.resumable = true;
-            return this;
-        }
-
-        public IntCodeDevice build() {
-            return new IntCodeComputer(memory, input, output, printStream, timeout, timeUnit, latch, resumable);
-        }
-    }
 }

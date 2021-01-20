@@ -16,8 +16,10 @@ public interface IntCodeDevice extends Runnable {
     void next(long offset);
 
     InputDevice input();
+    void input(InputDevice input);
 
     OutputDevice output();
+    void output(OutputDevice output);
 
     Memory memory();
 
@@ -27,11 +29,11 @@ public interface IntCodeDevice extends Runnable {
 
     TimeUnit timeUnit();
 
-    CountDownLatch latch();
-
     boolean resumable();
 
     void blockForInput();
 
     boolean isBlockedForInput();
+
+    IntCodeDevice copy();
 }

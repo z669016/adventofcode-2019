@@ -68,7 +68,7 @@ public class SurfaceTest {
     @Test
     public void testNewColoredSurface() {
         final Surface surface = new Surface(new String[]{"#....", ".#...", "..^..", "...#.", "....#"});
-        assertEquals(4, surface.paintedPanelsCount());
+        assertEquals(0, surface.paintedPanelsCount());
         assertEquals("#....\n.#...\n..^..\n...#.\n....#", surface.toString());
     }
 }

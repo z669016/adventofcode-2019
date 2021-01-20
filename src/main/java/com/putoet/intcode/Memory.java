@@ -7,6 +7,8 @@ public interface Memory {
     void poke(Address address, long value);
     int size();
     long[] toArray();
+    List<Long> toList();
+    Memory copy();
 
     class InvalidMemoryInitializer extends IllegalArgumentException {
         public InvalidMemoryInitializer(List<Long> memory) {

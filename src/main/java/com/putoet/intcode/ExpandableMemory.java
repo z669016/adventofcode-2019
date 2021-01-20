@@ -1,6 +1,8 @@
 package com.putoet.intcode;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExpandableMemory implements Memory {
     private long[] memory;
@@ -45,6 +47,16 @@ public class ExpandableMemory implements Memory {
         System.arraycopy(memory, 0, array, 0, memory.length);
 
         return array;
+    }
+
+    @Override
+    public List<Long> toList() {
+        return Arrays.stream(memory).boxed().collect(Collectors.toList());
+    }
+
+    @Override
+    public Memory copy() {
+        return new ExpandableMemory(toList());
     }
 
     protected void checkAddress(Address address) {

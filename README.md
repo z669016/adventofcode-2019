@@ -156,15 +156,27 @@ algorithm.
 
 RepairDroid runs an IntCode program. It implements InputDevice and OutputDevice to get the data. The IntCodeDevice of 
 the RepairDroid must stop when no input is available, and be able to resume later. This requires some refactoring
-on the IntCodeComputer we developed so far, and it enables the use of the generic bfs() of the algorithms project.
+on the IntCodeComputer developed so far, and it enables the use of the generic bfs() of the algorithms project.
 
-The starting state is at Point.ORIGIN, and an empty set of visited locations. The next states will be 4 different 
-commands and point.ORIGIN added to the set of visited places. Even dead-ends are recorded as visited, but those Node 
-paths will stop and will not be explored any further. The success state will have the value 2 as it's last 
-output value. The puzzle answer is the length of the Node path.
+The starting state is at Point.ORIGIN. The next states will be 4 different commands and point.ORIGIN. The success state 
+will have the value 2 as it's last output value. The puzzle answer is the length of the Node path.
 
+Part 2 is a bot more tricky for it requires you to build and remember the maze/grid. I changed the BFS method into an
+```all``` method, to enable me to find all routes to a wall. I found out the hard way, that wall elements shout never 
+be considered 'explored' because in the maze there can be multiple routes leading from a different angle to the same 
+wall element, so this required a special version on the ```State``` of the search, for the ```equals(other Object)``` 
+should always return false when the state found a wall element. This search starts at ```Point.ORIGIN```, searches for 
+all walls (where in part 1, I could search for the first hit on the oxygen system).
 
+Now I have all locations of wall elements, I know the origin, and I know the location of the oxygen system. With that
+I can builg a ```Grid``` with walls (#). Then I can search that mgrid for ```all``` routes from the oxygen system to a 
+wall element, and from that list, select the longest route (most steps). Beware, the number of steps includes a step to 
+the wall element, so the puzzle answer is steps minus one.
 
+Looking back, I could also reuse the approach of part 2 for part one, so, first find all walls and from that info 
+create a ```Grid```, and then just search the grind for the route to the OxygenSystem (which you could treat as a 
+special kind of wall element). But maybe that refactoring is something for later. For now, the solution is a bit crap 
+and lacks proper tests, but it does work.
 
 ## intcode
 An ```Address``` class is used to represent a memory address. 

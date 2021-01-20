@@ -1,9 +1,6 @@
 package com.putoet.day7;
 
-import com.putoet.intcode.FixedMemory;
-import com.putoet.intcode.IntCodeComputer;
-import com.putoet.intcode.IntCodeDevice;
-import com.putoet.intcode.IntCodeInputOutputDevice;
+import com.putoet.intcode.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,21 +15,21 @@ public class FeedbackAmplifierArray implements AmplifierArray {
 
     private final CountDownLatch latch = new CountDownLatch(ARRAY_SIZE);
     private final IntCodeDevice[] amplifiers = new IntCodeDevice[ARRAY_SIZE];
-    private final IntCodeInputOutputDevice[] input = new IntCodeInputOutputDevice[]{
-            new IntCodeInputOutputDevice(),
-            new IntCodeInputOutputDevice(),
-            new IntCodeInputOutputDevice(),
-            new IntCodeInputOutputDevice(),
-            new IntCodeInputOutputDevice()
+    private final IntCodeConcurrentInputOutputDevice[] input = new IntCodeConcurrentInputOutputDevice[]{
+            new IntCodeConcurrentInputOutputDevice(),
+            new IntCodeConcurrentInputOutputDevice(),
+            new IntCodeConcurrentInputOutputDevice(),
+            new IntCodeConcurrentInputOutputDevice(),
+            new IntCodeConcurrentInputOutputDevice()
     };
 
-    private final IntCodeInputOutputDevice output;
+    private final IntCodeConcurrentInputOutputDevice output;
 
     public FeedbackAmplifierArray(List<Long> intCodeProgram, PhaseSetting phaseSetting) {
         assert phaseSetting.size() == ARRAY_SIZE;
 
         for (int i = 0; i < amplifiers.length; i++) {
-            amplifiers[i] = IntCodeComputer.builder()
+            amplifiers[i] = ConcurrentIntCodeComputer.builder()
                     .memory(new FixedMemory(intCodeProgram))
                     .input(input[i])
                     .output(input[i == ARRAY_SIZE - 1 ? 0 : i + 1])
