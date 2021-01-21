@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class GridSearch {
+    public static char WALL = '#';
+    public static char OXYGEN_SYSTEM = 'O';
+    public static char OPEN = '.';
+
     public static class State {
         public final Point point;
         public final char element;
@@ -18,7 +22,7 @@ public class GridSearch {
 
         @Override
         public boolean equals(Object o) {
-            if (this.element == '#')
+            if (this.element == WALL)
                 return false;
 
             if (this == o) return true;
@@ -34,22 +38,20 @@ public class GridSearch {
     }
 
     private final Grid grid;
-    private final Point oxygenSystem;
 
-    public GridSearch(Grid grid, Point oxygenSystem) {
+    public GridSearch(Grid grid) {
         this.grid = grid;
-        this.oxygenSystem = oxygenSystem;
     }
 
-    public State init() {
-        return stateFor(oxygenSystem);
+    public State init(Point startingPoint) {
+        return stateFor(startingPoint);
     }
 
     private State stateFor(Point point) {
         return new State(point, grid.get(point.x, point.y));
     }
 
-    public List<State> successors(State state) {
+    public List<State> wallSearch(State state) {
         return List.of(
                 stateFor(state.point.add(Point.NORTH)),
                 stateFor(state.point.add(Point.SOUTH)),
@@ -58,7 +60,23 @@ public class GridSearch {
         );
     }
 
-    public boolean hitWall(State state) {
-        return state.element == '#';
+    public List<State> oxygenSystemSearch(State state) {
+        if (state.element == WALL)
+            return List.of();
+
+        return List.of(
+                stateFor(state.point.add(Point.NORTH)),
+                stateFor(state.point.add(Point.SOUTH)),
+                stateFor(state.point.add(Point.WEST)),
+                stateFor(state.point.add(Point.EAST))
+        );
+    }
+
+    public boolean wallFound(State state) {
+        return state.element == WALL;
+    }
+
+    public boolean oxygenSystemFound(State state) {
+        return state.element == OXYGEN_SYSTEM;
     }
 }

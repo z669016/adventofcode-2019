@@ -151,32 +151,20 @@ rest of ORE, redo this process until the remainder of ORE is not enough to creat
 All in all not too difficult but it does require a careful breakdown of the process in small steps.
 
 ## Day 15
-Part 1 must be a BFS (breadth first search) problem, but now using an IntCodeDevice as part of the state of the search
-algorithm.
+```RepairDroid``` runs an IntCode program. It implements ```InputDevice``` and ```OutputDevice``` to get the data. The
+```IntCodeDevice``` of the ```RepairDroid``` must stop when no input is available, and be able to resume later. This 
+requires some refactoring on the ```IntCodeComputer``` developed so far, but it enables the use of the generic bfs() 
+of the algorithms project.
 
-RepairDroid runs an IntCode program. It implements InputDevice and OutputDevice to get the data. The IntCodeDevice of 
-the RepairDroid must stop when no input is available, and be able to resume later. This requires some refactoring
-on the IntCodeComputer developed so far, and it enables the use of the generic bfs() of the algorithms project.
+The objective of the ```RepairDroid``` is to find all non-open spaces in the maze (which includes walls and the oxygen
+system). This allows the creation of a ```Grid``` to solve the actual problem.
 
-The starting state is at Point.ORIGIN. The next states will be 4 different commands and point.ORIGIN. The success state 
-will have the value 2 as it's last output value. The puzzle answer is the length of the Node path.
+The starting point for the ```RepairDroid``` search is at ```Point.ORIGIN```. The next states will be 4 different 
+from there (add NORTH, SOUTH, EAST, and WEST). The success state will have the value 0 or 2 as it's last output value. 
 
-Part 2 is a bot more tricky for it requires you to build and remember the maze/grid. I changed the BFS method into an
-```all``` method, to enable me to find all routes to a wall. I found out the hard way, that wall elements shout never 
-be considered 'explored' because in the maze there can be multiple routes leading from a different angle to the same 
-wall element, so this required a special version on the ```State``` of the search, for the ```equals(other Object)``` 
-should always return false when the state found a wall element. This search starts at ```Point.ORIGIN```, searches for 
-all walls (where in part 1, I could search for the first hit on the oxygen system).
-
-Now I have all locations of wall elements, I know the origin, and I know the location of the oxygen system. With that
-I can builg a ```Grid``` with walls (#). Then I can search that mgrid for ```all``` routes from the oxygen system to a 
-wall element, and from that list, select the longest route (most steps). Beware, the number of steps includes a step to 
-the wall element, so the puzzle answer is steps minus one.
-
-Looking back, I could also reuse the approach of part 2 for part one, so, first find all walls and from that info 
-create a ```Grid```, and then just search the grind for the route to the OxygenSystem (which you could treat as a 
-special kind of wall element). But maybe that refactoring is something for later. For now, the solution is a bit crap 
-and lacks proper tests, but it does work.
+Once the Grid is available, it can be used for a ```bfs()``` for the oxygen system (part 1), or a ```findAll()``` for
+all routes to a wall and then just select the longest route (part 2). The ```GridSearch``` is a simple helper class 
+for the actual search and the search state.
 
 ## intcode
 An ```Address``` class is used to represent a memory address. 

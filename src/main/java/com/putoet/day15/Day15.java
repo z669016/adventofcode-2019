@@ -14,58 +14,52 @@ import java.util.stream.Collectors;
 public class Day15 {
     public static void main(String[] args) {
         final List<Long> intCode = CSV.flatList("/day15.txt", Long::parseLong);
+        final Grid grid = asGrid(intCode);
+        final GridSearch search = new GridSearch(grid);
 
-        final Optional<GenericSearch.Node<RepairDroid>> node = part1(intCode);
-        node.ifPresent(state -> part2(intCode, state.state.location(), node.get()));
+        Optional<Point> oxygenSystem = part1(search);
+        oxygenSystem.ifPresent(point -> part2(search, point));
     }
 
-    private static Optional<GenericSearch.Node<RepairDroid>> part1(List<Long> intCode) {
-        final Optional<GenericSearch.Node<RepairDroid>> node = GenericSearch.bfs(
-                RepairDroid.init(intCode, Point.ORIGIN),
-                RepairDroid::oxygenSystemFound,
-                RepairDroid::successorsMoved);
-
-        System.out.println();
-        if (node.isEmpty()) {
-            System.out.println("Oxygen system not found.");
+    private static Optional<Point> part1(GridSearch search) {
+        final Optional<GenericSearch.Node<GridSearch.State>> node = GenericSearch.bfs(
+                search.init(Point.ORIGIN),
+                search::oxygenSystemFound,
+                search::oxygenSystemSearch);
+        if (node.isEmpty())
             return Optional.empty();
-        }
 
-        System.out.println("Oxygen system found at " + node.get().state.location());
-        System.out.println("It took " + node.get().steps() + " to get there.");
+        System.out.println("Found oxygenSystem in " + node.get().steps() + " steps.");
 
-        return node;
+        return Optional.of(node.get().state.point);
     }
 
-    private static void part2(List<Long> intCode, Point oxygenSystemLocation, GenericSearch.Node<RepairDroid> path) {
-        System.out.println("Finding the longest possible route from " + oxygenSystemLocation + " to the borders");
-
-        final Grid grid = asGrid(oxygenSystemLocation, intCode);
-        final GridSearch search = new GridSearch(grid, oxygenSystemLocation);
-        final List<GenericSearch.Node<GridSearch.State>> walls = GenericSearch.all(
-                search.init(),
-                search::hitWall,
-                search::successors);
+    private static void part2(GridSearch search, Point oxygenSystemLocation) {
+        final List<GenericSearch.Node<GridSearch.State>> walls = GenericSearch.findAll(
+                search.init(oxygenSystemLocation),
+                search::wallFound,
+                search::wallSearch);
 
         final GenericSearch.Node<GridSearch.State> longest = walls.stream().max(Comparator.comparingInt(GenericSearch.Node::steps)).get();
         System.out.println("The longest route has " + (longest.steps() - 1) + " steps");
     }
 
-    private static Grid asGrid(Point oxygenSystemLocation,
-                               List<Long> intCode) {
-        final List<GenericSearch.Node<RepairDroid>> walls = GenericSearch.all(
+    private static Grid asGrid(List<Long> intCode) {
+        final List<GenericSearch.Node<RepairDroid>> walls = GenericSearch.findAll(
                 RepairDroid.init(intCode, Point.ORIGIN),
-                RepairDroid::wallFound,
+                RepairDroid::wallOrOxygenSystemFound,
                 RepairDroid::successorsWalls);
 
         final Grid grid = createGrid(walls);
 
         walls.stream()
-                .filter(node -> node.state.result() == RepairDroid.MovementSensor.WALL_HIT)
-                .map(node -> node.state.location())
-                .forEach(point -> grid.set(point.x, point.y, '#'));
-
-        grid.set(oxygenSystemLocation.x, oxygenSystemLocation.y, 'O');
+                .map(node -> node.state)
+                .forEach(state -> grid.set(state.location().x, state.location().y, switch (state.result()) {
+                            case MOVED -> GridSearch.OPEN;
+                            case OXYGEN_SYSTEM_FOUND -> GridSearch.OXYGEN_SYSTEM;
+                            case WALL_HIT -> GridSearch.WALL;
+                        })
+                );
 
         return grid;
     }
@@ -81,16 +75,8 @@ public class Day15 {
         final int width = Math.abs(maxX - minX);
         final char[][] data = new char[height][width];
 
-        for (char[] datum : data) Arrays.fill(datum, '.');
+        for (char[] datum : data) Arrays.fill(datum, GridSearch.OPEN);
 
-        final Grid grid = new Grid(minX, maxX, minY, maxY, data);
-        return grid;
-    }
-
-    private List<Point> successors(Point from) {
-        return List.of(from.add(Point.NORTH),
-                from.add(Point.SOUTH),
-                from.add(Point.WEST),
-                from.add(Point.EAST));
+        return new Grid(minX, maxX, minY, maxY, data);
     }
 }

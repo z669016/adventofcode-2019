@@ -29,33 +29,20 @@ public class RepairDroid implements Runnable {
         return new RepairDroid(device, location);
     }
 
-    public static List<RepairDroid> successorsMoved(RepairDroid repairDroid) {
+    public static List<RepairDroid> successorsWalls(RepairDroid repairDroid) {
         if (repairDroid.result() != MovementSensor.MOVED)
             return List.of();
 
         final List<RepairDroid> successors = new ArrayList<>();
         for (int move : List.of(1, 2, 3, 4)) {
-            final RepairDroid successor = successorForMove(repairDroid, move);
+            final RepairDroid successor = forMove(repairDroid, move);
             successors.add(successor);
         }
 
         return successors;
     }
 
-    public static List<RepairDroid> successorsWalls(RepairDroid repairDroid) {
-        if (repairDroid.result() == MovementSensor.WALL_HIT)
-            return List.of();
-
-        final List<RepairDroid> successors = new ArrayList<>();
-        for (int move : List.of(1, 2, 3, 4)) {
-            final RepairDroid successor = successorForMove(repairDroid, move);
-            successors.add(successor);
-        }
-
-        return successors;
-    }
-
-    private static RepairDroid successorForMove(RepairDroid repairDroid, int move) {
+    private static RepairDroid forMove(RepairDroid repairDroid, int move) {
         final Point newLocation = repairDroid.location().add(switch (move) {
             case 1 -> Point.NORTH;
             case 2 -> Point.SOUTH;
@@ -71,19 +58,16 @@ public class RepairDroid implements Runnable {
         final IntCodeDevice copy = repairDroid.device.copy();
         final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
         input.offer(move);
-        
+
         copy.input(new IntCodeInputOutputDevice());
         copy.output(new IntCodeInputOutputDevice());
         ((IntCodeInputOutputDevice) copy.input()).offer(move);
         return copy;
     }
 
-    public static boolean oxygenSystemFound(RepairDroid repairDroid) {
-        return repairDroid.result() == MovementSensor.OXYGEN_SYSTEM_FOUND;
-    }
-
-    public static boolean wallFound(RepairDroid repairDroid) {
-        return repairDroid.result() == MovementSensor.WALL_HIT;
+    public static boolean wallOrOxygenSystemFound(RepairDroid repairDroid) {
+        return repairDroid.result() == MovementSensor.WALL_HIT
+                || repairDroid.result() == MovementSensor.OXYGEN_SYSTEM_FOUND;
     }
 
     @Override
@@ -122,7 +106,7 @@ public class RepairDroid implements Runnable {
 
     @Override
     public boolean equals(Object o) {
-        if (result()  == MovementSensor.WALL_HIT)
+        if (result() == MovementSensor.WALL_HIT)
             return false;
 
         if (this == o) return true;
