@@ -166,6 +166,18 @@ Once the Grid is available, it can be used for a ```bfs()``` for the oxygen syst
 all routes to a wall and then just select the longest route (part 2). The ```GridSearch``` is a simple helper class 
 for the actual search and the search state.
 
+## Day 16
+This exercise was mean ... For part 1, I started with a ```Signal``` class that just implemented the required algorithm. 
+Pretty  straight forward nothing difficult. Part 2 of course could not be solved reusing the same algorithm, I 
+implemented an optimized ```FasterSignal``` that skips calculations for zeros in the pattern. Unfortunately that still 
+doesn't do the trick.
+
+After reading some Reddit posts, I realized that the offset was part of the original message, so there was no need to 
+calculate the numbers on the first part of the signal (everything before the offset), also because according to the 
+pattern the numbers before the offset should be multiplied with 0. All the numbers after the offset should be 
+multiplied with 1, which means you can fill new data from the end just by summing up the values (which would prevent 
+looping over all remaining values as well).  
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 
