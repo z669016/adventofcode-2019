@@ -178,6 +178,19 @@ pattern the numbers before the offset should be multiplied with 0. All the numbe
 multiplied with 1, which means you can fill new data from the end just by summing up the values (which would prevent 
 looping over all remaining values as well).  
 
+## Day 17
+The ```VacuumRobot``` is used to run the int program (puzzle input). One constructor only takes an int code program and
+it produces a scan of the scaffolds. The ```Calibrator``` takes the map and does the calibration (part 1), and creates 
+the route from the map (the map is represented by a ```Grid```).
+
+The``` Route``` class takes the route, and splits it into a main routine, and three functions as described in the 
+assignment. The route is split by searching for the longest repeating piece of route (max sublist is 10 commands, 
+otherwise it could exceed the 20 characters). 
+
+The second constructor of the ```VacuumRobot``` takes an int code program and a route. This constructor sets the first 
+instruction to 2, and sets up the input device with the routes main routine and functions A, B, and C, and no contiuous 
+video feed to solve part 2.
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 
