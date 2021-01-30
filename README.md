@@ -204,6 +204,13 @@ Part 2 uses the same algorithm, but with a different state. However, first a ```
 location for each section of the map. So the structure is a little different, but the algorithm itself is basically 
 the same.  
 
+## Day 19
+The ```Drone``` class takes an int code program and is able to determine the state for a coordinate (```Point```) by 
+running the program and provining the X and Y coordinate as input values. The very first test run show, you need to 
+initialize the programs memory for each run, as the program throws an error when you try to run it again reusing the 
+state (memory) it had after a previous run. 
+
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 

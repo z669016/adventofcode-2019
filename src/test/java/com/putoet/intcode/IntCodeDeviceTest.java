@@ -48,8 +48,8 @@ class IntCodeDeviceTest {
     void day5BlockingInOutSample() throws InterruptedException {
         final List<Long> intCode = List.of(3L, 0L, 4L, 0L, 99L);
         final Memory memory = new FixedMemory(intCode);
-        final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
-        final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
+        final IntCodeConcurrentInputOutputDevice input = new IntCodeConcurrentInputOutputDevice();
+        final IntCodeConcurrentInputOutputDevice output = new IntCodeConcurrentInputOutputDevice();
         final IntCodeDevice device = IntCodeComputer.builder()
                 .memory(memory)
                 .input(input)
