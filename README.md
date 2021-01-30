@@ -191,6 +191,19 @@ The second constructor of the ```VacuumRobot``` takes an int code program and a 
 instruction to 2, and sets up the input device with the routes main routine and functions A, B, and C, and no contiuous 
 video feed to solve part 2.
 
+## Day 18
+Started with a ```KeyMap``` class that represents the maze using a grid. It provides some convenience methods to get 
+all the keys, the doors, the entrance, etc. It also provides a method to get the shortest paths to available keys from 
+the current location given a set of available keys (using a bfs). Then an ```Explorer``` class also performs a bfs to 
+find the shortest path to collect all keys. In order to make that one perform, states that have already been evaluated
+and have proven shorter are pruned (a state contains a current location, a set of collected keys, and a number of 
+steps). this solves part 1, not blazingly fast but with acceptable performance (less than 2.5 seconds).     
+
+Part 2 uses the same algorithm, but with a different state. However, first a ```SplitKeyMap``` is created from the 
+```KeyMap```. Then the MultiMapExplorer searches for the shortest route, where the state now contains a current 
+location for each section of the map. So the structure is a little different, but the algorithm itself is basically 
+the same.  
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 
