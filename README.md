@@ -206,10 +206,16 @@ the same.
 
 ## Day 19
 The ```Drone``` class takes an int code program and is able to determine the state for a coordinate (```Point```) by 
-running the program and provining the X and Y coordinate as input values. The very first test run show, you need to 
-initialize the programs memory for each run, as the program throws an error when you try to run it again reusing the 
-state (memory) it had after a previous run. 
+running the program and providing the X and Y coordinate as input values. The very first test run showed, you need to 
+initialize the program memory for each run, as the program throws an error when you try to run it again reusing the 
+state (memory) it had after a previous run. The ```TractorBeamMap``` class creates a 50x50 grid and fills all the cells
+on the grid with the output from the drone. Not the fastest solution but it works and can be easily visualized.
 
+Part 2 needs a bit of more work, as the sheer number of elements in the grid to contain a 100x100 block is probably 
+be too large. I created a ```TractorBeamSearch``` that performs a search for the location of the block. It starts the 
+search at the first line for which the beam at least 100 units wide. The initial estimation for that line is based on 
+data from part one (the angle for the lower and upper beam lines of line 35). Then just move one line down until the 
+line contains the top of the square. The spead of the search can probably be improved but the runtime was okay(ish).
 
 ## intcode
 An ```Address``` class is used to represent a memory address. 

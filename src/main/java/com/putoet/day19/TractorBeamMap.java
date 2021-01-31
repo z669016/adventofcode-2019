@@ -9,39 +9,76 @@ public class TractorBeamMap {
     public static final char PULLED_TOKEN = '#';
 
     private final Grid grid;
+    private final int minX;
     private final int maxX;
+    private final int minY;
     private final int maxY;
 
-    public TractorBeamMap(int maxX, int maxY) {
+    public TractorBeamMap(int minX, int maxX, int minY, int maxY) {
+        this.minX = minX;
         this.maxX = maxX;
+        this.minY = minY;
         this.maxY = maxY;
-
-        grid = new Grid(GridUtils.of(0, maxX, 0, maxY, '.'));
+        grid = new Grid(minX, maxX, minY, maxY, GridUtils.of(minX, maxX, minY, maxY, '.'));
     }
 
     public static TractorBeamMap of(Drone drone, int maxX, int maxY) {
-        final TractorBeamMap tractorBeamMap = new TractorBeamMap(maxX, maxY);
+        return of (drone, 0, maxX, 0, maxY);
+    }
 
-        for (int y = 0; y < maxY; y++) {
-            for (int x = 0; x < maxX; x++) {
+    public static TractorBeamMap of(Drone drone, int minX, int maxX, int minY, int maxY) {
+        final TractorBeamMap tractorBeamMap = new TractorBeamMap(minX, maxX, minY, maxY);
+
+        for (int y = minY; y < maxY; y++) {
+            for (int x = minX; x < maxX; x++) {
                 final Point point = Point.of(x, y);
                 final Drone.State state = drone.state(point);
-                switch (state) {
-                    case STATIONARY -> tractorBeamMap.grid.set(x, y, STATIONARY_TOKEN);
-                    case PULLED -> tractorBeamMap.grid.set(x, y, PULLED_TOKEN);
-                }
+                tractorBeamMap.grid.set(x, y, stateToChar(state));
             }
         }
 
         return tractorBeamMap;
     }
 
+    public static char stateToChar(Drone.State state) {
+        return switch (state) {
+            case STATIONARY -> STATIONARY_TOKEN;
+            case PULLED -> PULLED_TOKEN;
+        };
+    }
+
     public long affectedPoints() {
         return grid.count(PULLED_TOKEN);
+    }
+
+    public Point lowerVector(int y) {
+        int x = minX;
+        while (grid.get(x, y) == '.')
+            x++;
+        return Point.of(x, y);
+    }
+
+    public Point upperVector(int y) {
+        int x = maxX - 1;
+        while (grid.get(x, y) == '.')
+            x--;
+        return Point.of(x, y);
+    }
+
+    public boolean contains(Point point) {
+        return grid.contains(point.x, point.y);
     }
 
     @Override
     public String toString() {
         return grid.toString();
+    }
+
+    public void paint(Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
+        for (int y = upperLeft.y; y < bottomLeft.y; y++) {
+            for (int x = upperLeft.x; x < upperRight.x; x++) {
+                grid.set(x, y, '@');
+            }
+        }
     }
 }
