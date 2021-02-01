@@ -217,6 +217,23 @@ search at the first line for which the beam at least 100 units wide. The initial
 data from part one (the angle for the lower and upper beam lines of line 35). Then just move one line down until the 
 line contains the top of the square. The spead of the search can probably be improved but the runtime was okay(ish).
 
+## Day 20
+Started to address this challenge with the ```DonutMaze``` class, that provides some helpful methods for this 
+particular weird grid. It collects the labels and caches the from-to values per label, it can identify  a label and get 
+the entry and exit poiints for the maze.  Basically the stuff you need to create methods to run a BFS on the maze.
+
+The ```DonutMazeExplorer``` contains a ```shortestRoute()``` method that uses BFS to find the exit using a Point as 
+state for the search. The ```successors(Point point)``` method simply transports to the other end of the gate when the 
+next point is a label. 
+
+The recursive part is just as straight forward, now with a ```RecursiveDonutMazeExplorer```. The search through the 
+maze now uses a ```Pair<Integer,Point>``` as its state (which is the level, and the current location). The init starts
+at level 0, the success is at the exit point only if current level is 0, and the ```successors()``` method takes the 
+level into account (moving through an inner circle gate will reduce the level with 1, moving through an outer gate
+will increase the level with 1), and that's basically it. 
+
+So, fundamentally the two explorers are identical. This exercise looked more difficult than it actually was.  
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 
