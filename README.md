@@ -220,7 +220,7 @@ line contains the top of the square. The spead of the search can probably be imp
 ## Day 20
 Started to address this challenge with the ```DonutMaze``` class, that provides some helpful methods for this 
 particular weird grid. It collects the labels and caches the from-to values per label, it can identify  a label and get 
-the entry and exit poiints for the maze.  Basically the stuff you need to create methods to run a BFS on the maze.
+the entry and exit points for the maze.  Basically the stuff you need to create methods to run a BFS on the maze.
 
 The ```DonutMazeExplorer``` contains a ```shortestRoute()``` method that uses BFS to find the exit using a Point as 
 state for the search. The ```successors(Point point)``` method simply transports to the other end of the gate when the 
@@ -233,6 +233,14 @@ level into account (moving through an inner circle gate will reduce the level wi
 will increase the level with 1), and that's basically it. 
 
 So, fundamentally the two explorers are identical. This exercise looked more difficult than it actually was.  
+
+## Day 21
+Not my kind of puzzle. The ```SpringDroidProgrammingDevice``` class creates an IntCode ASCII computer. It takes a 
+```List<String>``` feeds that into the input, runs the program and transforms the output data again into a list of 
+strings. While trying different combinations of spring-instructions, the output of the program returned different 
+pictures, so the damage the droid needed to navigate through depended on the input. At that point I decided to search 
+Reddit for the answer, as I didn't want to run some kind of brute force search for all possible combinations of 
+instructions. As I said, not my kind of puzzle.
 
 ## intcode
 An ```Address``` class is used to represent a memory address. 
