@@ -45,7 +45,8 @@ public final class DeckShuffle {
      * Aggregate two functions f(x) and g(x) to create a new function h(x)=g(f(x))
      */
     private LinearFunction aggregate(LinearFunction f, LinearFunction g) {
-        // Let f(x)=k*x+m and g(x)=j*x+n, then h(x) = g(f(x)) = Ax+B = j*(k*x+m)+n = j*k*x + (j*m+n) => A=j*k, B=j*m+n
+        // Let f(x)=k*x+m and g(x)=j*x+n, then
+        //      h(x) = g(f(x)) = Ax+B = j*(k*x+m)+n = j*k*x + (j*m+n) => A=j*k, B=j*m+n
         return new LinearFunction(g.k.multiply(f.k), g.k.multiply(f.m).add(g.m));
     }
 

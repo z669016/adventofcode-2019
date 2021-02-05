@@ -253,6 +253,28 @@ read [Modular Arithmetic for Beginners](https://codeforces.com/blog/entry/72527)
 a [Tutorial for Advent of Code 2019 day 22 part 2](https://codeforces.com/blog/entry/72593) which describes the details
 on how the solution works.
 
+## Day 23
+What a tremendously fun puzzle this time, a great opportunity to play around with threads and locks.
+
+The ```NetworkInterfaceController``` (NIC) basically creates an ```IntCodeDevice```and the NIC can be run on a separate 
+thread. The ```Network``` creates 50 NIC's and connects them to a dedicated ```SynchronizedInputDevice``` and 
+```SynchronizedOutputDevice```. When the network is started, it creates a separate thread for each NIC, and it also 
+runs itself on a separate thread. The network itself is a simple dispatcher which loops over all output 
+devices, takes a value and (when a value was available) dispatches the packet to the appropriate input for the 
+requested destination. The network instance saves the first package with an invalid address (0 <= address < 50). 
+
+The synchronized input and output devices have been made thread safe using a ```ReentrantLock```, and both offer and 
+poll complete packets, so the network doesn't have to handle partial packets. 
+
+A ```NotAlwaysTransmit``` (NAT) class which also runs on a separate thread, can be connected to the network, and 
+when present, will receive the invalid packages found by the network. The NAT loops and only when it finds the network
+idle (all input devices are empty), and it has previously received an invalid packet, then it forwards that packet to
+the input of device 0 (after which the last received invalid packet is set to null again). The NAT has been made thread 
+safe using a ```ReentrantReadWriteLock```. If the NAT find a second consecutive packet with the same Y value for the 
+first time, then that packed is stored. 
+
+Probably not the fastest possible solution, but definitely fun to implement. 
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 
