@@ -242,6 +242,17 @@ pictures, so the damage the droid needed to navigate through depended on the inp
 Reddit for the answer, as I didn't want to run some kind of brute force search for all possible combinations of 
 instructions. As I said, not my kind of puzzle.
 
+## Day 22
+My knowledge of math definitely wasn't good enough to solve this myself. For part one I started with an array of 
+integers, and it worked very well. For part 2, I started on a new version that only tracked the position of one number
+instead of a complete array, but even then the numbers are way too high, and the answer is not on a position of a 
+card after shuffles but of a card at some position.
+
+The math behind this is modular arithmetic, 
+read [Modular Arithmetic for Beginners](https://codeforces.com/blog/entry/72527) for a good introduction. There is also
+a [Tutorial for Advent of Code 2019 day 22 part 2](https://codeforces.com/blog/entry/72593) which describes the details
+on how the solution works.
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 
