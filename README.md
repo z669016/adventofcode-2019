@@ -275,6 +275,19 @@ first time, then that packed is stored.
 
 Probably not the fastest possible solution, but definitely fun to implement. 
 
+## Day 24
+Part 1 is straight forward reusing the ```Grid``` and ```Point``` that has been used before. Using the static field 
+```NEIGHBOURS```(```List.of(Point.NORTH, Point.EAST, Point.SOUTH, Point.WEST)```) you can simply get all adjacent 
+points in the grid using ```NEIGHBOURS.stream().map(current::add).collect(Collectors.toList())```. You can then count
+adjacent bugs by ```adjacent.stream().filter(p -> grid.contains(p.x, p.y)).filter(p -> grid.get(p.x, p.y) == BUG).count()```
+All is handled within the ```Eris``` class.
+
+For part 2 a different approach is required, so I introduced ```RecursiveFoldedEris``` which stores a contains a map of 
+grids with the level as the map key (```Map<Integer,Grid>```). Now points outside the grid should no longer be ignored 
+but be substituted by a list of points in the adjacent grid (o level up or down, depending on the current point being 
+ckecked). With each next minute, you also need to check if the map should be expanded up or down (as the outer grids in 
+the map can cause bugs to spread into new grids not yet in the map).
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 
