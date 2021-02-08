@@ -288,6 +288,21 @@ but be substituted by a list of points in the adjacent grid (o level up or down,
 ckecked). With each next minute, you also need to check if the map should be expanded up or down (as the outer grids in 
 the map can cause bugs to spread into new grids not yet in the map).
 
+## Day 25
+This looks like a game ... the ```SyncCommandInputDevice``` and ```SyncCommandOutputDevice``` are input and output 
+devices for the intcode computer (they take commands and provide them as characters ended with a newline character to 
+the droid). As the Droid will be running asynchronously the devices use locks. The Droid uses a resumable intcode 
+computer that is started on a separate thread. If no input is available, it just waits a while, and retries. 
+
+The main program (```Day25```) reads the intcode program, creates a droid and starts it. Then it runs a loop to read a 
+command, after which it sends the command to the droid, and reads the response. As both programs run on separate 
+threads, and threads need some tom eto do their work, some delays have been introduced (```Thread.sleep()```).
+
+Playing the game by hand, I found several rooms with items to take. Some will kill you or send you back to the starting 
+point (like the ```photons``` and ```molted lava```). I took some time to find out the layout of the ship by walking 
+around and then gathered the items. The combination of ```shell```, ```fixed point```, ```polygon```  and 
+```candy cane``` got me into the secured room were the pass code was to be found.
+
 ## intcode
 An ```Address``` class is used to represent a memory address. 
 
