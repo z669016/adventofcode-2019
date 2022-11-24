@@ -86,7 +86,7 @@ public class KeyMap {
     }
 
     private Predicate<Point> goalTest(Predicate<Character> predicate) {
-        return point -> predicate.test(grid.get(point.x, point.y));
+        return point -> predicate.test(grid.get(point.x(), point.y()));
     }
 
     private Function<Point, List<Point>> successors(Set<Character> possessedKeys) {
@@ -95,8 +95,8 @@ public class KeyMap {
 
             for (Point move : List.of(Point.NORTH, Point.EAST, Point.SOUTH, Point.WEST)) {
                 final Point successor = current.add(move);
-                if (grid.contains(successor.x, successor.y)) {
-                    final char element = grid.get(successor.x, successor.y);
+                if (grid.contains(successor.x(), successor.y())) {
+                    final char element = grid.get(successor.x(), successor.y());
                     if (isOpen(element) || isEntrance(element) || isKey(element)
                             || (isDoor(element) && possessedKeys.contains(asKey(element))))
                         successors.add(successor);
@@ -112,10 +112,10 @@ public class KeyMap {
     }
 
     public char elementAt(Point point) {
-        if (!grid.contains(point.x, point.y))
+        if (!grid.contains(point.x(), point.y()))
             throw new IllegalArgumentException("Point " + point + " is not on the grid.");
 
-        return grid.get(point.x, point.y);
+        return grid.get(point.x(), point.y());
     }
 
     public SplitKeyMap split() {
@@ -123,7 +123,7 @@ public class KeyMap {
     }
 
     public boolean contains(Point point) {
-        return grid.contains(point.x, point.y);
+        return grid.contains(point.x(), point.y());
     }
 
     @Override

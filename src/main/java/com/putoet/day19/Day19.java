@@ -27,6 +27,6 @@ public class Day19 {
         final TractorBeamSearch search = new TractorBeamSearch(drone, y -> (int)(1.1 * y), y -> (int)(1.4 * y));
         final Point topLeft = search.squareTopLeft(100);
         System.out.println("The top left position for the 100x100 square is " + topLeft);
-        System.out.println("The answer code is " + (topLeft.x * 10_000 + topLeft.y));
+        System.out.println("The answer code is " + (topLeft.x() * 10_000 + topLeft.y()));
     }
 }

@@ -41,10 +41,10 @@ public class DonutMaze {
 
     private static String labelAt(Grid grid, Point point) {
         for (Point adjacent : adjacent(point)) {
-            if (grid.contains(adjacent.x, adjacent.y)) {
-                final char token = grid.get(adjacent.x, adjacent.y);
+            if (grid.contains(adjacent.x(), adjacent.y())) {
+                final char token = grid.get(adjacent.x(), adjacent.y());
                 if (Character.isLetter(token)) {
-                    return String.valueOf(grid.get(point.x, point.y)) + token;
+                    return String.valueOf(grid.get(point.x(), point.y())) + token;
                 }
             }
         }
@@ -55,16 +55,16 @@ public class DonutMaze {
     private static Point entryForLabelAt(Grid grid, Point point) {
         final List<Point> adjacents = adjacent(point);
         for (Point adjacent : adjacents) {
-            if (grid.contains(adjacent.x, adjacent.y)) {
-                final char token = grid.get(adjacent.x, adjacent.y);
+            if (grid.contains(adjacent.x(), adjacent.y())) {
+                final char token = grid.get(adjacent.x(), adjacent.y());
                 if (token == '.')
                     return adjacent;
             }
         }
 
         for (Point adjacent : adjacents) {
-            if (grid.contains(adjacent.x, adjacent.y)) {
-                final char token = grid.get(adjacent.x, adjacent.y);
+            if (grid.contains(adjacent.x(), adjacent.y())) {
+                final char token = grid.get(adjacent.x(), adjacent.y());
                 if (Character.isLetter(token)) {
                     return entryForLabelAt(grid, adjacent);
                 }
@@ -85,7 +85,7 @@ public class DonutMaze {
     public char tokenAt(Point point) {
         assert point != null;
 
-        return grid.get(point.x, point.y);
+        return grid.get(point.x(), point.y());
     }
 
     public String labelAt(Point point) {
@@ -120,9 +120,13 @@ public class DonutMaze {
     public String toString() {
         final StringBuilder sb = new StringBuilder(grid.toString());
         sb.append("\n");
-        labels.forEach((key, value) -> {
-            sb.append(key).append(" from ").append(value.getValue0()).append(" to ").append(value.getValue1()).append("\n");
-        });
+        labels.forEach((key, value) -> sb.append(key)
+                .append(" from ")
+                .append(value.getValue0())
+                .append(" to ")
+                .append(value.getValue1())
+                .append("\n")
+        );
 
         return sb.toString();
     }

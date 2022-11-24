@@ -3,19 +3,11 @@ package com.putoet.day10;
 import com.putoet.grid.Point;
 
 import java.math.BigInteger;
-import java.util.Objects;
 
-public class Vector implements Comparable<Vector> {
-    public final int x;
-    public final int y;
-
-    public Vector(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+public record Vector(int x, int y) implements Comparable<Vector> {
 
     public static Vector ofPoints(Point a, Point b) {
-        return new Vector(b.x - a.x, b.y - a.y);
+        return new Vector(b.x() - a.x(), b.y() - a.y());
     }
 
     private static int ggd(int a, int b) {
@@ -39,19 +31,6 @@ public class Vector implements Comparable<Vector> {
     @Override
     public String toString() {
         return String.format("{%d,%d (%3.02f)}", x, y, degrees());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Vector)) return false;
-        Vector vector = (Vector) o;
-        return x == vector.x && y == vector.y;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
     }
 
     @Override

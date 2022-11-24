@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class Day15 {
     public static void main(String[] args) {
@@ -40,7 +39,9 @@ public class Day15 {
                 search::wallFound,
                 search::wallSearch);
 
-        final GenericSearch.Node<GridSearch.State> longest = walls.stream().max(Comparator.comparingInt(GenericSearch.Node::steps)).get();
+        final GenericSearch.Node<GridSearch.State> longest = walls.stream()
+                .max(Comparator.comparingInt(GenericSearch.Node::steps))
+                .orElseThrow();
         System.out.println("The longest route has " + (longest.steps() - 1) + " steps");
     }
 
@@ -54,7 +55,7 @@ public class Day15 {
 
         walls.stream()
                 .map(node -> node.state)
-                .forEach(state -> grid.set(state.location().x, state.location().y, switch (state.result()) {
+                .forEach(state -> grid.set(state.location().x(), state.location().y(), switch (state.result()) {
                             case MOVED -> GridSearch.OPEN;
                             case OXYGEN_SYSTEM_FOUND -> GridSearch.OXYGEN_SYSTEM;
                             case WALL_HIT -> GridSearch.WALL;
@@ -65,11 +66,11 @@ public class Day15 {
     }
 
     private static Grid createGrid(List<GenericSearch.Node<RepairDroid>> walls) {
-        final List<Point> wallPoints = walls.stream().map(node -> node.state.location()).collect(Collectors.toList());
-        final int minX = wallPoints.stream().mapToInt(point -> point.x).min().getAsInt();
-        final int maxX = wallPoints.stream().mapToInt(point -> point.x).max().getAsInt() + 1;
-        final int minY = wallPoints.stream().mapToInt(point -> point.y).min().getAsInt();
-        final int maxY = wallPoints.stream().mapToInt(point -> point.y).max().getAsInt() + 1;
+        final List<Point> wallPoints = walls.stream().map(node -> node.state.location()).toList();
+        final int minX = wallPoints.stream().mapToInt(Point::x).min().orElseThrow();
+        final int maxX = wallPoints.stream().mapToInt(Point::x).max().orElseThrow() + 1;
+        final int minY = wallPoints.stream().mapToInt(Point::y).min().orElseThrow();
+        final int maxY = wallPoints.stream().mapToInt(Point::y).max().orElseThrow() + 1;
 
         final int height = Math.abs(maxY - minY);
         final int width = Math.abs(maxX - minX);

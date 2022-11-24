@@ -87,7 +87,7 @@ public class RecursiveDonutMazeExplorer {
     }
 
     private boolean isOuter(Point point) {
-        return point.y == 1 || point.y == maze.maxY() - 2 ||
-                point.x == 1 || point.x == maze.maxX() - 2;
+        return point.y() == 1 || point.y() == maze.maxY() - 2 ||
+                point.x() == 1 || point.x() == maze.maxX() - 2;
     }
 }

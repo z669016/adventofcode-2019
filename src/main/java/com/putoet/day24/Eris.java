@@ -40,8 +40,8 @@ public class Eris {
     private long adjacentBugCount(Point current) {
         final List<Point> adjacent = NEIGHBOURS.stream().map(current::add).collect(Collectors.toList());
         return adjacent.stream()
-                .filter(p -> grid.contains(p.x, p.y))
-                .filter(p -> grid.get(p.x, p.y) == BUG)
+                .filter(p -> grid.contains(p.x(), p.y()))
+                .filter(p -> grid.get(p.x(), p.y()) == BUG)
                 .count();
     }
 

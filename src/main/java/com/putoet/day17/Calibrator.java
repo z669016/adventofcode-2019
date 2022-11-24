@@ -42,7 +42,7 @@ public class Calibrator {
 
     public static int alignment(List<Point> intersections) {
         return intersections.stream()
-                .mapToInt(point -> point.x * point.y)
+                .mapToInt(point -> point.x() * point.y())
                 .sum();
     }
 
@@ -62,7 +62,7 @@ public class Calibrator {
 
             int count = 0;
             Point next = current.add(direction);
-            while (grid.contains(next.x, next.y) && grid.get(next.x, next.y) == SCAFFOLD) {
+            while (grid.contains(next.x(), next.y()) && grid.get(next.x(), next.y()) == SCAFFOLD) {
                 count++;
                 current = next;
                 next = next.add(direction);
@@ -94,11 +94,11 @@ public class Calibrator {
     private Point nextDirection(Point direction, Point current) {
         for (Point next : List.of(Point.NORTH, Point.EAST, Point.SOUTH, Point.WEST)) {
             // ignore the same and opposite directions
-            if (next.x == direction.x || next.y == direction.y)
+            if (next.x() == direction.x() || next.y() == direction.y())
                 continue;
 
             final Point newPoint = current.add(next);
-            if (grid.contains(newPoint.x, newPoint.y) && grid.get(newPoint.x, newPoint.y) == SCAFFOLD)
+            if (grid.contains(newPoint.x(), newPoint.y()) && grid.get(newPoint.x(), newPoint.y()) == SCAFFOLD)
                 return next;
         }
 

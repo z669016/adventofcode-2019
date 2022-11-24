@@ -54,12 +54,12 @@ public class Game implements OutputDevice, Runnable {
 
                     if (tile == TileFactory.BALL) {
                         if (ball != null)
-                            surface.set(ball.x, ball.y, TileFactory.EMPTY);
+                            surface.set(ball.x(), ball.y(), TileFactory.EMPTY);
                         ball = Point.of(x, y);
                         surface.set(x, y, TileFactory.BALL);
                     } else if (tile == TileFactory.PADDLE) {
                         if (paddle != null)
-                            surface.set(paddle.x, paddle.y, TileFactory.EMPTY);
+                            surface.set(paddle.x(), paddle.y(), TileFactory.EMPTY);
                         paddle = Point.of(x, y);
                         surface.set(x, y, TileFactory.PADDLE);
                     } else {
@@ -68,8 +68,8 @@ public class Game implements OutputDevice, Runnable {
                 }
                 state = State.X;
                 if (ball != null && paddle != null) {
-                    if (ball.x < paddle.x) joystick.left();
-                    else if (ball.x > paddle.x) joystick.right();
+                    if (ball.x() < paddle.x()) joystick.left();
+                    else if (ball.x() > paddle.x()) joystick.right();
                     else joystick.neutral();
                 }
             }
@@ -88,7 +88,7 @@ public class Game implements OutputDevice, Runnable {
 
     @Override
     public String toString() {
-        return "SCORE " + score + "\n" + surface.toString();
+        return "SCORE " + score + "\n" + surface;
     }
 
     @Override

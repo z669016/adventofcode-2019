@@ -35,7 +35,7 @@ public class Surface {
     }
 
     private Panel panel() {
-        return panels[robotPoint.y][robotPoint.x];
+        return panels[robotPoint.y()][robotPoint.x()];
     }
 
     private Optional<Point> robotPointFrom(String[] initialPanels) {
@@ -63,7 +63,7 @@ public class Surface {
         for (int idy = 0; idy < panels.length; idy++) {
             StringBuilder sb = new StringBuilder();
             for (int idx = 0; idx < panels[idy].length; idx++)
-                if (robotPoint.x == idx && robotPoint.y == idy)
+                if (robotPoint.x() == idx && robotPoint.y() == idy)
                     sb.append(robotDirection.toString());
                 else
                     sb.append(panels[idy][idx].color() == PanelColor.WHITE ? '#' : '.');
@@ -74,7 +74,7 @@ public class Surface {
     }
 
     public void paint(PanelColor color) {
-        panels[robotPoint.y][robotPoint.x].paint(color);
+        panels[robotPoint.y()][robotPoint.x()].paint(color);
     }
 
     public void moveRobot() {
@@ -83,14 +83,14 @@ public class Surface {
     }
 
     private void checkBordersAndExpand() {
-        if (robotPoint.x < 0) {
+        if (robotPoint.x() < 0) {
             expandPanelsToTheLeft();
             robotPoint = robotPoint.add(Point.EAST);
-        } else if (robotPoint.y < 0) {
+        } else if (robotPoint.y() < 0) {
             expandPanelsAtTheBottom();
             robotPoint = robotPoint.add(Point.NORTH);
-        } else if (robotPoint.x > panels[0].length - 1) expandPanelsAtTheRight();
-        else if (robotPoint.y > panels.length - 1) expandPanelsAtTheTop();
+        } else if (robotPoint.x() > panels[0].length - 1) expandPanelsAtTheRight();
+        else if (robotPoint.y() > panels.length - 1) expandPanelsAtTheTop();
     }
 
     private void expandPanelsAtTheTop() {

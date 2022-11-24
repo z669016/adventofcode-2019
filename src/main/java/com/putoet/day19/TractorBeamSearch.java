@@ -21,7 +21,7 @@ public class TractorBeamSearch {
     public Point squareTopLeft(int size) {
         final Point startingPoint = findStartingPoint(size);
 
-        int row = startingPoint.y;
+        int row = startingPoint.y();
         int step = 1;
         while (!containsSquare(row))
                 row += step;
@@ -33,9 +33,9 @@ public class TractorBeamSearch {
         final Pair<Integer, Integer> xValues = lowerAndUpperForRow(y);
 
         final Point upperRight = Point.of(xValues.getValue1(), y);
-        final Point upperLeft = Point.of(upperRight.x - 99, upperRight.y);
-        final Point bottomRight = Point.of(upperRight.x, upperRight.y + 99);
-        final Point bottomLeft = Point.of(upperLeft.x, bottomRight.y);
+        final Point upperLeft = Point.of(upperRight.x() - 99, upperRight.y());
+        final Point bottomRight = Point.of(upperRight.x(), upperRight.y() + 99);
+        final Point bottomLeft = Point.of(upperLeft.x(), bottomRight.y());
 
         final List<Point> corners = List.of(upperLeft, upperRight, bottomRight, bottomLeft);
         return corners.stream().allMatch(point -> drone.state(point) == Drone.State.PULLED) ||

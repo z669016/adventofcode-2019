@@ -11,14 +11,10 @@ public class TractorBeamMap {
     private final Grid grid;
     private final int minX;
     private final int maxX;
-    private final int minY;
-    private final int maxY;
 
     public TractorBeamMap(int minX, int maxX, int minY, int maxY) {
         this.minX = minX;
         this.maxX = maxX;
-        this.minY = minY;
-        this.maxY = maxY;
         grid = new Grid(minX, maxX, minY, maxY, GridUtils.of(minX, maxX, minY, maxY, '.'));
     }
 
@@ -66,19 +62,11 @@ public class TractorBeamMap {
     }
 
     public boolean contains(Point point) {
-        return grid.contains(point.x, point.y);
+        return grid.contains(point.x(), point.y());
     }
 
     @Override
     public String toString() {
         return grid.toString();
-    }
-
-    public void paint(Point upperLeft, Point upperRight, Point bottomRight, Point bottomLeft) {
-        for (int y = upperLeft.y; y < bottomLeft.y; y++) {
-            for (int x = upperLeft.x; x < upperRight.x; x++) {
-                grid.set(x, y, '@');
-            }
-        }
     }
 }

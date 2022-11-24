@@ -26,8 +26,8 @@ public class Drone {
         final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
         final IntCodeDevice device = IntCodeComputer.builder().memory(memory).input(input).output(output).build();
 
-        input.offer(point.x);
-        input.offer(point.y);
+        input.offer(point.x());
+        input.offer(point.y());
         device.run();
 
         final OptionalLong state = output.poll();

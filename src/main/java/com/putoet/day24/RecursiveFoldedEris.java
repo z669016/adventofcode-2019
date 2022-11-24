@@ -120,31 +120,31 @@ public class RecursiveFoldedEris {
 
     public List<Point3D> adjacent(Point3D current) {
         return Eris.NEIGHBOURS.stream()
-                .map(neighbour -> Point3D.of(current.x + neighbour.x, current.y + neighbour.y, current.z))
+                .map(neighbour -> Point3D.of(current.x() + neighbour.x(), current.y() + neighbour.y(), current.z()))
                 .map(point3d -> {
-                    final Grid grid = map.getOrDefault(point3d.z, EMPTY_GRID);
-                    if (!grid.contains(point3d.x, point3d.y)) {
-                        if (point3d.x < grid.minX())
-                            return westUp(point3d.z - 1);
-                        if (point3d.x >= grid.maxX())
-                            return eastUp(point3d.z - 1);
+                    final Grid grid = map.getOrDefault(point3d.z(), EMPTY_GRID);
+                    if (!grid.contains(point3d.x(), point3d.y())) {
+                        if (point3d.x() < grid.minX())
+                            return westUp(point3d.z() - 1);
+                        if (point3d.x() >= grid.maxX())
+                            return eastUp(point3d.z() - 1);
 
-                        if (point3d.y < grid.minY())
-                            return northUp(point3d.z - 1);
-                        if (point3d.y >= grid.maxY())
-                            return southUp(point3d.z - 1);
+                        if (point3d.y() < grid.minY())
+                            return northUp(point3d.z() - 1);
+                        if (point3d.y() >= grid.maxY())
+                            return southUp(point3d.z() - 1);
                     }
 
-                    if (point3d.x == 0 && point3d.y == 0) {
-                        if (current.x == 1)
-                            return eastDown(point3d.z + 1);
-                        if (current.x == -1)
-                            return westDown(point3d.z + 1);
+                    if (point3d.x() == 0 && point3d.y() == 0) {
+                        if (current.x() == 1)
+                            return eastDown(point3d.z() + 1);
+                        if (current.x() == -1)
+                            return westDown(point3d.z() + 1);
 
-                        if (current.y == 1)
-                            return southDown(point3d.z + 1);
-                        if (current.y == -1)
-                            return northDown(point3d.z + 1);
+                        if (current.y() == 1)
+                            return southDown(point3d.z() + 1);
+                        if (current.y() == -1)
+                            return northDown(point3d.z() + 1);
                     }
 
                     return List.of(point3d);
@@ -160,7 +160,7 @@ public class RecursiveFoldedEris {
     }
 
     private char get(Point3D point) {
-        return map.getOrDefault(point.z, EMPTY_GRID).get(point.x, point.y);
+        return map.getOrDefault(point.z(), EMPTY_GRID).get(point.x(), point.y());
     }
 
     public long bugs() {

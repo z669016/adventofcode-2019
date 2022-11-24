@@ -279,7 +279,7 @@ Probably not the fastest possible solution, but definitely fun to implement.
 Part 1 is straight forward reusing the ```Grid``` and ```Point``` that has been used before. Using the static field 
 ```NEIGHBOURS```(```List.of(Point.NORTH, Point.EAST, Point.SOUTH, Point.WEST)```) you can simply get all adjacent 
 points in the grid using ```NEIGHBOURS.stream().map(current::add).collect(Collectors.toList())```. You can then count
-adjacent bugs by ```adjacent.stream().filter(p -> grid.contains(p.x, p.y)).filter(p -> grid.get(p.x, p.y) == BUG).count()```
+adjacent bugs by ```adjacent.stream().filter(p -> grid.contains(p.x(), p.y())).filter(p -> grid.get(p.x(), p.y()) == BUG).count()```
 All is handled within the ```Eris``` class.
 
 For part 2 a different approach is required, so I introduced ```RecursiveFoldedEris``` which stores a contains a map of 

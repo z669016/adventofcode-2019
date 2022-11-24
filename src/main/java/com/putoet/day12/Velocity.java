@@ -28,8 +28,7 @@ public class Velocity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Velocity)) return false;
-        Velocity velocity = (Velocity) o;
+        if (!(o instanceof Velocity velocity)) return false;
         return x == velocity.x &&
                 y == velocity.y &&
                 z == velocity.z;

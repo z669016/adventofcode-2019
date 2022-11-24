@@ -26,8 +26,7 @@ public class GridSearch {
                 return false;
 
             if (this == o) return true;
-            if (!(o instanceof State)) return false;
-            State state = (State) o;
+            if (!(o instanceof State state)) return false;
             return element == state.element && Objects.equals(point, state.point);
         }
 
@@ -48,7 +47,7 @@ public class GridSearch {
     }
 
     private State stateFor(Point point) {
-        return new State(point, grid.get(point.x, point.y));
+        return new State(point, grid.get(point.x(), point.y()));
     }
 
     public List<State> wallSearch(State state) {
