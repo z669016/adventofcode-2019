@@ -1,15 +1,15 @@
 package com.putoet.day1;
 
-public class Mass {
-    private final Long mass;
+import org.jetbrains.annotations.NotNull;
 
-    public Mass(String mass) {
-        this.mass = Long.valueOf(mass);
+record Mass(long mass) {
+    public Mass(@NotNull String mass) {
+        this(Long.parseLong(mass));
     }
 
     public Fuel requiredFuel() {
-        Fuel total = new Fuel(0);
-        Fuel additionalfuel = requiredFuelForMass(this);
+        var total = new Fuel(0);
+        var additionalfuel = requiredFuelForMass(this);
         while (!additionalfuel.isEmpty()) {
             total = total.add(additionalfuel);
             additionalfuel = requiredFuelForMass(additionalfuel.asMass());

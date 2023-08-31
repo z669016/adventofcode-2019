@@ -9,6 +9,14 @@
 
   <name>adventofcode-2018</name>
   <description>A simple adventofcode-2019.</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>23.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 
   <parent>
     <groupId>com.putoet</groupId>
