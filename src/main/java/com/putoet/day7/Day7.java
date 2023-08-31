@@ -1,7 +1,7 @@
 package com.putoet.day7;
 
 import com.putoet.resources.CSV;
-import com.putoet.statistics.Permutator;
+import org.paukov.combinatorics3.Generator;
 
 import java.util.List;
 import java.util.OptionalLong;
@@ -11,12 +11,11 @@ import java.util.function.BiFunction;
 public class Day7 {
     public static void main(String[] args) {
         final List<Long> intCodeProgram = CSV.list("/day7.txt", Long::parseLong).get(0);
-        final Permutator<Integer> permutator = new Permutator<>();
 
-        List<List<Integer>> phaseSettings = permutator.permute(List.of(0, 1, 2, 3, 4));
+        List<List<Integer>> phaseSettings = Generator.permutation(List.of(0, 1, 2, 3, 4)).simple().stream().toList();
         part(intCodeProgram, phaseSettings, "simple amplifier", Day7::simpleAmplifier);
 
-        phaseSettings = permutator.permute(List.of(5, 6, 7, 8, 9));
+        phaseSettings = Generator.permutation(List.of(5, 6, 7, 8, 9)).simple().stream().toList();
         part(intCodeProgram, phaseSettings, "feedback amplifier", Day7::feedbackAmplifier);
     }
 
