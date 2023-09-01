@@ -14,7 +14,6 @@ public class DirectionTest {
         assertEquals(Direction.LEFT, Direction.of('L'));
         assertEquals(Direction.RIGHT, Direction.of('R'));
 
-        assertThrows(AssertionError.class, () -> Direction.of(null));
         assertThrows(AssertionError.class, () -> Direction.of('q'));
     }
 }

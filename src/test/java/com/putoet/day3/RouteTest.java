@@ -13,7 +13,7 @@ public class RouteTest {
 
     @Test
     public void testRoute() {
-        Route route = new Route();
+        var route = new Route();
         assertEquals("[]", route.toString());
         assertEquals(0, route.manhattenDistance());
 
@@ -42,8 +42,8 @@ public class RouteTest {
 
         assertEquals(4, route.stepsTo(Point.of(2, 0)));
 
-        Route route1 = new Route(List.of("R8", "U5", "L5", "D3"));
-        Route route2 = new Route(List.of("U7", "R6", "D4", "L4"));
+        var route1 = new Route(List.of("R8", "U5", "L5", "D3"));
+        var route2 = new Route(List.of("U7", "R6", "D4", "L4"));
         assertEquals(6, route1.intersect(route2).stream().min(Comparator.comparing(Point::manhattanDistance)).get().manhattanDistance());
 
         route1 = new Route(List.of("R75", "D30", "R83", "U83", "L12", "D49", "R71", "U7", "L72"));

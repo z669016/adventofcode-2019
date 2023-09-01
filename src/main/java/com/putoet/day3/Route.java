@@ -1,6 +1,7 @@
 package com.putoet.day3;
 
 import com.putoet.grid.Point;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,23 +14,17 @@ class Route {
 
     public Route() {}
 
-    public Route(List<String> pathList) {
-        assert pathList != null;
-
+    public Route(@NotNull List<String> pathList) {
         add(pathList.stream().map(Path::of).collect(Collectors.toList()));
     }
 
-    private void add(List<Path> paths) {
-        assert paths != null;
-
+    private void add(@NotNull List<Path> paths) {
         paths.forEach(this::add);
     }
 
-    private void add(Path path) {
-        assert path != null;
-
+    private void add(@NotNull Path path) {
         if (path.length() > 0) {
-            Point coord = endPoint();
+            var coord = endPoint();
             for (int idx = 0; idx < path.length(); idx++) {
                 coord = coord.add(path.direction().asMove());
                 route.add(coord);
@@ -50,16 +45,12 @@ class Route {
         return endPoint.manhattanDistance(Point.ORIGIN);
     }
 
-    public Set<Point> intersect(Route other) {
-        assert other != null;
-
+    public Set<Point> intersect(@NotNull Route other) {
         return route.stream().filter(other.route::contains).collect(Collectors.toSet());
     }
 
-    public int stepsTo(Point point) {
-        assert point != null;
-
-        final int idx = route.indexOf(point);
+    public int stepsTo(@NotNull Point point) {
+        final var idx = route.indexOf(point);
         if (idx == -1)
             throw new IllegalArgumentException("Coordinate not on route");
 

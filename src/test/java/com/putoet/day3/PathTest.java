@@ -9,12 +9,11 @@ public class PathTest {
 
     @Test
     public void testPath() {
-        assertThrows(AssertionError.class, () -> Path.of((String) null));
         assertThrows(AssertionError.class, () -> Path.of("q"));
         assertThrows(IllegalArgumentException.class, () -> Path.of("uu"));
         assertThrows(IllegalArgumentException.class, () -> Path.of("u-2"));
 
-        Path path = Path.of("D");
+        var path = Path.of("D");
         assertEquals(Direction.DOWN, path.direction());
         assertEquals(0, path.length());
 
