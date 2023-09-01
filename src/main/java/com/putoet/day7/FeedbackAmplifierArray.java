@@ -1,16 +1,14 @@
 package com.putoet.day7;
 
 import com.putoet.intcode.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.OptionalLong;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
-public class FeedbackAmplifierArray implements AmplifierArray {
+class FeedbackAmplifierArray implements AmplifierArray {
     public static final int ARRAY_SIZE = 5;
 
     private final CountDownLatch latch = new CountDownLatch(ARRAY_SIZE);
@@ -25,10 +23,10 @@ public class FeedbackAmplifierArray implements AmplifierArray {
 
     private final IntCodeConcurrentInputOutputDevice output;
 
-    public FeedbackAmplifierArray(List<Long> intCodeProgram, PhaseSetting phaseSetting) {
+    public FeedbackAmplifierArray(@NotNull List<Long> intCodeProgram, @NotNull PhaseSetting phaseSetting) {
         assert phaseSetting.size() == ARRAY_SIZE;
 
-        for (int i = 0; i < amplifiers.length; i++) {
+        for (var i = 0; i < amplifiers.length; i++) {
             amplifiers[i] = ConcurrentIntCodeComputer.builder()
                     .memory(new FixedMemory(intCodeProgram))
                     .input(input[i])
@@ -37,7 +35,7 @@ public class FeedbackAmplifierArray implements AmplifierArray {
                     .latch(latch)
                     .build();
 
-            input[i].offer((long) phaseSetting.get(i));
+            input[i].offer(phaseSetting.get(i));
         }
         output = input[0];
     }
@@ -45,8 +43,8 @@ public class FeedbackAmplifierArray implements AmplifierArray {
     @Override
     public void run() {
         try {
-            for (IntCodeDevice amplifier : amplifiers) {
-                final Thread thread = new Thread(amplifier);
+            for (var amplifier : amplifiers) {
+                final var thread = new Thread(amplifier);
                 thread.start();
             }
             latch.await();

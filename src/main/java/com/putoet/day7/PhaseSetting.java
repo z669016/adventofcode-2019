@@ -1,13 +1,14 @@
 package com.putoet.day7;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
-public class PhaseSetting {
+class PhaseSetting {
     private final List<Integer> setting;
 
-    public PhaseSetting(List<Integer> setting) {
-        this.setting = new ArrayList<>(setting);
+    public PhaseSetting(@NotNull List<Integer> setting) {
+        this.setting = List.copyOf(setting);
     }
 
     public int get(int i) {

@@ -1,12 +1,13 @@
 package com.putoet.day7;
 
 import com.putoet.intcode.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.concurrent.TimeUnit;
 
-public class SimpleAmplifierArray implements AmplifierArray {
+class SimpleAmplifierArray implements AmplifierArray {
     private static final int ARRAY_SIZE = 5;
 
     private final IntCodeDevice[] amplifiers = new IntCodeDevice[ARRAY_SIZE];
@@ -21,7 +22,7 @@ public class SimpleAmplifierArray implements AmplifierArray {
 
     private final IntCodeConcurrentInputOutputDevice output;
 
-    public SimpleAmplifierArray(List<Long> intCodeProgram, PhaseSetting phaseSetting) {
+    public SimpleAmplifierArray(@NotNull List<Long> intCodeProgram, @NotNull PhaseSetting phaseSetting) {
         assert phaseSetting.size() == ARRAY_SIZE;
 
         for (int i = 0; i < amplifiers.length; i++) {
@@ -39,8 +40,8 @@ public class SimpleAmplifierArray implements AmplifierArray {
 
     @Override
     public void run() {
-        for (IntCodeDevice amplifier : amplifiers) {
-            final Thread thread = new Thread(amplifier);
+        for (var amplifier : amplifiers) {
+            final var thread = new Thread(amplifier);
             thread.start();
         }
     }
