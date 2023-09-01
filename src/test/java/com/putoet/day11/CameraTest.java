@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CameraTest {
     @Test
     public void cameraTest() {
-        final Surface surface = new Surface(new String[]{"#....", ".#...", "..^..", "...#.", "....#"});
-        final Camera camera = new Camera(surface);
+        final var surface = new Surface(new String[]{"#....", ".#...", "..^..", "...#.", "....#"});
+        final var camera = new Camera(surface);
 
         surface.moveRobot();
         assertEquals(PanelColor.BLACK, camera.color());
@@ -21,15 +21,15 @@ public class CameraTest {
 
     @Test
     public void testGet() {
-        final Surface surface = new Surface(new String[]{"#....", ".#...", "..^..", "...#.", "....#"});
-        final Camera camera = new Camera(surface);
+        final var surface = new Surface(new String[]{"#....", ".#...", "..^..", "...#.", "....#"});
+        final var camera = new Camera(surface);
 
         surface.moveRobot();
-        assertEquals(0, camera.poll().getAsLong());
+        assertEquals(0, camera.poll().orElseThrow());
         surface.turnRobotLeft();
         surface.moveRobot();
-        assertEquals(1, camera.poll().getAsLong());
+        assertEquals(1, camera.poll().orElseThrow());
         surface.moveRobot();
-        assertEquals(0, camera.poll().getAsLong());
+        assertEquals(0, camera.poll().orElseThrow());
     }
 }

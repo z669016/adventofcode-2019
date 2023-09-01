@@ -1,13 +1,12 @@
 package com.putoet.day11;
 
-public class Panel {
-    private PanelColor color = PanelColor.BLACK;
+import org.jetbrains.annotations.NotNull;
+
+class Panel {
+    private PanelColor color;
     private boolean painted = false;
 
-    public Panel() {
-    }
-
-    private Panel(PanelColor color) {
+    private Panel(@NotNull PanelColor color) {
         this.color = color;
     }
 
@@ -19,7 +18,7 @@ public class Panel {
         return new Panel(PanelColor.WHITE);
     }
 
-    public void paint(PanelColor color) {
+    public void paint(@NotNull PanelColor color) {
         this.color = color;
         painted = true;
     }

@@ -1,17 +1,18 @@
 package com.putoet.day11;
 
 import com.putoet.intcode.OutputDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Painter implements OutputDevice {
+class Painter implements OutputDevice {
     private final Surface surface;
     private final List<Long> instructions = new ArrayList<>();
     private boolean isPainting = true;
 
-    public Painter(Surface surface) {
+    public Painter(@NotNull Surface surface) {
         this.surface = surface;
     }
 

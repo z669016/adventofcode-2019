@@ -2,7 +2,7 @@ package com.putoet.day11;
 
 import com.putoet.grid.Point;
 
-public enum Direction {
+enum Direction {
     UP('^'),
     RIGHT('>'),
     DOWN('v'),

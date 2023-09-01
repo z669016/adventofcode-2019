@@ -8,8 +8,8 @@ import static org.mockito.Mockito.verify;
 public class PainterTest {
     @Test
     public void testPut00() {
-        final Surface surface = mock(Surface.class);
-        final Painter painter = new Painter(surface);
+        final var surface = mock(Surface.class);
+        final var painter = new Painter(surface);
 
         painter.offer(0);
         painter.offer(0);
@@ -20,8 +20,8 @@ public class PainterTest {
 
     @Test
     public void testPut11() {
-        final Surface surface = mock(Surface.class);
-        final Painter painter = new Painter(surface);
+        final var surface = mock(Surface.class);
+        final var painter = new Painter(surface);
 
         painter.offer(1);
         painter.offer(1);
