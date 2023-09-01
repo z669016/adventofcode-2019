@@ -2,21 +2,22 @@ package com.putoet.day9;
 
 import com.putoet.intcode.*;
 import com.putoet.resources.CSV;
+import com.putoet.utils.Timer;
 
 import java.util.List;
 
 public class Day9 {
     public static void main(String[] args) {
-        final List<Long> intCode = CSV.list("/day9.txt", Long::parseLong).get(0);
-        part(intCode, "part 1", 1L);
-        part(intCode, "part 1", 2L);
+        final var intCode = CSV.list("/day9.txt", Long::parseLong).get(0);
+        Timer.run(() -> part(intCode, "part 1", 1L));
+        Timer.run(() -> part(intCode, "part 2", 2L));
     }
 
     private static void part(List<Long> intCode, String part, long inputValue) {
-        final Memory memory = new ExpandableMemory(intCode);
-        final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
-        final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
-        final IntCodeDevice device = IntCodeComputer.builder()
+        final var memory = new ExpandableMemory(intCode);
+        final var input = new IntCodeInputOutputDevice();
+        final var output = new IntCodeInputOutputDevice();
+        final var device = IntCodeComputer.builder()
                 .memory(memory)
                 .input(input)
                 .output(output)
