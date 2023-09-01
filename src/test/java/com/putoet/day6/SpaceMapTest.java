@@ -38,7 +38,8 @@ public class SpaceMapTest {
     @Test
     public void get() {
         assertEquals(SpaceObject.COM(), map.get("COM"));
-        SpaceObject so = map.get(AAA_NAME);
+
+        var so = map.get(AAA_NAME);
         assertEquals(AAA_NAME, so.name());
         assertEquals(SpaceObject.COM(), so.center());
 
@@ -53,11 +54,11 @@ public class SpaceMapTest {
 
     @Test
     public void testDistance() {
-        final SpaceObject AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
-        final SpaceObject BBB = new SpaceObject(BBB_NAME, AAA);
-        final SpaceObject CCC = new SpaceObject(CCC_NAME, BBB);
-        final SpaceObject DDD = new SpaceObject(DDD_NAME, BBB);
-        final SpaceObject EEE = new SpaceObject(EEE_NAME, DDD);
+        final var AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
+        final var BBB = new SpaceObject(BBB_NAME, AAA);
+        final var CCC = new SpaceObject(CCC_NAME, BBB);
+        final var DDD = new SpaceObject(DDD_NAME, BBB);
+        final var EEE = new SpaceObject(EEE_NAME, DDD);
 
         assertEquals(1, map.distance(EEE, CCC));
         assertEquals(2, map.distance(EEE, AAA));

@@ -1,5 +1,7 @@
 package com.putoet.day6;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +12,7 @@ public class SpaceObject {
 
     private static final SpaceObject COM = new SpaceObject();
 
-    public static final SpaceObject COM() {
+    public static SpaceObject COM() {
         return COM;
     }
 
@@ -19,9 +21,8 @@ public class SpaceObject {
         this.center = null;
     }
 
-    public SpaceObject(String name, SpaceObject center) {
-        assert name != null && name.length() > 0;
-        assert center != null;
+    public SpaceObject(@NotNull String name, @NotNull SpaceObject center) {
+        assert !name.isEmpty();
 
         if (name.equals("COM"))
             throw new IllegalArgumentException("COM cannot be instantiated");
@@ -38,9 +39,7 @@ public class SpaceObject {
         return center;
     }
 
-    public void reCenter(SpaceObject center) {
-        assert center != null;
-
+    public void reCenter(@NotNull SpaceObject center) {
         if (this.center == center)
             return;
 
@@ -50,13 +49,11 @@ public class SpaceObject {
         this.center = center;
     }
 
-    public static int orbitsToCom(SpaceObject spaceObject) {
-        assert spaceObject != null;
-
+    public static int orbitsToCom(@NotNull SpaceObject spaceObject) {
         if (spaceObject == COM)
             return 0;
 
-        int count = 1;
+        var count = 1;
         while (spaceObject.center != COM) {
             count++;
             spaceObject = spaceObject.center;
@@ -64,18 +61,15 @@ public class SpaceObject {
         return count;
     }
 
-    public static int orbitsTo(SpaceObject from, SpaceObject to) {
-        assert from != null;
-        assert to != null;
-
+    public static int orbitsTo(@NotNull SpaceObject from, @NotNull SpaceObject to) {
         if (from == COM)
             throw new IllegalArgumentException("Cannot count orbits from COM");
 
         if (from == to)
             return 0;
 
-        int count = 0;
-        SpaceObject center = from.center;
+        var count = 0;
+        var center = from.center;
         while (center != to && center != COM) {
             count++;
             center = center.center;
@@ -87,13 +81,11 @@ public class SpaceObject {
         throw new IllegalStateException(to.name + " is not at the route between " + from.name + " and COM");
     }
 
-    public static List<SpaceObject> route(SpaceObject so) {
-        assert so != null;
-
+    public static List<SpaceObject> route(@NotNull SpaceObject so) {
         if (so == COM)
             return List.of();
 
-        final List<SpaceObject> route = new ArrayList<>();
+        final var route = new ArrayList<SpaceObject>();
         while (so != SpaceObject.COM()) {
             route.add(so);
             so = so.center();

@@ -1,5 +1,7 @@
 package com.putoet.day6;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class SpaceMap {
@@ -13,19 +15,14 @@ public class SpaceMap {
         return Collections.unmodifiableMap(spaceObjects);
     }
 
-    public void add(String spaceObjectName, SpaceObject center) {
-        assert spaceObjectName != null;
-        assert center != null;
-
+    public void add(@NotNull String spaceObjectName, @NotNull SpaceObject center) {
         if (spaceObjects.containsKey(spaceObjectName)) {
             spaceObjects.get(spaceObjectName).reCenter(center);
         } else
             spaceObjects.put(spaceObjectName, new SpaceObject(spaceObjectName, center));
     }
 
-    public SpaceObject get(String spaceObjectName) {
-        assert spaceObjectName != null;
-
+    public SpaceObject get(@NotNull String spaceObjectName) {
         return spaceObjects.get(spaceObjectName);
     }
 
@@ -33,17 +30,11 @@ public class SpaceMap {
         return spaceObjects.values().stream().map(SpaceObject::orbitsToCom).reduce(0, Integer::sum);
     }
 
-    public int distance(SpaceObject from, SpaceObject to) {
-        assert from != null;
-        assert to != null;
+    public int distance(@NotNull SpaceObject from, @NotNull SpaceObject to) {
+        final var routeFrom = SpaceObject.route(from);
+        final var routeTo = SpaceObject.route(to);
+        final var firstIntersection = routeFrom.stream().filter(routeTo::contains).findFirst().orElseThrow();
 
-        final List<SpaceObject> routeFrom = SpaceObject.route(from);
-        final List<SpaceObject> routeTo = SpaceObject.route(to);
-
-        final Optional<SpaceObject> firstIntersection = routeFrom.stream().filter(routeTo::contains).findFirst();
-        if (firstIntersection.isEmpty())
-            throw new IllegalArgumentException("No intersection between the routes of " + from + " and " + to);
-
-        return SpaceObject.orbitsTo(from, firstIntersection.get()) + SpaceObject.orbitsTo(to, firstIntersection.get());
+        return SpaceObject.orbitsTo(from, firstIntersection) + SpaceObject.orbitsTo(to, firstIntersection);
     }
 }

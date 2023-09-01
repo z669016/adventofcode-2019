@@ -23,8 +23,8 @@ public class SpaceObjectTest {
 
     @Test
     public void properties() {
-        final SpaceObject AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
-        final SpaceObject BBB = new SpaceObject(BBB_NAME, AAA);
+        final var AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
+        final var BBB = new SpaceObject(BBB_NAME, AAA);
 
         assertEquals(AAA_NAME, AAA.name());
         assertEquals(SpaceObject.COM(), AAA.center());
@@ -38,9 +38,9 @@ public class SpaceObjectTest {
 
     @Test
     public void reCenter() {
-        final SpaceObject AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
-        final SpaceObject BBB = new SpaceObject(BBB_NAME, SpaceObject.COM());
-        final SpaceObject CCC = new SpaceObject(CCC_NAME, BBB);
+        final var AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
+        final var BBB = new SpaceObject(BBB_NAME, SpaceObject.COM());
+        final var CCC = new SpaceObject(CCC_NAME, BBB);
 
         /// Recenter with the current center should not fail
         AAA.reCenter(SpaceObject.COM());
@@ -50,20 +50,17 @@ public class SpaceObjectTest {
         BBB.reCenter(AAA);
         assertEquals(AAA, BBB.center());
 
-        // Cannot recenter to null
-        assertThrows(AssertionError.class, () -> AAA.reCenter(null));
-
         // Cannot recenter if center isn't COM
         assertThrows(IllegalStateException.class, () -> CCC.reCenter(AAA));
     }
 
     @Test
     public void testOrbitsTo() {
-        final SpaceObject AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
-        final SpaceObject BBB = new SpaceObject(BBB_NAME, AAA);
-        final SpaceObject CCC = new SpaceObject(CCC_NAME, BBB);
-        final SpaceObject DDD = new SpaceObject(DDD_NAME, BBB);
-        final SpaceObject EEE = new SpaceObject(EEE_NAME, DDD);
+        final var AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
+        final var BBB = new SpaceObject(BBB_NAME, AAA);
+        final var CCC = new SpaceObject(CCC_NAME, BBB);
+        final var DDD = new SpaceObject(DDD_NAME, BBB);
+        final var EEE = new SpaceObject(EEE_NAME, DDD);
 
         assertEquals(0, SpaceObject.orbitsToCom(SpaceObject.COM()));
         assertEquals(1, SpaceObject.orbitsToCom(AAA));
@@ -94,11 +91,11 @@ public class SpaceObjectTest {
 
     @Test
     public void testRoute() {
-        final SpaceObject AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
-        final SpaceObject BBB = new SpaceObject(BBB_NAME, AAA);
-        final SpaceObject CCC = new SpaceObject(CCC_NAME, BBB);
-        final SpaceObject DDD = new SpaceObject(DDD_NAME, BBB);
-        final SpaceObject EEE = new SpaceObject(EEE_NAME, DDD);
+        final var AAA = new SpaceObject(AAA_NAME, SpaceObject.COM());
+        final var BBB = new SpaceObject(BBB_NAME, AAA);
+        final var CCC = new SpaceObject(CCC_NAME, BBB);
+        final var DDD = new SpaceObject(DDD_NAME, BBB);
+        final var EEE = new SpaceObject(EEE_NAME, DDD);
 
         assertEquals(List.of(EEE, DDD, BBB, AAA), SpaceObject.route(EEE));
         assertEquals(List.of(CCC, BBB, AAA), SpaceObject.route(CCC));
