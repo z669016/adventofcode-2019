@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GeneratorATest {
     @Test
     public void testGeneratorStart() {
-        GeneratorA generatorA = new GeneratorA();
+        final var generatorA = new GeneratorA();
         assertTrue(generatorA.hasNext());
         assertEquals("111111", generatorA.next().toString());
         assertTrue(generatorA.hasNext());
@@ -24,7 +24,7 @@ public class GeneratorATest {
 
     @Test
     public void testGeneratorEnd() {
-        GeneratorA generatorA = new GeneratorA(9);
+        final var generatorA = new GeneratorA(9);
         assertTrue(generatorA.hasNext());
         assertEquals("999999", generatorA.next().toString());
         assertFalse(generatorA.hasNext());
@@ -32,7 +32,7 @@ public class GeneratorATest {
 
     @Test
     public void testGeneratorMinMax() {
-        GeneratorA generatorA = new GeneratorA(123456, 999999);
+        var generatorA = new GeneratorA(123456, 999999);
         assertTrue(generatorA.hasNext());
         assertEquals("123466", generatorA.next().toString());
 

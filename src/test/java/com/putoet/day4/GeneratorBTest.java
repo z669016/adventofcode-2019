@@ -9,7 +9,7 @@ public class GeneratorBTest {
 
     @Test
     public void testGeneratorB() {
-        GeneratorB generatorB = new GeneratorB(112233, 999999);
+        var generatorB = new GeneratorB(112233, 999999);
         assertEquals("112233", generatorB.next().toString());
 
         generatorB = new GeneratorB(123444, 999999);

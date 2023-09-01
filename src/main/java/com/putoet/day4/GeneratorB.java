@@ -13,5 +13,4 @@ class GeneratorB extends GeneratorA {
                 (i4 == i5 && i3 != i4 && i5 != i6) ||
                 (i5 == i6 && i4 != i5);
     }
-
 }

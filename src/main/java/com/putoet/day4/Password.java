@@ -1,12 +1,8 @@
 package com.putoet.day4;
 
-public class Password {
-    private final String value;
+import org.jetbrains.annotations.NotNull;
 
-    public Password(String value) {
-        this.value = value;
-    }
-
+record Password(@NotNull String value) {
     @Override
     public String toString() {
         return value;

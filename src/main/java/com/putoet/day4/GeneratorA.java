@@ -29,7 +29,7 @@ class GeneratorA implements Iterator<Password> {
         assert (min >= 111111);
         assert (max >= min && max <= 999999);
 
-        final String start = String.format("%06d", min);
+        final var start = String.format("%06d", min);
         i1 = start.charAt(0) - '0';
         i2 = start.charAt(1) - '0';
         i3 = start.charAt(2) - '0';
@@ -39,7 +39,7 @@ class GeneratorA implements Iterator<Password> {
 
         this.min = min;
         this.max = max;
-        if (!isValid()) {
+        if (isInvalid()) {
             increase();
         }
     }
@@ -59,7 +59,7 @@ class GeneratorA implements Iterator<Password> {
     private void increase() {
         do {
             increaseByOne();
-        } while (!isValid() && hasNext());
+        } while (isInvalid() && hasNext());
     }
 
     private void increaseByOne() {
@@ -103,8 +103,8 @@ class GeneratorA implements Iterator<Password> {
         return "" + i1 + i2 + i3 + i4 + i5 + i6;
     }
 
-    private boolean isValid() {
-        return areGreaterEqual() && hasDuplicate();
+    private boolean isInvalid() {
+        return !areGreaterEqual() || !hasDuplicate();
     }
 
     private boolean areGreaterEqual() {
