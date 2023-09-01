@@ -1,10 +1,13 @@
 package com.putoet.day10;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
-public class LineOfSight implements Comparable<LineOfSight> {
+class LineOfSight implements Comparable<LineOfSight> {
     private final Asteroid origin;
     private final Vector direction;
+
     private final TreeSet<Asteroid> hidden = new TreeSet<>(new Comparator<>() {
         @Override
         public int compare(Asteroid o1, Asteroid o2) {
@@ -15,13 +18,13 @@ public class LineOfSight implements Comparable<LineOfSight> {
     });
     private Asteroid visible;
 
-    public LineOfSight(Asteroid origin, Vector direction, Asteroid visible) {
+    public LineOfSight(@NotNull Asteroid origin, @NotNull Vector direction, @NotNull Asteroid visible) {
         this.origin = origin;
         this.visible = visible;
         this.direction = direction;
     }
 
-    public static LineOfSight of(Asteroid origin, Asteroid visible) {
+    public static LineOfSight of(@NotNull Asteroid origin, @NotNull Asteroid visible) {
         return new LineOfSight(origin,
                 Vector.ofPoints(origin.location(), visible.location()).direction(),
                 visible);
@@ -47,7 +50,7 @@ public class LineOfSight implements Comparable<LineOfSight> {
         return Collections.unmodifiableSet(hidden);
     }
 
-    public void add(Asteroid asteroid) {
+    public void add(@NotNull Asteroid asteroid) {
         if (origin.equals(asteroid))
             return;
 
@@ -73,11 +76,9 @@ public class LineOfSight implements Comparable<LineOfSight> {
     }
 
     public Optional<Asteroid> vaporize() {
-        final Optional<Asteroid> result = Optional.ofNullable(visible);
+        final var result = Optional.ofNullable(visible);
 
         if (result.isPresent()) {
-            // System.out.println("Vaporized asteroid at " + result.get().location() + " at angle " + direction.degrees());
-
             try {
                 final Asteroid head = hidden.first();
                 hidden.remove(head);

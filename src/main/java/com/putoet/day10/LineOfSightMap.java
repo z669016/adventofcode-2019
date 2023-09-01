@@ -1,9 +1,11 @@
 package com.putoet.day10;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class LineOfSightMap {
+class LineOfSightMap {
     private final Asteroid origin;
     private final Map<Vector, LineOfSight> map = new HashMap<>();
 
@@ -11,8 +13,8 @@ public class LineOfSightMap {
         this.origin = origin;
     }
 
-    public static LineOfSightMap of(Asteroid origin, Collection<Asteroid> asteroids) {
-        final LineOfSightMap map = new LineOfSightMap(origin);
+    public static LineOfSightMap of(@NotNull Asteroid origin, @NotNull Collection<Asteroid> asteroids) {
+        final var map = new LineOfSightMap(origin);
         asteroids.forEach(map::add);
         return map;
     }
@@ -21,11 +23,11 @@ public class LineOfSightMap {
         return Collections.unmodifiableSet(new TreeSet<>(map.values()));
     }
 
-    public void add(Asteroid asteroid) {
+    public void add(@NotNull Asteroid asteroid) {
         if (origin.equals(asteroid))
             return;
 
-        final Vector direction = Vector.ofPoints(origin.location(), asteroid.location()).direction();
+        final var direction = Vector.ofPoints(origin.location(), asteroid.location()).direction();
         if (map.containsKey(direction))
             map.get(direction).add(asteroid);
         else
@@ -50,7 +52,7 @@ public class LineOfSightMap {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
+        final var sb = new StringBuilder();
         sb.append(origin).append("\n");
         map.forEach((key, value) -> sb.append(value.toString()).append("\n"));
         return sb.toString();

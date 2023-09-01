@@ -1,31 +1,28 @@
 package com.putoet.day10;
 
 import com.putoet.grid.Point;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class SpaceArea {
+class SpaceArea {
     private final Map<Point, Asteroid> asteroids;
 
-    public SpaceArea(Map<Point, Asteroid> asteroids) {
-        assert asteroids != null;
-
+    public SpaceArea(@NotNull Map<Point, Asteroid> asteroids) {
         this.asteroids = asteroids;
     }
 
-    public static SpaceArea of(List<String> lines) {
-        assert lines != null;
-
-        if (lines.stream().noneMatch(s -> s != null && s.length() > 0))
+    public static SpaceArea of(@NotNull List<String> lines) {
+        if (lines.stream().noneMatch(s -> s != null && !s.isEmpty()))
             throw new IllegalArgumentException("Empty map");
 
-        final Map<Point, Asteroid> asteroids = new HashMap<>();
-        for (int idy = 0; idy < lines.size(); idy++) {
-            final String line = lines.get(idy);
+        final var asteroids = new HashMap<Point, Asteroid>();
+        for (var idy = 0; idy < lines.size(); idy++) {
+            final var line = lines.get(idy);
             if (line != null) {
-                for (int idx = 0; idx < line.length(); idx++) {
+                for (var idx = 0; idx < line.length(); idx++) {
                     if (line.charAt(idx) == '#') {
-                        final Point location = Point.of(idx, idy);
+                        final var location = Point.of(idx, idy);
                         asteroids.put(location, new Asteroid(location));
                     }
                 }
@@ -40,7 +37,7 @@ public class SpaceArea {
     }
 
     public Map<Asteroid, LineOfSightMap> linesOfSightMaps() {
-        final Map<Asteroid, LineOfSightMap> map = new HashMap<>();
+        final var map = new HashMap<Asteroid, LineOfSightMap>();
         asteroids.values().forEach(asteroid -> map.put(asteroid, LineOfSightMap.of(asteroid, asteroids.values())));
         return Collections.unmodifiableMap(map);
     }

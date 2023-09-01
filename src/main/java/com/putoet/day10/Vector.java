@@ -1,26 +1,21 @@
 package com.putoet.day10;
 
 import com.putoet.grid.Point;
+import org.apache.commons.math3.util.ArithmeticUtils;
 
-import java.math.BigInteger;
-
-public record Vector(int x, int y) implements Comparable<Vector> {
+record Vector(int x, int y) implements Comparable<Vector> {
 
     public static Vector ofPoints(Point a, Point b) {
         return new Vector(b.x() - a.x(), b.y() - a.y());
     }
 
-    private static int ggd(int a, int b) {
-        return BigInteger.valueOf(a).gcd(BigInteger.valueOf(b)).intValue();
-    }
-
     public Vector direction() {
-        final int ggd = ggd(x, y);
-        return new Vector(x / ggd, y / ggd);
+        final var gcd = ArithmeticUtils.gcd(x, y);
+        return new Vector(x / gcd, y / gcd);
     }
 
     public double degrees() {
-        double degrees = Math.toDegrees(Math.atan2(x, y));
+        final var degrees = Math.toDegrees(Math.atan2(x, y));
         return Math.abs(degrees - 180.0);
     }
 

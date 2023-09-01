@@ -1,10 +1,9 @@
 package com.putoet.day10;
 
 import com.putoet.grid.Point;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-public record Asteroid(Point location) {
+record Asteroid(@NotNull Point location) {
 
     public String name() {
         return String.format("A%02d%02d", location.x(), location.y());
