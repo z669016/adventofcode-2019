@@ -3,21 +3,21 @@ package com.putoet.day24;
 import com.putoet.grid.Grid;
 import com.putoet.grid.GridUtils;
 import com.putoet.resources.ResourceLines;
+import com.putoet.utils.Timer;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Day24 {
     public static void main(String[] args) {
-        final List<String> lines = ResourceLines.list("/day24.txt");
-        part1(lines);
-        part2(lines);
+        final var lines = ResourceLines.list("/day24.txt");
+        Timer.run(() -> part1(lines));
+        Timer.run(() -> part2(lines));
     }
 
     private static void part1(List<String> lines) {
-        final Set<Long> history = new HashSet<>();
-        Eris next = new Eris(new Grid(GridUtils.of(lines)));
+        final var history = new HashSet<Long>();
+        var next = new Eris(new Grid(GridUtils.of(lines)));
 
         while (history.add(next.biodiversityRating()))
             next = next.evolve();
@@ -26,9 +26,9 @@ public class Day24 {
     }
 
     private static void part2(List<String> lines) {
-        RecursiveFoldedEris next = new RecursiveFoldedEris(GridUtils.of(lines));
+        var next = new RecursiveFoldedEris(GridUtils.of(lines));
 
-        for (int i = 0; i < 200; i++)
+        for (var i = 0; i < 200; i++)
             next = next.evolve();
 
         System.out.println("The bugs are present in the recursive folded Eris after 200 minutes is " + next.bugs());

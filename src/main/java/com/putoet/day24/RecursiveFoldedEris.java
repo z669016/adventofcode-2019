@@ -3,6 +3,7 @@ package com.putoet.day24;
 import com.putoet.grid.Grid;
 import com.putoet.grid.GridUtils;
 import com.putoet.grid.Point3D;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,9 +23,9 @@ public class RecursiveFoldedEris {
 
         map = new HashMap<>();
 
-        final Grid zero = EMPTY_GRID.copy();
-        for (int y = 0; y < 5; y++) {
-            for (int x = 0; x < 5; x++) {
+        final var zero = EMPTY_GRID.copy();
+        for (var y = 0; y < 5; y++) {
+            for (var x = 0; x < 5; x++) {
                 zero.grid()[y][x] = grid[y][x];
             }
         }
@@ -76,14 +77,14 @@ public class RecursiveFoldedEris {
     }
 
     public RecursiveFoldedEris evolve() {
-        final Map<Integer, Grid> evolve = new HashMap<>();
+        final var evolve = new HashMap<Integer, Grid>();
         int minKey = 0, maxKey = 0;
-        for (Integer key : map.keySet()) {
+        for (var key : map.keySet()) {
             minKey = Math.min(minKey, key);
             maxKey = Math.max(maxKey, key);
 
-            final Grid grid = map.get(key);
-            final Grid evolvedGrid = grid.copy();
+            final var grid = map.get(key);
+            final var evolvedGrid = grid.copy();
             evolve.put(key, evolvedGrid);
 
             evolveGrid(key, grid, evolvedGrid);
@@ -95,19 +96,19 @@ public class RecursiveFoldedEris {
         return new RecursiveFoldedEris(evolve);
     }
 
-    public void addLevelIfRequired(Map<Integer, Grid> evolve, int key) {
-        final Grid grid = EMPTY_GRID.copy();
+    public void addLevelIfRequired(@NotNull Map<Integer, Grid> evolve, int key) {
+        final var grid = EMPTY_GRID.copy();
         evolveGrid(key, EMPTY_GRID, grid);
         if (grid.count(Eris.BUG) > 0)
             evolve.put(key, grid);
     }
 
     private void evolveGrid(Integer key, Grid grid, Grid evolvedGrid) {
-        for (int y = grid.minY(); y < grid.maxY(); y++) {
-            for (int x = grid.minX(); x < grid.maxX(); x++) {
+        for (var y = grid.minY(); y < grid.maxY(); y++) {
+            for (var x = grid.minX(); x < grid.maxX(); x++) {
                 if (!(x == 0 && y == 0)) {
-                    final Point3D current = Point3D.of(x, y, key);
-                    final long adjacentBugCount = adjacentBugCount(adjacent(current));
+                    final var current = Point3D.of(x, y, key);
+                    final var adjacentBugCount = adjacentBugCount(adjacent(current));
 
                     if (grid.get(x, y) == Eris.BUG)
                         evolvedGrid.set(x, y, adjacentBugCount == 1L ? Eris.BUG : Eris.EMPTY);
@@ -118,11 +119,11 @@ public class RecursiveFoldedEris {
         }
     }
 
-    public List<Point3D> adjacent(Point3D current) {
+    public List<Point3D> adjacent(@NotNull Point3D current) {
         return Eris.NEIGHBOURS.stream()
                 .map(neighbour -> Point3D.of(current.x() + neighbour.x(), current.y() + neighbour.y(), current.z()))
                 .map(point3d -> {
-                    final Grid grid = map.getOrDefault(point3d.z(), EMPTY_GRID);
+                    final var grid = map.getOrDefault(point3d.z(), EMPTY_GRID);
                     if (!grid.contains(point3d.x(), point3d.y())) {
                         if (point3d.x() < grid.minX())
                             return westUp(point3d.z() - 1);
@@ -150,7 +151,7 @@ public class RecursiveFoldedEris {
                     return List.of(point3d);
                 })
                 .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private long adjacentBugCount(List<Point3D> adjacent) {

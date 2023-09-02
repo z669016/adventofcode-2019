@@ -6,6 +6,7 @@ import com.putoet.resources.ResourceLines;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,39 +16,37 @@ class ErisTest {
 
     @BeforeEach
     void setup() {
-        final Grid grid = new Grid(GridUtils.of(ResourceLines.list("/day24.txt")));
-        eris = new Eris(grid);
+        eris = new Eris(new Grid(GridUtils.of(ResourceLines.list("/day24.txt"))));
     }
 
     @Test
     void biodiversityRating() {
-        final List<String> map = List.of(
+        final var map = List.of(
                 ".....",
                 ".....",
                 ".....",
                 "#....",
                 ".#..."
         );
-        final Grid grid = new Grid(GridUtils.of(map));
-        final Eris eris = new Eris(grid);
+        final var eris = new Eris(new Grid(GridUtils.of(map)));
 
         assertEquals(2_129_920L, eris.biodiversityRating());
     }
 
     @Test
     void evolve() {
-        final List<String> one = List.of("#..#.","####.", "###.#", "##.##", ".##..");
-        final List<String> two = List.of("#####", "....#", "....#", "...#.", "#.###");
-        final List<String> three = List.of("#....", "####.", "...##", "#.##.", ".##.#");
-        final List<String> four = List.of("####.", "....#", "##..#", ".....", "##...");
+        final var one = List.of("#..#.","####.", "###.#", "##.##", ".##..");
+        final var two = List.of("#####", "....#", "....#", "...#.", "#.###");
+        final var three = List.of("#....", "####.", "...##", "#.##.", ".##.#");
+        final var four = List.of("####.", "....#", "##..#", ".....", "##...");
 
-        Eris next = eris.evolve();
-        assertTrue(next.equals(GridUtils.of(one)));
+        var next = eris.evolve();
+        assertTrue(Arrays.deepEquals(next.grid().grid(), GridUtils.of(one)));
         next = next.evolve();
-        assertTrue(next.equals(GridUtils.of(two)));
+        assertTrue(Arrays.deepEquals(next.grid().grid(), GridUtils.of(two)));
         next = next.evolve();
-        assertTrue(next.equals(GridUtils.of(three)));
+        assertTrue(Arrays.deepEquals(next.grid().grid(), GridUtils.of(three)));
         next = next.evolve();
-        assertTrue(next.equals(GridUtils.of(four)));
+        assertTrue(Arrays.deepEquals(next.grid().grid(), GridUtils.of(four)));
     }
 }
