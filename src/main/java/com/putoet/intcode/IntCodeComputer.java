@@ -72,7 +72,7 @@ public class IntCodeComputer implements IntCodeDevice {
         }
         blockedForInput = false;
 
-        while (interpreter.hasNext() && !blockedForInput) {
+        while (interpreter.hasNext() && !blockedForInput && !Thread.interrupted()) {
             final Instruction instruction = interpreter.next();
             instruction.run();
         }
