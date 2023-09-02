@@ -3,12 +3,11 @@ package com.putoet.day25;
 import com.putoet.intcode.ExpandableMemory;
 import com.putoet.intcode.IntCodeComputer;
 import com.putoet.intcode.IntCodeDevice;
-import com.putoet.intcode.Memory;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Droid implements Runnable {
+class Droid implements Runnable {
     private final IntCodeDevice device;
     private final SyncCommandInputDevice input = new SyncCommandInputDevice();
     private final SyncCommandOutputDevice output = new SyncCommandOutputDevice();
@@ -16,7 +15,7 @@ public class Droid implements Runnable {
     private Thread worker;
 
     public Droid(List<Long> intCode) {
-        final Memory memory = new ExpandableMemory(intCode);
+        final var memory = new ExpandableMemory(intCode);
         device = IntCodeComputer.builder().memory(memory).input(input).output(output).resumable().build();
     }
 

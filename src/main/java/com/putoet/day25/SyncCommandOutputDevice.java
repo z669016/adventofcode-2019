@@ -10,10 +10,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SyncCommandOutputDevice implements OutputDevice {
+class SyncCommandOutputDevice implements OutputDevice {
     private final Lock lock = new ReentrantLock();
     private final Queue<Long> command = new LinkedList<>();
-    private AtomicLong lastUpdate = new AtomicLong(0);
+    private final AtomicLong lastUpdate = new AtomicLong(0);
 
     @Override
     public void offer(long value) {
@@ -26,7 +26,7 @@ public class SyncCommandOutputDevice implements OutputDevice {
     @Override
     public int size() {
         lock.lock();
-        final int size = command.size();
+        final var size = command.size();
         lock.unlock();
         return size;
     }
@@ -34,7 +34,7 @@ public class SyncCommandOutputDevice implements OutputDevice {
     @Override
     public List<Long> asList() {
         lock.lock();
-        final List<Long> list = new ArrayList<>(command);
+        final var list = new ArrayList<>(command);
         lock.unlock();
         return list;
     }
@@ -43,18 +43,18 @@ public class SyncCommandOutputDevice implements OutputDevice {
         if (System.currentTimeMillis() - lastUpdate.get() < 10)
             return List.of();
 
-        final List<Long> list = asList();
-        StringBuilder sb = new StringBuilder();
-        final List<String> result = new ArrayList<>();
-        for (long l : list) {
+        final var list = asList();
+        var sb = new StringBuilder();
+        final var result = new ArrayList<String>();
+        for (var l : list) {
             if (l == 10L) {
                 result.add(sb.toString());
                 sb = new StringBuilder();
             } else {
-                sb.append((char) l);
+                sb.append((char) l.intValue());
             }
         }
-        if (sb.length() > 0)
+        if (!sb.isEmpty())
             result.add(sb.toString());
 
         return result;

@@ -7,14 +7,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SyncCommandInputDevice implements InputDevice {
+class SyncCommandInputDevice implements InputDevice {
     private final Lock lock = new ReentrantLock();
     private final Queue<Long> command = new LinkedList<>();
 
     @Override
     public OptionalLong poll() {
         lock.lock();
-        final OptionalLong result = command.isEmpty() ? OptionalLong.empty() : OptionalLong.of(command.poll());
+        final var result = command.isEmpty() ? OptionalLong.empty() : OptionalLong.of(command.poll());
         lock.unlock();
 
         return result;

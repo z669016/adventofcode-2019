@@ -5,19 +5,18 @@ import com.putoet.resources.CSV;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 public class Day25 {
     public static void main(String[] args) {
-        final List<Long> intCode = CSV.flatList("/day25.txt", Long::parseLong);
-        final Droid droid = new Droid(intCode);
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        final var intCode = CSV.flatList("/day25.txt", Long::parseLong);
+        final var droid = new Droid(intCode);
+        final var reader = new BufferedReader(new InputStreamReader(System.in));
 
-        String command = "";
+        var command = "";
         droid.start();
         showDroidResponse(droid);
 
-        while (command != null && !"exit".equals(command)) {
+        while (!"exit".equals(command)) {
             System.out.print("=> ");
             command = readCommand(reader);
             System.out.println(command);
@@ -42,7 +41,7 @@ public class Day25 {
         droid.stop();
     }
 
-    public static void showDroidResponse(Droid droid) {
+    private static void showDroidResponse(Droid droid) {
         try {
             Thread.sleep(100);
         } catch (InterruptedException ignored) {
