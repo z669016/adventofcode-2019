@@ -1,14 +1,14 @@
 package com.putoet.day14;
 
-import java.util.Optional;
+import com.putoet.utils.Timer;
 
 public class Day14 {
     public static void main(String[] args) {
-        final NanoFactory nanoFactory = new NanoFactory(NanoFactory.loadFile("/day14.txt"));
+        final var nanoFactory = NanoFactory.of("/day14.txt");
 
-        pert1(nanoFactory);
+        Timer.run(() -> pert1(nanoFactory));
         System.out.println();
-        part2(nanoFactory);
+        Timer.run(() -> part2(nanoFactory));
     }
 
     private static void pert1(NanoFactory nanoFactory) {
@@ -16,7 +16,7 @@ public class Day14 {
     }
 
     private static void part2(NanoFactory nanoFactory) {
-        final Optional<ChemicalReaction> maxFuelTReaction = nanoFactory.maxFuelReactionFor(1_000_000_000_000L);
+        final var maxFuelTReaction = nanoFactory.maxFuelReactionFor(1_000_000_000_000L);
         if (maxFuelTReaction.isEmpty()) {
             System.out.println("No maximum fuel reaction possible.");
         } else {

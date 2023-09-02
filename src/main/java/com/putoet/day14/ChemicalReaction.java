@@ -1,26 +1,17 @@
 package com.putoet.day14;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ChemicalReaction {
-    private final List<Ingredient> inputChemicals;
-    private final Ingredient outputChemical;
+record ChemicalReaction(@NotNull List<Ingredient> ingredients, @NotNull Ingredient result) {
 
-    public ChemicalReaction(Ingredient outputChemical, List<Ingredient> inputChemicals) {
-        this.outputChemical = outputChemical;
-        this.inputChemicals = inputChemicals;
-    }
+    public Set<Chemical> chemicals() { return ingredients.stream().map(Ingredient::chemical).collect(Collectors.toSet()); }
 
-    public Ingredient result() { return outputChemical; }
-
-    public List<Ingredient> ingredients() { return inputChemicals; }
-
-    public Set<Chemical> chemicals() { return inputChemicals.stream().map(Ingredient::chemical).collect(Collectors.toSet()); }
-
-    public static ChemicalReaction of(String reaction) {
-        final String[] parts = reaction.split(" => ");
+    public static ChemicalReaction of(@NotNull String reaction) {
+        final var parts = reaction.split(" => ");
         if (parts.length != 2)
             throw new IllegalArgumentException("Not a valid reaction definition (" + reaction + ")");
 
@@ -32,19 +23,19 @@ public class ChemicalReaction {
     }
 
     private static ChemicalReaction of(String resultString, String reaction) {
-        final Ingredient result = Ingredient.of(resultString);
-        final List<Ingredient> ingredientList = Ingredient.ofList(reaction);
-        return new ChemicalReaction(result, ingredientList);
+        final var result = Ingredient.of(resultString);
+        final var ingredientList = Ingredient.ofList(reaction);
+        return new ChemicalReaction(ingredientList, result);
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        inputChemicals.forEach(ingredient -> sb.append(ingredient.amount()).append(" ").append(ingredient.chemical()).append(", "));
-        return sb.toString().substring(0, sb.length() - 2) + " => " + outputChemical.amount() + " " + outputChemical.chemical();
+        final var sb = new StringBuilder();
+        ingredients.forEach(ingredient -> sb.append(ingredient.amount()).append(" ").append(ingredient.chemical()).append(", "));
+        return sb.substring(0, sb.length() - 2) + " => " + result.amount() + " " + result.chemical();
     }
 
     public ChemicalReaction multiplyBy(long factor) {
-        return new ChemicalReaction(outputChemical.multiplyBy(factor), inputChemicals.stream().map(i -> i.multiplyBy(factor)).collect(Collectors.toList()));
+        return new ChemicalReaction(ingredients.stream().map(i -> i.multiplyBy(factor)).toList(), result.multiplyBy(factor));
     }
 }

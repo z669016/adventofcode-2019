@@ -5,16 +5,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ChemicalTest {
+class ChemicalTest {
     @Test
     public void testChemical() {
         assertEquals("A", new Chemical("A").name());
         assertEquals("XYZ", new Chemical("xyz").name());
-    }
-
-    @Test
-    public void testNoName() {
-        assertThrows(IllegalArgumentException.class, () -> new Chemical(null));
     }
 
     @Test

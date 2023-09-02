@@ -1,31 +1,40 @@
 package com.putoet.day14;
 
 import com.putoet.resources.ResourceLines;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class NanoFactory {
-    private final Map<Chemical, ChemicalReaction> map = new HashMap<>();
+record NanoFactory(@NotNull Map<Chemical, ChemicalReaction> map) {
 
-    public NanoFactory(List<ChemicalReaction> chemicalReactions) {
-        chemicalReactions.forEach(reaction -> map.put(reaction.result().chemical(), reaction));
+    public NanoFactory {
         if (!map.containsKey(Chemical.FUEL)) {
             throw new AssertionError("List of chemicals must contain a chemical reaction fro FUEL");
         }
+
+        map = Collections.unmodifiableMap(map);
     }
 
-    public static List<ChemicalReaction> loadFile(String fileName) {
-        return ResourceLines.stream(fileName).map(ChemicalReaction::of).collect(Collectors.toList());
+    public static NanoFactory of(@NotNull String fileName) {
+        return NanoFactory.of(ResourceLines.stream(fileName)
+                        .map(ChemicalReaction::of)
+                        .toList());
+    }
+
+    public static NanoFactory of(@NotNull List<ChemicalReaction> reactions) {
+        return new NanoFactory(reactions.stream()
+                .collect(Collectors.toMap(reaction -> reaction.result().chemical(), reaction -> reaction))
+        );
     }
 
     public Map<Chemical, ChemicalReaction> chemicalReactions() {
         return Collections.unmodifiableMap(map);
     }
 
-    public Optional<ChemicalReaction> reactionFor(Chemical chemical) {
+    public Optional<ChemicalReaction> reactionFor(@NotNull Chemical chemical) {
         return Optional.ofNullable(map.get(chemical));
     }
 
@@ -41,9 +50,9 @@ public class NanoFactory {
     }
 
     public Optional<ChemicalReaction> simplifyChemicalReaction(ChemicalReaction reaction) {
-        Optional<Chemical> chemical = nextToReplace(reaction);
+        var chemical = nextToReplace(reaction);
         while (chemical.isPresent()) {
-            Optional<ChemicalReaction> newReaction = replaceChemicalInReaction(reaction, chemical.get());
+            var newReaction = replaceChemicalInReaction(reaction, chemical.get());
             if (newReaction.isEmpty())
                 return Optional.empty();
 
@@ -55,15 +64,13 @@ public class NanoFactory {
     }
 
     public Optional<Chemical> nextToReplace(ChemicalReaction reaction) {
-        final Set<Chemical> topLevelChemicals = reaction.chemicals().stream()
+        final var topLevelChemicals = reaction.chemicals().stream()
                 .filter(chemical -> !chemical.equals(Chemical.ORE))
                 .collect(Collectors.toSet());
 
-        final Set<Chemical> independentChemicals = topLevelChemicals.stream()
+        return topLevelChemicals.stream()
                 .filter(chemical -> noneIsDependingOn(topLevelChemicals, chemical))
-                .collect(Collectors.toSet());
-
-        return independentChemicals.stream().findFirst();
+                .findFirst();
     }
 
     private boolean noneIsDependingOn(Set<Chemical> chemicals, Chemical chemical) {
@@ -75,26 +82,26 @@ public class NanoFactory {
     }
 
     public Optional<ChemicalReaction> replaceChemicalInReaction(ChemicalReaction chemicalReaction, Chemical chemicalToReplace) {
-        final Optional<Ingredient> ingredientToReplace = chemicalReaction.ingredients().stream().filter(i -> i.chemical().equals(chemicalToReplace)).findFirst();
+        final var ingredientToReplace = chemicalReaction.ingredients().stream().filter(i -> i.chemical().equals(chemicalToReplace)).findFirst();
         if (ingredientToReplace.isPresent()) {
-            final List<Ingredient> ingredientList = replaceIngredientInList(ingredientToReplace.get(), chemicalReaction.ingredients());
-            return Optional.of(new ChemicalReaction(chemicalReaction.result(), combineIdenticalChemicals(ingredientList)));
+            final var ingredientList = replaceIngredientInList(ingredientToReplace.get(), chemicalReaction.ingredients());
+            return Optional.of(new ChemicalReaction(combineIdenticalChemicals(ingredientList), chemicalReaction.result()));
         }
 
         return Optional.empty();
     }
 
     private List<Ingredient> combineIdenticalChemicals(List<Ingredient> ingredientList) {
-        final Map<Chemical, List<Ingredient>> groupedIngredients = ingredientList.stream().collect(groupingBy(Ingredient::chemical));
+        final var groupedIngredients = ingredientList.stream().collect(groupingBy(Ingredient::chemical));
 
         return groupedIngredients.entrySet().stream()
                 .map(entry -> new Ingredient(entry.getKey(), entry.getValue().stream().mapToLong(Ingredient::amount).sum()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<Ingredient> replaceIngredientInList(Ingredient ingredientToReplace, List<Ingredient> ingredientListToUpdate) {
-        final List<Ingredient> replacementIngredientList = replacementForIngredient(ingredientToReplace);
-        final List<Ingredient> newIngredientList = new ArrayList<>();
+        final var replacementIngredientList = replacementForIngredient(ingredientToReplace);
+        final var newIngredientList = new ArrayList<Ingredient>();
 
         ingredientListToUpdate.forEach(ingredient -> {
             if (!ingredient.chemical().equals(ingredientToReplace.chemical()))
@@ -104,39 +111,36 @@ public class NanoFactory {
         });
         newIngredientList.sort(Comparator.comparing(o -> o.chemical().name()));
 
-        return newIngredientList;
+        return Collections.unmodifiableList(newIngredientList);
     }
 
-    private List<Ingredient> replacementForIngredient(Ingredient ingredientToReplace) {
+    private List<Ingredient> replacementForIngredient(@NotNull Ingredient ingredientToReplace) {
         if (!map.containsKey(ingredientToReplace.chemical()))
             throw new IllegalArgumentException("Cannot replace ingredient " + ingredientToReplace);
 
-        final Ingredient toBeReplacedResult = map.get(ingredientToReplace.chemical()).result();
-        final List<Ingredient> ingredientList = map.get(ingredientToReplace.chemical()).ingredients();
-        final long factor = (ingredientToReplace.amount() / toBeReplacedResult.amount()) + (ingredientToReplace.amount() % toBeReplacedResult.amount() == 0 ? 0 : 1);
+        final var toBeReplacedResult = map.get(ingredientToReplace.chemical()).result();
+        final var ingredientList = map.get(ingredientToReplace.chemical()).ingredients();
+        final var factor = (ingredientToReplace.amount() / toBeReplacedResult.amount()) + (ingredientToReplace.amount() % toBeReplacedResult.amount() == 0 ? 0 : 1);
 
         return ingredientList.stream().map(i -> new Ingredient(i.chemical(), i.amount() * factor)).collect(Collectors.toList());
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        map.values().forEach(reaction -> sb.append(reaction).append("\n"));
-        return sb.toString();
+        return map.values().stream()
+                .map(ChemicalReaction::toString)
+                .collect(Collectors.joining("\n"));
     }
 
     public long minimalOreForFuel() {
-        final ChemicalReaction fuelReaction = reactionForFuel();
+        final var fuelReaction = reactionForFuel();
+        final var simplifiedFuelReaction = simplifyChemicalReaction(fuelReaction).orElseThrow();
 
-        final Optional<ChemicalReaction> simplifiedFuelReaction = simplifyChemicalReaction(fuelReaction);
-        if (simplifiedFuelReaction.isEmpty())
-            throw new IllegalStateException("Cannot determine max fuel without simplified chemical reaction for fuel");
-
-        return simplifiedFuelReaction.get().ingredients().get(0).amount();
+        return simplifiedFuelReaction.ingredients().get(0).amount();
     }
 
     public Optional<ChemicalReaction> maxFuelReactionFor(long availableOre) {
-        final long minimalOreForFuel = minimalOreForFuel();
+        final var minimalOreForFuel = minimalOreForFuel();
 
         if (availableOre < minimalOreForFuel)
             throw new IllegalArgumentException("Insufficient fuel for 1 fuel, you need a minimum of " + minimalOreForFuel + " ORE.");
@@ -145,14 +149,14 @@ public class NanoFactory {
     }
 
     private Optional<ChemicalReaction> maxFuelFor(long availableOre, long minimalOreForFuel) {
-        final ChemicalReaction fuelReaction = reactionForFuel();
+        final var fuelReaction = reactionForFuel();
         Optional<ChemicalReaction> maxReaction = Optional.empty();
         long max = 0;
         long used = 0;
         long rest = availableOre - used;
 
         while (rest > minimalOreForFuel) {
-            final ChemicalReaction reaction = fuelReaction.multiplyBy(max + ((availableOre - used) / minimalOreForFuel));
+            final var reaction = fuelReaction.multiplyBy(max + ((availableOre - used) / minimalOreForFuel));
             maxReaction = simplifyChemicalReaction(reaction);
             if (maxReaction.isEmpty())
                 return Optional.empty();
