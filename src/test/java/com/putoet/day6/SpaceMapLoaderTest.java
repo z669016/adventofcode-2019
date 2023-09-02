@@ -6,7 +6,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SpaceMapLoaderTest {
+class SpaceMapLoaderTest {
     @Test
     public void loadMap() {
         final var mapNotations = List.of("COM)BBB",

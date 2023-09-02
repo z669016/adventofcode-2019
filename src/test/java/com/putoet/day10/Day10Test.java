@@ -21,12 +21,12 @@ public class Day10Test {
                 ".##.#..###",
                 "##...#..#.",
                 ".#....####"));
-        final Map<Asteroid, LineOfSightMap> lineOfSightMaps = spaceArea.linesOfSightMaps();
+        final var lineOfSightMaps = spaceArea.linesOfSightMaps();
         assertEquals(33, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).max().getAsInt());
         assertEquals("A0508", lineOfSightMaps.entrySet().stream()
                 .filter(entry -> entry.getValue().inLineOfSightCount() == 33)
                 .findFirst()
-                .get()
+                .orElseThrow()
                 .getKey()
                 .name());
     }
@@ -54,32 +54,32 @@ public class Day10Test {
                 ".#.#.###########.###",
                 "#.#.#.#####.####.###",
                 "###.##.####.##.#..##"));
-        final Map<Asteroid, LineOfSightMap> lineOfSightMaps = spaceArea.linesOfSightMaps();
-        assertEquals(210, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).max().getAsInt());
+        final var lineOfSightMaps = spaceArea.linesOfSightMaps();
+        assertEquals(210, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).max().orElseThrow());
         assertEquals("A1113", lineOfSightMaps.entrySet().stream()
                 .filter(entry -> entry.getValue().inLineOfSightCount() == 210)
                 .findFirst()
-                .get()
+                .orElseThrow()
                 .getKey()
                 .name());
     }
 
     @Test
     public void test3() {
-        final SpaceArea spaceArea = SpaceArea.of(List.of(
+        final var spaceArea = SpaceArea.of(List.of(
                 ".#....#####...#..",
                 "##...##.#####..##",
                 "##...#...#.#####.",
                 "..#.....#...###..",
                 "..#.#.....#....##"));
-        final Optional<Asteroid> asteroid = spaceArea.asteroidAt(Point.of(8, 3));
-        final Optional<LineOfSightMap> linesOfSightMap = spaceArea.linesOfSightMapFor(asteroid.get());
-        final Set<LineOfSight> linesOfSight = linesOfSightMap.get().map();
+        final var asteroid = spaceArea.asteroidAt(Point.of(8, 3));
+        final var linesOfSightMap = spaceArea.linesOfSightMapFor(asteroid.get());
+        final var linesOfSight = linesOfSightMap.orElseThrow().map();
 
         System.out.println(linesOfSight);
 
-        Iterator<LineOfSight> iter = linesOfSight.iterator();
-        Optional<Asteroid> result = iter.next().vaporize();
+        var iter = linesOfSight.iterator();
+        var result = iter.next().vaporize();
         while (result.isPresent()) {
             if (!iter.hasNext())
                 iter = linesOfSight.iterator();

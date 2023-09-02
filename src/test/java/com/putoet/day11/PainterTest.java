@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class PainterTest {
+class PainterTest {
     @Test
     public void testPut00() {
         final var surface = mock(Surface.class);

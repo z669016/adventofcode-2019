@@ -6,7 +6,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SpaceObjectTest {
+class SpaceObjectTest {
 
     public static final String AAA_NAME = "AAA";
     public static final String BBB_NAME = "BBB";

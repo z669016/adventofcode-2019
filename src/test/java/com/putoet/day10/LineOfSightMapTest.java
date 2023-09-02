@@ -23,13 +23,8 @@ public class LineOfSightMapTest {
 
     @Test
     public void testAdd() {
-        final LineOfSightMap lineOfSightMap = new LineOfSightMap(origin);
+        final var lineOfSightMap = new LineOfSightMap(origin);
         Arrays.stream(asteroids).forEach(lineOfSightMap::add);
-
-        System.out.println("In line of sight: " + lineOfSightMap.inLineOfSight());
-        System.out.println("Hidden: " + lineOfSightMap.hidden());
         assertEquals(5, lineOfSightMap.inLineOfSightCount());
-
-        System.out.println(lineOfSightMap.map());
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class ImageTest {
+class ImageTest {
     private static final Size SIZE = new Size(3, 2);
     private static final List<Integer> pixels = List.of(
             0, 1, 0, 1, 2, 1,

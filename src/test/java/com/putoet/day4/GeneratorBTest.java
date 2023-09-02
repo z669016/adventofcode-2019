@@ -1,11 +1,10 @@
 package com.putoet.day4;
 
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GeneratorBTest {
+class GeneratorBTest {
 
     @Test
     public void testGeneratorB() {

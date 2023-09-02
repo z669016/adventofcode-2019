@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class LayerTest {
+class LayerTest {
     @Test
     public void countTest() {
         final var layer = Layer.of(new Size(3, 2), List.of(1, 2, 1, 2, 3, 2));

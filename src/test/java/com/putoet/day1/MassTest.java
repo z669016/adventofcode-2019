@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MassTest {
+class MassTest {
     @Test
     public void testCalculateFuelForMass() {
         assertEquals(2, new Mass(12).requiredFuel().fuel());

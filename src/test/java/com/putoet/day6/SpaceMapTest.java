@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SpaceMapTest {
+class SpaceMapTest {
     public static final String AAA_NAME = "111";
     public static final String BBB_NAME = "222";
     public static final String CCC_NAME = "333";

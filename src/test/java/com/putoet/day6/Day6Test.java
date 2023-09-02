@@ -6,7 +6,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Day6Test {
+class Day6Test {
     @Test
     public void testDay6B() {
         final var mapNotations = List.of(

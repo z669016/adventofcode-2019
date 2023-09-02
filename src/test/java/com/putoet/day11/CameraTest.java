@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CameraTest {
+class CameraTest {
     @Test
     public void cameraTest() {
         final var surface = new Surface(new String[]{"#....", ".#...", "..^..", "...#.", "....#"});

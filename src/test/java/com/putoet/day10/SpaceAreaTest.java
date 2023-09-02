@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SpaceAreaTest {
+class SpaceAreaTest {
     final SpaceArea spaceArea = SpaceArea.of(List.of(
             ".#..#",
             ".....",
@@ -38,13 +37,13 @@ public class SpaceAreaTest {
 
     @Test
     public void testLeastVisible() {
-        final Map<Asteroid, LineOfSightMap> lineOfSightMaps = spaceArea.linesOfSightMaps();
-        assertEquals(5, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).min().getAsInt());
+        final var lineOfSightMaps = spaceArea.linesOfSightMaps();
+        assertEquals(5, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).min().orElseThrow());
     }
 
     @Test
     public void testMaxVisible() {
-        final Map<Asteroid, LineOfSightMap> lineOfSightMaps = spaceArea.linesOfSightMaps();
-        assertEquals(8, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).max().getAsInt());
+        final var lineOfSightMaps = spaceArea.linesOfSightMaps();
+        assertEquals(8, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).max().orElseThrow());
     }
 }

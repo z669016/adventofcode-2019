@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class VectorTest {
+class VectorTest {
     @Test
     public void testOfPoints() {
         assertEquals(new Vector(3, 8), Vector.ofPoints(Point.of(0, 0), Point.of(3, 8)));

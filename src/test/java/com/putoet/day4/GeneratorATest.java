@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GeneratorATest {
+class GeneratorATest {
     @Test
     public void testGeneratorStart() {
         final var generatorA = new GeneratorA();
