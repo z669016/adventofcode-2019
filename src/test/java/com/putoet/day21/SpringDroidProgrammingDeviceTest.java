@@ -1,6 +1,5 @@
 package com.putoet.day21;
 
-import com.putoet.day21.SpringDroidProgrammingDevice;
 import com.putoet.resources.CSV;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +20,8 @@ class SpringDroidProgrammingDeviceTest {
         // .................
         // @................
         // #####.#..########
-        final SpringDroidProgrammingDevice device = new SpringDroidProgrammingDevice(intCode);
-        final List<String> output = device.springDroid(List.of(
+        final var device = new SpringDroidProgrammingDevice(intCode);
+        final var output = device.springDroid(List.of(
                 "NOT A J",
                 "NOT C T",
                 "OR T J",
