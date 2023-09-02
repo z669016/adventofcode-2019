@@ -2,7 +2,6 @@ package com.putoet.day17;
 
 import com.putoet.grid.Grid;
 import com.putoet.grid.GridUtils;
-import com.putoet.grid.Point;
 import com.putoet.resources.ResourceLines;
 import org.junit.jupiter.api.Test;
 
@@ -14,20 +13,20 @@ class CalibratorTest {
 
     @Test
     void intersections() {
-        final List<String> lines = ResourceLines.list("/day17.txt");
-        final Grid grid = new Grid(GridUtils.of(lines));
-        final Calibrator calibrator = new Calibrator(grid);
+        final var lines = ResourceLines.list("/day17.txt");
+        final var grid = new Grid(GridUtils.of(lines));
+        final var calibrator = new Calibrator(grid);
 
-        final List<Point> intersections = calibrator.intersections();
+        final var intersections = calibrator.intersections();
         assertEquals(4, intersections.size());
         assertEquals(276, Calibrator.alignment(intersections));
     }
 
     @Test
     void route() {
-        final List<String> lines = ResourceLines.list("/day17.txt");
-        final Grid grid = new Grid(GridUtils.of(lines));
-        final Calibrator calibrator = new Calibrator(grid);
+        final var lines = ResourceLines.list("/day17.txt");
+        final var grid = new Grid(GridUtils.of(lines));
+        final var calibrator = new Calibrator(grid);
 
         assertEquals(List.of(
                 "R","8","R","8","R","4","R","4","R","8","L","6","L","2",

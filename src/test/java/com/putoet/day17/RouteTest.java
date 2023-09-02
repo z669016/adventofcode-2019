@@ -24,13 +24,13 @@ class RouteTest {
 
     @Test
     void replaceSubList() {
-        final List<String> list = new ArrayList<>(contains);
+        final var list = new ArrayList<>(contains);
         assertEquals(List.of("1", "A", "D", "C", "1", "A", "B"), Route.replaceSubList(list, first, "1"));
     }
 
     @Test
     void route() {
-        final Route route = new Route(List.of(
+        final var route = new Route(List.of(
                 "R","8","R","8","R","4","R","4","R","8","L","6","L","2",
                 "R","4","R","4","R","8","R","8","R","8","L","6","L","2"));
 

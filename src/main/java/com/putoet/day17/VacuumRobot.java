@@ -2,20 +2,21 @@ package com.putoet.day17;
 
 import com.putoet.grid.Grid;
 import com.putoet.intcode.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class VacuumRobot implements Runnable {
+class VacuumRobot implements Runnable {
     private final List<Long> intCode;
     private final IntCodeInputOutputDevice inputDevice;
     private IntCodeInputOutputDevice outputDevice;
 
-    public VacuumRobot(List<Long> intCode) {
+    public VacuumRobot(@NotNull List<Long> intCode) {
         this.intCode = intCode;
         this.inputDevice = new IntCodeInputOutputDevice();
     }
 
-    public VacuumRobot(List<Long> intCode, Route route) {
+    public VacuumRobot(@NotNull List<Long> intCode, @NotNull Route route) {
         this.intCode = intCode;
         this.inputDevice = new IntCodeInputOutputDevice();
 
@@ -23,10 +24,13 @@ public class VacuumRobot implements Runnable {
 
         route.mainRoute().chars().forEach(inputDevice::offer);
         inputDevice.offer('\n');
+
         route.functionA().chars().forEach(inputDevice::offer);
         inputDevice.offer('\n');
+
         route.functionB().chars().forEach(inputDevice::offer);
         inputDevice.offer('\n');
+
         route.functionC().chars().forEach(inputDevice::offer);
         inputDevice.offer('\n');
         inputDevice.offer('n');
@@ -35,9 +39,9 @@ public class VacuumRobot implements Runnable {
 
     @Override
     public void run() {
-        final Memory memory = new ExpandableMemory(intCode);
+        final var memory = new ExpandableMemory(intCode);
         outputDevice = new IntCodeInputOutputDevice();
-        final IntCodeDevice device = IntCodeComputer.builder()
+        final var device = IntCodeComputer.builder()
                 .memory(memory)
                 .input(inputDevice)
                 .output(outputDevice)
@@ -48,15 +52,15 @@ public class VacuumRobot implements Runnable {
 
     public Grid scan() {
         if (outputDevice == null)
-            throw new IllegalStateException("The vacuum robot didn;t run yet");
+            throw new IllegalStateException("The vacuum robot didn't run yet");
 
-        final List<Long> scan = outputDevice.asList();
-        final int width = scan.indexOf(10L) + 1;
-        final int height = scan.size() / width;
+        final var scan = outputDevice.asList();
+        final var width = scan.indexOf(10L) + 1;
+        final var height = scan.size() / width;
 
-        final char[][] grid = new char[height][width];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width - 1; x++) {
+        final var grid = new char[height][width];
+        for (var y = 0; y < height; y++) {
+            for (var x = 0; x < width - 1; x++) {
                 grid[y][x] = (char) scan.get(y * width + x).intValue();
             }
         }
@@ -65,9 +69,9 @@ public class VacuumRobot implements Runnable {
 
     public long collectedDust() {
         if (outputDevice == null)
-            throw new IllegalStateException("The vacuum robot didn;t run yet");
+            throw new IllegalStateException("The vacuum robot didn't run yet");
 
-        final List<Long> output = outputDevice.asList();
+        final var output = outputDevice.asList();
         return output.get(output.size() - 1);
     }
 }

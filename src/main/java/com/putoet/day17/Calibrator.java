@@ -2,12 +2,12 @@ package com.putoet.day17;
 
 import com.putoet.grid.Grid;
 import com.putoet.grid.Point;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class Calibrator {
+class Calibrator {
     public static final String RIGHT_COMMAND = "R";
     public static final String LEFT_COMMAND = "L";
     public static char SCAFFOLD = '#';
@@ -15,12 +15,12 @@ public class Calibrator {
 
     private final Grid grid;
 
-    public Calibrator(Grid grid) {
+    public Calibrator(@NotNull Grid grid) {
         this.grid = grid;
     }
 
     public List<Point> intersections() {
-        final List<Point> intersections = new ArrayList<>();
+        final var intersections = new ArrayList<Point>();
 
         for (int y = 1; y < grid.maxY() - 1; y++) {
             for (int x = 1; x < grid.maxX() - 1; x++) {
@@ -40,28 +40,28 @@ public class Calibrator {
                 grid.get(x, y + 1) == SCAFFOLD;
     }
 
-    public static int alignment(List<Point> intersections) {
+    public static int alignment(@NotNull List<Point> intersections) {
         return intersections.stream()
                 .mapToInt(point -> point.x() * point.y())
                 .sum();
     }
 
     public List<String> route() {
-        final List<String> commands = new ArrayList<>();
+        final var commands = new ArrayList<String>();
 
-        final Optional<Point> start = grid.findFirst(c -> c == ROBOT_UP);
+        final var start = grid.findFirst(c -> c == ROBOT_UP);
         if (start.isEmpty())
             throw new IllegalStateException("No starting point for the robot found on this grid.");
 
-        Point current = start.get();
-        Point direction = Point.SOUTH;
-        Point nextDirection = nextDirection(direction, current);
+        var current = start.get();
+        var direction = Point.SOUTH;
+        var nextDirection = nextDirection(direction, current);
         while (nextDirection != null) {
             commands.add(forNextDirection(direction, nextDirection));
             direction = nextDirection;
 
             int count = 0;
-            Point next = current.add(direction);
+            var next = current.add(direction);
             while (grid.contains(next.x(), next.y()) && grid.get(next.x(), next.y()) == SCAFFOLD) {
                 count++;
                 current = next;
@@ -92,12 +92,12 @@ public class Calibrator {
     }
 
     private Point nextDirection(Point direction, Point current) {
-        for (Point next : List.of(Point.NORTH, Point.EAST, Point.SOUTH, Point.WEST)) {
+        for (var next : List.of(Point.NORTH, Point.EAST, Point.SOUTH, Point.WEST)) {
             // ignore the same and opposite directions
             if (next.x() == direction.x() || next.y() == direction.y())
                 continue;
 
-            final Point newPoint = current.add(next);
+            final var newPoint = current.add(next);
             if (grid.contains(newPoint.x(), newPoint.y()) && grid.get(newPoint.x(), newPoint.y()) == SCAFFOLD)
                 return next;
         }
