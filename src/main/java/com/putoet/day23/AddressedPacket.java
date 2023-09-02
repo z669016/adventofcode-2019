@@ -1,6 +1,6 @@
 package com.putoet.day23;
 
-public class AddressedPacket extends Packet {
+class AddressedPacket extends Packet {
     public final long address;
 
     public AddressedPacket(long address, long x, long y) {

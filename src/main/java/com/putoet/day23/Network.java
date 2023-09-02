@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class Network implements Runnable {
+class Network implements Runnable {
     public static final int SIZE = 50;
 
     private final NetworkInterfaceController[] nics;
@@ -16,7 +16,6 @@ public class Network implements Runnable {
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
-    private Thread worker;
     private Thread[] workerNics;
     private AddressedPacket invalid;
     private NotAlwaysTransmitting nat;
@@ -45,7 +44,7 @@ public class Network implements Runnable {
     }
 
     public void start() {
-        worker = new Thread(this);
+        Thread worker = new Thread(this);
         workerNics = new Thread[SIZE];
 
         for (NetworkInterfaceController nic : nics) {
@@ -84,7 +83,7 @@ public class Network implements Runnable {
         }
 
         for (Thread t : workerNics)
-            t.stop();
+            t.interrupt();
     }
 
     public Optional<AddressedPacket> invalid() {
@@ -96,7 +95,6 @@ public class Network implements Runnable {
     }
 
     public boolean idle() {
-        final boolean result =  Arrays.stream(inputs).allMatch(in -> in.size() == 0);
-        return result;
+        return Arrays.stream(inputs).allMatch(in -> in.size() == 0);
     }
 }

@@ -4,7 +4,7 @@ import com.putoet.intcode.*;
 
 import java.util.List;
 
-public class NetworkInterfaceController implements Runnable {
+class NetworkInterfaceController implements Runnable {
     private final int address;
     private final IntCodeDevice device;
 

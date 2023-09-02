@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SynchronizedOutputDevice implements OutputDevice {
+class SynchronizedOutputDevice implements OutputDevice {
     private final Lock lock = new ReentrantLock();
     private final Queue<Long> queue = new LinkedList<>();
 
@@ -23,9 +23,9 @@ public class SynchronizedOutputDevice implements OutputDevice {
     public Optional<AddressedPacket> poll() {
         if (size() > 2) {
             lock.lock();
-            final Long address = queue.poll();
-            final Long x = queue.poll();
-            final Long y = queue.poll();
+            final var address = queue.poll();
+            final var x = queue.poll();
+            final var y = queue.poll();
             lock.unlock();
 
             if (address == null || x == null || y == null)
@@ -47,7 +47,7 @@ public class SynchronizedOutputDevice implements OutputDevice {
     @Override
     public int size() {
         lock.lock();
-        final int size = queue.size();
+        final var size = queue.size();
         lock.unlock();
         return size;
     }
@@ -55,7 +55,7 @@ public class SynchronizedOutputDevice implements OutputDevice {
     @Override
     public List<Long> asList() {
         lock.lock();
-        final List<Long> list = new ArrayList<>(queue);
+        final var list = new ArrayList<>(queue);
         lock.unlock();
         return list;
     }

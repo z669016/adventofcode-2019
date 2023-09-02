@@ -1,11 +1,13 @@
 package com.putoet.day23;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class NotAlwaysTransmitting implements Runnable {
+class NotAlwaysTransmitting implements Runnable {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final Network network;
@@ -14,7 +16,7 @@ public class NotAlwaysTransmitting implements Runnable {
     private AddressedPacket offered;
     private AddressedPacket twice;
 
-    public NotAlwaysTransmitting(Network network) {
+    public NotAlwaysTransmitting(@NotNull Network network) {
         this.network = network;
     }
 
@@ -44,6 +46,8 @@ public class NotAlwaysTransmitting implements Runnable {
                     last = null;
                     lock.writeLock().unlock();
                 }
+
+                //noinspection BusyWait
                 Thread.sleep(100);
             }
         } catch (InterruptedException ignored) {}
@@ -57,7 +61,7 @@ public class NotAlwaysTransmitting implements Runnable {
 
     public Optional<AddressedPacket> last() {
         lock.readLock().lock();
-        final Optional<AddressedPacket> result = Optional.ofNullable(last);
+        final var result = Optional.ofNullable(last);
         lock.readLock().unlock();
 
         return result;
@@ -65,7 +69,7 @@ public class NotAlwaysTransmitting implements Runnable {
 
     public Optional<AddressedPacket> twice() {
         lock.readLock().lock();
-        final Optional<AddressedPacket> result = Optional.ofNullable(twice);
+        final var result = Optional.ofNullable(twice);
         lock.readLock().unlock();
 
         return result;

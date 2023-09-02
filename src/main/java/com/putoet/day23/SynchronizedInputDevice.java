@@ -1,6 +1,7 @@
 package com.putoet.day23;
 
 import com.putoet.intcode.InputDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.OptionalLong;
@@ -9,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SynchronizedInputDevice implements InputDevice {
+class SynchronizedInputDevice implements InputDevice {
     public static final long EMPTY_VALUE = -1L;
 
     private final Lock lock = new ReentrantLock();
@@ -28,7 +29,7 @@ public class SynchronizedInputDevice implements InputDevice {
     @Override
     public OptionalLong poll() {
         lock.lock();
-        final Long result = queue.poll();
+        final var result = queue.poll();
         lock.unlock();
         return result == null ? OptionalLong.of(EMPTY_VALUE) : OptionalLong.of(result);
     }
@@ -38,7 +39,7 @@ public class SynchronizedInputDevice implements InputDevice {
         return poll();
     }
 
-    public void offer(Packet packet) {
+    public void offer(@NotNull Packet packet) {
         lock.lock();
         queue.offer(packet.x);
         queue.offer(packet.y);
