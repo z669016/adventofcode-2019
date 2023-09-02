@@ -1,24 +1,21 @@
 package com.putoet.day12;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 import java.util.Objects;
 
-public class Moon implements Cloneable {
+class Moon {
     private final String name;
     private Position position;
     private Velocity velocity = new Velocity(0, 0, 0);
 
-    public Moon(String name, Position position) {
-        if (name == null || name.trim().length() == 0)
-            throw new IllegalArgumentException("Empty moon name is not allowed.");
-        if (position == null)
-            throw new IllegalArgumentException("Initial Position for a moon is required.");
-
+    public Moon(@NotNull String name, @NotNull Position position) {
         this.name = name.trim();
         this.position = position;
     }
 
-    public static Moon of(String name, String coordinates) {
+    public static Moon of(@NotNull String name, @NotNull String coordinates) {
         return new Moon(name, Position.of(coordinates));
     }
 
@@ -30,7 +27,7 @@ public class Moon implements Cloneable {
         return velocity;
     }
 
-    public void applyGravity(Map<String, Moon> moonMap) {
+    public void applyGravity(@NotNull Map<String, Moon> moonMap) {
         moonMap.values().forEach(moon -> velocity = velocity.applyGravity(position, moon.position));
     }
 
@@ -53,10 +50,8 @@ public class Moon implements Cloneable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Moon)) return false;
-        Moon moon = (Moon) o;
-        return Objects.equals(name, moon.name) &&
-                Objects.equals(position, moon.position);
+        if (!(o instanceof Moon moon)) return false;
+        return Objects.equals(name, moon.name) && Objects.equals(position, moon.position);
     }
 
     @Override

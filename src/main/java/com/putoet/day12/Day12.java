@@ -1,21 +1,25 @@
 package com.putoet.day12;
 
-import java.util.*;
+import com.putoet.utils.Timer;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.OptionalLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.apache.commons.math3.util.ArithmeticUtils.gcd;
+import org.apache.commons.math3.util.ArithmeticUtils;
 
 public class Day12 {
     public static void main(String[] args) {
-        part1();
-        part2();
+        Timer.run(Day12::part1);
+        Timer.run(Day12::part2);
     }
 
     private static void part1() {
-        final Map<String, Moon> moons = MoonMap.loadFile("/day12.txt");
+        final var moons = MoonMap.loadFile("/day12.txt");
 
-        for (int idx = 0; idx < 1000; idx++) {
+        for (var idx = 0; idx < 1000; idx++) {
             moons.values().forEach(moon -> moon.applyGravity(moons));
             moons.values().forEach(Moon::applyVelocity);
         }
@@ -26,24 +30,24 @@ public class Day12 {
     }
 
     private static void part2() {
-        final Map<String, Moon> moons = MoonMap.loadFile("/day12.txt");
+        final var moons = MoonMap.loadFile("/day12.txt");
         System.out.println("Repeat after " + repeat(moons) + " turns.");
     }
 
     public static long repeat(Map<String, Moon> moons) {
-        final Set<String> xHistory = new HashSet<>();
-        final Set<String> yHistory = new HashSet<>();
-        final Set<String> zHistory = new HashSet<>();
+        final var xHistory = new HashSet<String>();
+        final var yHistory = new HashSet<String>();
+        final var zHistory = new HashSet<String>();
 
-        OptionalLong repeatX = OptionalLong.empty();
-        OptionalLong repeatY = OptionalLong.empty();
-        OptionalLong repeatZ = OptionalLong.empty();
+        var repeatX = OptionalLong.empty();
+        var repeatY = OptionalLong.empty();
+        var repeatZ = OptionalLong.empty();
 
         xHistory.add(hashX(moons));
         yHistory.add(hashY(moons));
         zHistory.add(hashZ(moons));
 
-        long idx = 0;
+        var idx = 0;
         do {
             moons.values().forEach(moon -> moon.applyGravity(moons));
             moons.values().forEach(Moon::applyVelocity);
@@ -61,24 +65,24 @@ public class Day12 {
         } while (repeatX.isEmpty() || repeatY.isEmpty() || repeatZ.isEmpty());
 
         return Stream.of(repeatX.getAsLong(), repeatY.getAsLong(), repeatZ.getAsLong())
-                .reduce(1L, (x, y) -> x * (y / gcd(x, y)));
+                .reduce(1L, (x, y) -> x * (y / ArithmeticUtils.gcd(x, y)));
     }
 
     private static String hashX(Map<String, Moon> moons) {
         return moons.values().stream()
-                .map(moon -> moon.position().x + "_" + moon.velocity().x)
+                .map(moon -> moon.position().x() + "_" + moon.velocity().x())
                 .collect(Collectors.joining("x"));
     }
 
     private static String hashY(Map<String, Moon> moons) {
         return moons.values().stream()
-                .map(moon -> moon.position().y + "_" + moon.velocity().y)
+                .map(moon -> moon.position().y() + "_" + moon.velocity().y())
                 .collect(Collectors.joining("y"));
     }
 
     private static String hashZ(Map<String, Moon> moons) {
         return moons.values().stream()
-                .map(moon -> moon.position().z + "_" + moon.velocity().z)
+                .map(moon -> moon.position().z() + "_" + moon.velocity().z())
                 .collect(Collectors.joining("z"));
     }
 }

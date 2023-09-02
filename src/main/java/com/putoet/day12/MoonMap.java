@@ -1,25 +1,25 @@
 package com.putoet.day12;
 
 import com.putoet.resources.ResourceLines;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class MoonMap {
-    public static Map<String, Moon> loadFile(String fileName) {
-        final List<String> moons = List.of("Io", "Europa", "Ganymede", "Callisto");
-        final List<Position> positions = ResourceLines.stream(fileName)
+class MoonMap {
+    public static Map<String, Moon> loadFile(@NotNull String fileName) {
+        final var moons = List.of("Io", "Europa", "Ganymede", "Callisto");
+        final var positions = ResourceLines.stream(fileName)
                 .map(Position::of)
-                .collect(Collectors.toList());
+                .toList();
 
         if (positions.size() != moons.size())
             throw new IllegalArgumentException("Number of provided positions (" + positions.size() + " doesn't match the number of moons (" + moons.size() + ")");
 
-        final Map<String, Moon> moonMap = new HashMap<>();
-        for (int idx = 0; idx < moons.size(); idx++) {
-            final String name = moons.get(idx);
+        final var moonMap = new HashMap<String, Moon>();
+        for (var idx = 0; idx < moons.size(); idx++) {
+            final var name = moons.get(idx);
             moonMap.put(name, new Moon(name, positions.get(idx)));
         }
 

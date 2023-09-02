@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MoonTest {
+class MoonTest {
     private final Map<String, Moon> moons = new HashMap<>();
 
     @BeforeEach
@@ -28,10 +28,10 @@ public class MoonTest {
     public void testApplyGravity() {
         moons.values().forEach(moon -> moon.applyGravity(moons));
 
-        assertEquals("<x=3, y=-1, z=-1>", moons.get("Io").velocity().toString());
-        assertEquals("<x=1, y=3, z=3>", moons.get("Europa").velocity().toString());
-        assertEquals("<x=-3, y=1, z=-3>", moons.get("Ganymede").velocity().toString());
-        assertEquals("<x=-1, y=-3, z=1>", moons.get("Calisto").velocity().toString());
+        assertEquals("Velocity[x=3, y=-1, z=-1]", moons.get("Io").velocity().toString());
+        assertEquals("Velocity[x=1, y=3, z=3]", moons.get("Europa").velocity().toString());
+        assertEquals("Velocity[x=-3, y=1, z=-3]", moons.get("Ganymede").velocity().toString());
+        assertEquals("Velocity[x=-1, y=-3, z=1]", moons.get("Calisto").velocity().toString());
     }
 
     @Test
@@ -39,29 +39,22 @@ public class MoonTest {
         moons.values().forEach(moon -> moon.applyGravity(moons));
         moons.values().forEach(Moon::applyVelocity);
 
-        assertEquals("<x=2, y=-1, z=1>", moons.get("Io").position().toString());
-        assertEquals("<x=3, y=-7, z=-4>", moons.get("Europa").position().toString());
-        assertEquals("<x=1, y=-7, z=5>", moons.get("Ganymede").position().toString());
-        assertEquals("<x=2, y=2, z=0>", moons.get("Calisto").position().toString());
+        assertEquals("Position[x=2, y=-1, z=1]", moons.get("Io").position().toString());
+        assertEquals("Position[x=3, y=-7, z=-4]", moons.get("Europa").position().toString());
+        assertEquals("Position[x=1, y=-7, z=5]", moons.get("Ganymede").position().toString());
+        assertEquals("Position[x=2, y=2, z=0]", moons.get("Calisto").position().toString());
     }
 
     @Test
     public void testEnergyTest() {
-        for (int idx = 0; idx < 10; idx++) {
+        for (var idx = 0; idx < 10; idx++) {
             moons.values().forEach(moon -> moon.applyGravity(moons));
             moons.values().forEach(Moon::applyVelocity);
-
-            moons.values().forEach(System.out::println);
-            System.out.println("Total energy in the  system is: " + moons.values().stream().mapToInt(Moon::totalEnergy).sum());
-
-            System.out.println();
         }
 
         assertEquals(36, moons.get("Io").totalEnergy());
         assertEquals(45, moons.get("Europa").totalEnergy());
         assertEquals(80, moons.get("Ganymede").totalEnergy());
         assertEquals(18, moons.get("Calisto").totalEnergy());
-
-//        moons.values().forEach(moon -> System.out.println(moon));
     }
 }
