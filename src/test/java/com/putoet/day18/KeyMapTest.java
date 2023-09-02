@@ -2,12 +2,10 @@ package com.putoet.day18;
 
 import com.putoet.grid.Point;
 import com.putoet.resources.ResourceLines;
-import com.putoet.search.GenericSearch;
 import org.javatuples.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +16,7 @@ class KeyMapTest {
 
     @BeforeEach
     void setup() {
-        final List<String> lines = ResourceLines.list("/day18-1.txt");
+        final var lines = ResourceLines.list("/day18-1.txt");
         keyMap1 = KeyMap.of(lines);
     }
 
@@ -29,21 +27,21 @@ class KeyMapTest {
 
     @Test
     void keys() {
-        final List<Pair<Character, Point>> keys = keyMap1.keys();
+        final var keys = keyMap1.keys();
         assertEquals(2, keys.size());
         assertEquals(Set.of(new Pair<>('a', Point.of(7,1)), new Pair<>('b', Point.of(1,1))), Set.copyOf(keys));
     }
 
     @Test
     void doors() {
-        final List<Pair<Character, Point>> doors = keyMap1.doors();
+        final var doors = keyMap1.doors();
         assertEquals(1, doors.size());
         assertEquals(Set.of(new Pair<>('A', Point.of(3,1))), Set.copyOf(doors));
     }
 
     @Test
     void availableKeys() {
-        List<GenericSearch.Node<Point>> availableKeys = keyMap1.availableKeys(keyMap1.entrance(), Set.of());
+        var availableKeys = keyMap1.availableKeys(keyMap1.entrance(), Set.of());
         assertEquals(1, availableKeys.size());
         assertEquals(Point.of(7, 1), availableKeys.get(0).state);
 

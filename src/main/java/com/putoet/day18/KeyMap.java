@@ -6,6 +6,7 @@ import com.putoet.grid.GridUtils;
 import com.putoet.grid.Point;
 import com.putoet.search.GenericSearch;
 import org.javatuples.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class KeyMap {
+class KeyMap {
     public static final char OPEN ='.';
     public static final char WALL ='#';
     public static final char ENTRANCE = '@';
@@ -22,11 +23,11 @@ public class KeyMap {
     private final GridType grid;
     private Point entrance;
 
-    public KeyMap(GridType grid) {
+    public KeyMap(@NotNull GridType grid) {
         this.grid = grid;
     }
 
-    public static KeyMap of(List<String> lines) {
+    public static KeyMap of(@NotNull List<String> lines) {
         return new KeyMap(new Grid(GridUtils.of(lines)));
     }
 
@@ -75,9 +76,9 @@ public class KeyMap {
     }
 
     private List<Pair<Character, Point>> list(char lower, char upper) {
-        final List<Pair<Character, Point>> points = new ArrayList<>();
-        for (char id = lower; id <= upper; id++) {
-            final Optional<Point> point = find(id);
+        final var points = new ArrayList<Pair<Character, Point>>();
+        for (var id = lower; id <= upper; id++) {
+            final var point = find(id);
             if (point.isPresent())
                 points.add(new Pair<>(id, point.get()));
         }
@@ -91,12 +92,12 @@ public class KeyMap {
 
     private Function<Point, List<Point>> successors(Set<Character> possessedKeys) {
         return current -> {
-            final List<Point> successors = new ArrayList<>();
+            final var successors = new ArrayList<Point>();
 
-            for (Point move : List.of(Point.NORTH, Point.EAST, Point.SOUTH, Point.WEST)) {
-                final Point successor = current.add(move);
+            for (var move : List.of(Point.NORTH, Point.EAST, Point.SOUTH, Point.WEST)) {
+                final var successor = current.add(move);
                 if (grid.contains(successor.x(), successor.y())) {
-                    final char element = grid.get(successor.x(), successor.y());
+                    final var element = grid.get(successor.x(), successor.y());
                     if (isOpen(element) || isEntrance(element) || isKey(element)
                             || (isDoor(element) && possessedKeys.contains(asKey(element))))
                         successors.add(successor);
@@ -107,12 +108,16 @@ public class KeyMap {
         };
     }
 
-    public List<GenericSearch.Node<Point>> availableKeys(Point from, Set<Character> possessedKeys) {
-        return GenericSearch.findAll(from, goalTest(c -> isKey(c) && !possessedKeys.contains(c)), successors(possessedKeys));
+    public List<GenericSearch.Node<Point>> availableKeys(@NotNull Point from, @NotNull Set<Character> possessedKeys) {
+        return GenericSearch.findAll(
+                from,
+                goalTest(c -> isKey(c) && !possessedKeys.contains(c)),
+                successors(possessedKeys)
+        );
     }
 
-    public char elementAt(Point point) {
-        if (!grid.contains(point.x(), point.y()))
+    public char elementAt(@NotNull Point point) {
+        if (!contains(point))
             throw new IllegalArgumentException("Point " + point + " is not on the grid.");
 
         return grid.get(point.x(), point.y());
@@ -122,7 +127,7 @@ public class KeyMap {
         return new SplitKeyMap(grid.copy(), entrance());
     }
 
-    public boolean contains(Point point) {
+    public boolean contains(@NotNull Point point) {
         return grid.contains(point.x(), point.y());
     }
 
