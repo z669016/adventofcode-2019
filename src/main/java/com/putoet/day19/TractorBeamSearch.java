@@ -3,56 +3,55 @@ package com.putoet.day19;
 
 import com.putoet.grid.Point;
 import org.javatuples.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Function;
 
-public class TractorBeamSearch {
+class TractorBeamSearch {
     private final Drone drone;
     private final Function<Integer, Integer> lowerBoundForRow;
     private final Function<Integer, Integer> upperBoundForRow;
 
-    public TractorBeamSearch(Drone drone, Function<Integer, Integer> lowerBoundForRow, Function<Integer, Integer> upperBoundForRow) {
+    public TractorBeamSearch(@NotNull Drone drone,
+                             @NotNull Function<Integer, Integer> lowerBoundForRow,
+                             @NotNull Function<Integer, Integer> upperBoundForRow
+    ) {
         this.drone = drone;
         this.lowerBoundForRow = lowerBoundForRow;
         this.upperBoundForRow = upperBoundForRow;
     }
 
     public Point squareTopLeft(int size) {
-        final Point startingPoint = findStartingPoint(size);
+        final var startingPoint = findStartingPoint(size);
 
-        int row = startingPoint.y();
-        int step = 1;
+        var row = startingPoint.y();
+        var step = 1;
         while (!containsSquare(row))
-                row += step;
+            row += step;
 
         return Point.of(upperForRow(row) - 99, row);
     }
 
     private boolean containsSquare(int y) {
-        final Pair<Integer, Integer> xValues = lowerAndUpperForRow(y);
+        final var xValues = lowerAndUpperForRow(y);
 
-        final Point upperRight = Point.of(xValues.getValue1(), y);
-        final Point upperLeft = Point.of(upperRight.x() - 99, upperRight.y());
-        final Point bottomRight = Point.of(upperRight.x(), upperRight.y() + 99);
-        final Point bottomLeft = Point.of(upperLeft.x(), bottomRight.y());
+        final var upperRight = Point.of(xValues.getValue1(), y);
+        final var upperLeft = Point.of(upperRight.x() - 99, upperRight.y());
+        final var bottomRight = Point.of(upperRight.x(), upperRight.y() + 99);
+        final var bottomLeft = Point.of(upperLeft.x(), bottomRight.y());
 
-        final List<Point> corners = List.of(upperLeft, upperRight, bottomRight, bottomLeft);
+        final var corners = List.of(upperLeft, upperRight, bottomRight, bottomLeft);
         return corners.stream().allMatch(point -> drone.state(point) == Drone.State.PULLED) ||
-                corners.stream().allMatch(point -> drone.state(point.add(Point.WEST)) == Drone.State.PULLED);
-    }
-
-    private void printRow(int minY) {
-        for (int x = lowerBoundForRow.apply(minY); x < upperBoundForRow.apply(minY); x++)
-            System.out.print(TractorBeamMap.stateToChar(drone.state(Point.of(x, minY))));
+               corners.stream().allMatch(point -> drone.state(point.add(Point.WEST)) == Drone.State.PULLED);
     }
 
     private Point findStartingPoint(int size) {
-        int y = 0;
+        var y = 0;
         while (upperBoundForRow.apply(y) - lowerBoundForRow.apply(y) < size)
             y++;
 
-        Pair<Integer, Integer> pair = lowerAndUpperForRow(y);
+        var pair = lowerAndUpperForRow(y);
         while (pair.getValue1() - pair.getValue0() < size) {
             pair = lowerAndUpperForRow(++y);
         }
@@ -69,7 +68,7 @@ public class TractorBeamSearch {
     }
 
     private int lowerForRow(int row, int start) {
-        int x = start;
+        var x = start;
         while (drone.state(Point.of(x, row)) == Drone.State.STATIONARY)
             x++;
 
@@ -81,7 +80,7 @@ public class TractorBeamSearch {
     }
 
     private int upperForRow(int row, int start) {
-        int x = start;
+        var x = start;
         while (drone.state(Point.of(x, row)) == Drone.State.STATIONARY)
             x--;
 

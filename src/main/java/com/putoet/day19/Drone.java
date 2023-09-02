@@ -5,37 +5,36 @@ import com.putoet.intcode.ExpandableMemory;
 import com.putoet.intcode.IntCodeComputer;
 import com.putoet.intcode.IntCodeDevice;
 import com.putoet.intcode.IntCodeInputOutputDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.OptionalLong;
 
-public class Drone {
+class Drone {
     enum State {
         STATIONARY, PULLED
     }
 
     private final List<Long> intCode;
 
-    public Drone(List<Long> intCode) {
+    public Drone(@NotNull List<Long> intCode) {
         this.intCode = intCode;
     }
 
-    public State state(Point point) {
-        final ExpandableMemory memory = new ExpandableMemory(intCode);
-        final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
-        final IntCodeInputOutputDevice output = new IntCodeInputOutputDevice();
-        final IntCodeDevice device = IntCodeComputer.builder().memory(memory).input(input).output(output).build();
+    public State state(@NotNull Point point) {
+        final var memory = new ExpandableMemory(intCode);
+        final var input = new IntCodeInputOutputDevice();
+        final var output = new IntCodeInputOutputDevice();
+        final var device = IntCodeComputer.builder().memory(memory).input(input).output(output).build();
 
         input.offer(point.x());
         input.offer(point.y());
         device.run();
 
-        final OptionalLong state = output.poll();
-        if (state.isEmpty())
-            throw new IllegalStateException("No state reported by drone");
-        if (state.getAsLong() < 0 || state.getAsLong() > 1)
-            throw new IllegalStateException("Invallid state reported by drone: " + state.getAsLong());
+        final var state = output.poll().orElseThrow();
+        if (state < 0 || state > 1)
+            throw new IllegalStateException("Invalid state reported by drone: " + state);
 
-        return state.getAsLong() == 0L ? State.STATIONARY : State.PULLED;
+        return state == 0L ? State.STATIONARY : State.PULLED;
     }
 }
