@@ -2,25 +2,26 @@ package com.putoet.day15;
 
 import com.putoet.grid.Point;
 import com.putoet.intcode.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.OptionalLong;
 
-public class RepairDroid implements Runnable {
+class RepairDroid implements Runnable {
     private final IntCodeDevice device;
     private final Point location;
     private long result = -1;
 
-    public RepairDroid(IntCodeDevice device, Point location) {
+    public RepairDroid(@NotNull IntCodeDevice device, @NotNull Point location) {
         this.device = device;
         this.location = location;
     }
 
-    public static RepairDroid init(List<Long> intCode, Point location) {
-        final Memory memory = new ExpandableMemory(intCode);
-        final IntCodeDevice device = IntCodeComputer.builder()
+    public static RepairDroid init(@NotNull List<Long> intCode, @NotNull Point location) {
+        final var memory = new ExpandableMemory(intCode);
+        final var device = IntCodeComputer.builder()
                 .memory(memory)
                 .input(new IntCodeInputOutputDevice())
                 .output(new IntCodeInputOutputDevice())
@@ -29,34 +30,34 @@ public class RepairDroid implements Runnable {
         return new RepairDroid(device, location);
     }
 
-    public static List<RepairDroid> successorsWalls(RepairDroid repairDroid) {
+    public static List<RepairDroid> successorsWalls(@NotNull RepairDroid repairDroid) {
         if (repairDroid.result() != MovementSensor.MOVED)
             return List.of();
 
-        final List<RepairDroid> successors = new ArrayList<>();
-        for (int move : List.of(1, 2, 3, 4)) {
-            final RepairDroid successor = forMove(repairDroid, move);
+        final var successors = new ArrayList<RepairDroid>();
+        for (var move : List.of(1, 2, 3, 4)) {
+            final var successor = forMove(repairDroid, move);
             successors.add(successor);
         }
 
         return successors;
     }
 
-    private static RepairDroid forMove(RepairDroid repairDroid, int move) {
-        final Point newLocation = repairDroid.location().add(switch (move) {
+    private static RepairDroid forMove(@NotNull RepairDroid repairDroid, int move) {
+        final var newLocation = repairDroid.location().add(switch (move) {
             case 1 -> Point.NORTH;
             case 2 -> Point.SOUTH;
             case 3 -> Point.WEST;
             default -> Point.EAST;
         });
 
-        final IntCodeDevice copy = intCodeDeviceCopy(repairDroid, move);
+        final var copy = intCodeDeviceCopy(repairDroid, move);
         return new RepairDroid(copy, newLocation);
     }
 
-    private static IntCodeDevice intCodeDeviceCopy(RepairDroid repairDroid, int move) {
-        final IntCodeDevice copy = repairDroid.device.copy();
-        final IntCodeInputOutputDevice input = new IntCodeInputOutputDevice();
+    private static IntCodeDevice intCodeDeviceCopy(@NotNull RepairDroid repairDroid, int move) {
+        final var copy = repairDroid.device.copy();
+        final var input = new IntCodeInputOutputDevice();
         input.offer(move);
 
         copy.input(new IntCodeInputOutputDevice());
@@ -65,7 +66,7 @@ public class RepairDroid implements Runnable {
         return copy;
     }
 
-    public static boolean wallOrOxygenSystemFound(RepairDroid repairDroid) {
+    public static boolean wallOrOxygenSystemFound(@NotNull RepairDroid repairDroid) {
         return repairDroid.result() == MovementSensor.WALL_HIT
                 || repairDroid.result() == MovementSensor.OXYGEN_SYSTEM_FOUND;
     }
@@ -110,8 +111,7 @@ public class RepairDroid implements Runnable {
             return false;
 
         if (this == o) return true;
-        if (!(o instanceof RepairDroid)) return false;
-        RepairDroid that = (RepairDroid) o;
+        if (!(o instanceof RepairDroid that)) return false;
         return Objects.equals(location, that.location);
     }
 

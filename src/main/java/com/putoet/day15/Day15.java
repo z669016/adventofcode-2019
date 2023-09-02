@@ -4,6 +4,7 @@ import com.putoet.grid.Grid;
 import com.putoet.grid.Point;
 import com.putoet.resources.CSV;
 import com.putoet.search.GenericSearch;
+import com.putoet.utils.Timer;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -12,16 +13,16 @@ import java.util.Optional;
 
 public class Day15 {
     public static void main(String[] args) {
-        final List<Long> intCode = CSV.flatList("/day15.txt", Long::parseLong);
-        final Grid grid = asGrid(intCode);
-        final GridSearch search = new GridSearch(grid);
+        final var intCode = CSV.flatList("/day15.txt", Long::parseLong);
+        final var grid = asGrid(intCode);
+        final var search = new GridSearch(grid);
 
-        Optional<Point> oxygenSystem = part1(search);
-        oxygenSystem.ifPresent(point -> part2(search, point));
+        final var oxygenSystem = Timer.run(() -> part1(search));
+        oxygenSystem.ifPresent(point -> Timer.run(() -> part2(search, point)));
     }
 
     private static Optional<Point> part1(GridSearch search) {
-        final Optional<GenericSearch.Node<GridSearch.State>> node = GenericSearch.bfs(
+        final var node = GenericSearch.bfs(
                 search.init(Point.ORIGIN),
                 search::oxygenSystemFound,
                 search::oxygenSystemSearch);
@@ -30,28 +31,28 @@ public class Day15 {
 
         System.out.println("Found oxygenSystem in " + node.get().steps() + " steps.");
 
-        return Optional.of(node.get().state.point);
+        return Optional.of(node.get().state.point());
     }
 
     private static void part2(GridSearch search, Point oxygenSystemLocation) {
-        final List<GenericSearch.Node<GridSearch.State>> walls = GenericSearch.findAll(
+        final var walls = GenericSearch.findAll(
                 search.init(oxygenSystemLocation),
                 search::wallFound,
                 search::wallSearch);
 
-        final GenericSearch.Node<GridSearch.State> longest = walls.stream()
+        final var longest = walls.stream()
                 .max(Comparator.comparingInt(GenericSearch.Node::steps))
                 .orElseThrow();
         System.out.println("The longest route has " + (longest.steps() - 1) + " steps");
     }
 
     private static Grid asGrid(List<Long> intCode) {
-        final List<GenericSearch.Node<RepairDroid>> walls = GenericSearch.findAll(
+        final var walls = GenericSearch.findAll(
                 RepairDroid.init(intCode, Point.ORIGIN),
                 RepairDroid::wallOrOxygenSystemFound,
                 RepairDroid::successorsWalls);
 
-        final Grid grid = createGrid(walls);
+        final var grid = createGrid(walls);
 
         walls.stream()
                 .map(node -> node.state)
@@ -66,17 +67,17 @@ public class Day15 {
     }
 
     private static Grid createGrid(List<GenericSearch.Node<RepairDroid>> walls) {
-        final List<Point> wallPoints = walls.stream().map(node -> node.state.location()).toList();
-        final int minX = wallPoints.stream().mapToInt(Point::x).min().orElseThrow();
-        final int maxX = wallPoints.stream().mapToInt(Point::x).max().orElseThrow() + 1;
-        final int minY = wallPoints.stream().mapToInt(Point::y).min().orElseThrow();
-        final int maxY = wallPoints.stream().mapToInt(Point::y).max().orElseThrow() + 1;
+        final var wallPoints = walls.stream().map(node -> node.state.location()).toList();
+        final var minX = wallPoints.stream().mapToInt(Point::x).min().orElseThrow();
+        final var maxX = wallPoints.stream().mapToInt(Point::x).max().orElseThrow() + 1;
+        final var minY = wallPoints.stream().mapToInt(Point::y).min().orElseThrow();
+        final var maxY = wallPoints.stream().mapToInt(Point::y).max().orElseThrow() + 1;
 
-        final int height = Math.abs(maxY - minY);
-        final int width = Math.abs(maxX - minX);
-        final char[][] data = new char[height][width];
+        final var height = Math.abs(maxY - minY);
+        final var width = Math.abs(maxX - minX);
+        final var data = new char[height][width];
 
-        for (char[] datum : data) Arrays.fill(datum, GridSearch.OPEN);
+        for (var datum : data) Arrays.fill(datum, GridSearch.OPEN);
 
         return new Grid(minX, maxX, minY, maxY, data);
     }
