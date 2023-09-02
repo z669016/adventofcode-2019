@@ -24,8 +24,7 @@ class LongSignalTest {
     }
 
     void sampleTest(String input, String signature) {
-        final LongSignal signal = new LongSignal(FasterSignal.asIntArray(input));
-
+        final var signal = LongSignal.ofRaw(FasterSignal.asIntArray(input));
         assertEquals(signature, signal.fft(100).signature());
     }
 }

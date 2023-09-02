@@ -1,23 +1,17 @@
 package com.putoet.day16;
 
-public class FasterSignal {
-    // the pattern used will be 0, 1, 0, -1
+import org.jetbrains.annotations.NotNull;
 
-    protected final int[] data;
+import java.util.Arrays;
 
-    public FasterSignal(int[] data) {
-        assert data != null;
-
-        this.data = data;
-    }
-
+record FasterSignal(int[] data) {
     private static int applyPattern(int nth, int[] data) {
-        int sign = 1;
-        int sum = 0;
+        var sign = 1;
+        var sum = 0;
 
-        for (int i = nth - 1; i < data.length; i += (nth * 2)) {
-            int sub = 0;
-            for (int offset = 0; offset < nth && i + offset < data.length; offset++) {
+        for (var i = nth - 1; i < data.length; i += (nth * 2)) {
+            var sub = 0;
+            for (var offset = 0; offset < nth && i + offset < data.length; offset++) {
                 sub += data[i + offset];
             }
 
@@ -32,16 +26,15 @@ public class FasterSignal {
         return Math.abs(sum % 10);
     }
 
-    public static int[] asIntArray(String input) {
+    public static int[] asIntArray(@NotNull String input) {
         return input.chars().map(i -> i - '0').toArray();
     }
 
     public FasterSignal fft(int count) {
-        final int[] newData = new int[data.length];
-        System.arraycopy(data, 0, newData, 0, data.length);
+        final var newData = Arrays.copyOf(data, data.length);
 
         while (count > 0) {
-            for (int i = 1; i <= newData.length; i++)
+            for (var i = 1; i <= newData.length; i++)
                 newData[i - 1] = applyPattern(i, newData);
 
             count--;
@@ -60,10 +53,6 @@ public class FasterSignal {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        for (int i : data)
-            sb.append(i);
-
-        return sb.toString();
+        return Arrays.stream(data).mapToObj(Integer::toString).reduce("", String::concat);
     }
 }
