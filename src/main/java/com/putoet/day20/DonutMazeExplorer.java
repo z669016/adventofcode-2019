@@ -2,40 +2,37 @@ package com.putoet.day20;
 
 import com.putoet.grid.Point;
 import com.putoet.search.GenericSearch;
-import org.javatuples.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class DonutMazeExplorer {
+class DonutMazeExplorer {
     private final DonutMaze maze;
 
-    public DonutMazeExplorer(DonutMaze maze) {
+    public DonutMazeExplorer(@NotNull DonutMaze maze) {
         this.maze = maze;
     }
 
     public int shortestRoute() {
-        final Optional<GenericSearch.Node<Point>> node = GenericSearch.bfs(init(), this::success, this::successors);
-        if (node.isEmpty())
-            return -1;
+        final var node = GenericSearch.bfs(init(), this::success, this::successors);
+        return node.map(GenericSearch.Node::steps).orElse(-1);
 
-        return node.get().steps();
     }
 
     public Point init() {
         return maze.entry();
     }
 
-    public boolean success(Point point) {
+    public boolean success(@NotNull Point point) {
         return point.equals(maze.exit());
     }
 
-    public List<Point> successors(Point point) {
-        final List<Point> successors = new ArrayList<>();
-        final List<Point> adjacents = DonutMaze.adjacent(point);
+    public List<Point> successors(@NotNull Point point) {
+        final var successors = new ArrayList<Point>();
+        final var adjacentList = DonutMaze.adjacent(point);
 
-        for (Point next : adjacents) {
+        for (var next : adjacentList) {
             if (isWall(next))
                 continue;
 
@@ -43,9 +40,9 @@ public class DonutMazeExplorer {
                 successors.add(next);
 
             if (isGate(next)) {
-                final String label = maze.labelAt(next);
+                final var label = maze.labelAt(next);
                 if (!DonutMaze.ENTRY.equals(label) && !DonutMaze.EXIT.equals(label)) {
-                    final Pair<Point, Point> gate = maze.gate(label);
+                    final var gate = maze.gate(label);
                     if (gate == null)
                         throw new IllegalStateException("No gate found for label " + label);
 

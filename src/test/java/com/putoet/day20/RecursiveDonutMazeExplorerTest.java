@@ -19,7 +19,7 @@ class RecursiveDonutMazeExplorerTest {
 
     @BeforeEach
     void setup() {
-        DonutMaze maze = new DonutMaze(new Grid(GridUtils.of(ResourceLines.list("/day20-1.txt"), ' ')));
+        var maze = new DonutMaze(new Grid(GridUtils.of(ResourceLines.list("/day20-1.txt"), ' ')));
         explorer1 = new RecursiveDonutMazeExplorer(maze);
 
         maze = new DonutMaze(new Grid(GridUtils.of(ResourceLines.list("/day20-2.txt"), ' ')));

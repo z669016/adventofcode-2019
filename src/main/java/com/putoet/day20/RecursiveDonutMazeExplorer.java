@@ -3,41 +3,39 @@ package com.putoet.day20;
 import com.putoet.grid.Point;
 import com.putoet.search.GenericSearch;
 import org.javatuples.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class RecursiveDonutMazeExplorer {
+class RecursiveDonutMazeExplorer {
     private final DonutMaze maze;
 
-    public RecursiveDonutMazeExplorer(DonutMaze maze) {
+    public RecursiveDonutMazeExplorer(@NotNull DonutMaze maze) {
         this.maze = maze;
     }
 
     public int shortestRoute() {
-        final Optional<GenericSearch.Node<Pair<Integer, Point>>> node = GenericSearch.bfs(init(), this::success, this::successors);
-        if (node.isEmpty())
-            return -1;
+        final var node = GenericSearch.bfs(init(), this::success, this::successors);
+        return node.map(GenericSearch.Node::steps).orElse(-1);
 
-        return node.get().steps();
     }
 
     public Pair<Integer, Point> init() {
         return Pair.with(0, maze.entry());
     }
 
-    public boolean success(Pair<Integer, Point> pair) {
+    public boolean success(@NotNull Pair<Integer, Point> pair) {
         return pair.getValue0() == 0 && pair.getValue1().equals(maze.exit());
     }
 
-    public List<Pair<Integer, Point>> successors(Pair<Integer, Point> pair) {
-        final int level = pair.getValue0();
-        final Point point = pair.getValue1();
-        final List<Pair<Integer, Point>> successors = new ArrayList<>();
-        final List<Point> adjacents = DonutMaze.adjacent(point);
+    public List<Pair<Integer, Point>> successors(@NotNull Pair<Integer, Point> pair) {
+        final var level = pair.getValue0();
+        final var point = pair.getValue1();
+        final var successors = new ArrayList<Pair<Integer, Point>>();
+        final var adjacentList = DonutMaze.adjacent(point);
 
-        for (Point next : adjacents) {
+        for (var next : adjacentList) {
             if (isWall(next))
                 continue;
 
@@ -45,7 +43,7 @@ public class RecursiveDonutMazeExplorer {
                 successors.add(Pair.with(pair.getValue0(), next));
 
             if (isGate(next)) {
-                final String label = maze.labelAt(next);
+                final var label = maze.labelAt(next);
 
                 // EXIT and ENTRY are only visible at the most outer maze (level == 0) otherwise treat them as walls
                 if (level != 0 && (DonutMaze.ENTRY.equals(label) || DonutMaze.EXIT.equals(label)))
