@@ -1,5 +1,7 @@
 package com.putoet.day22;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,12 +10,11 @@ import java.util.List;
 import static java.math.BigInteger.*;
 
 /**
- * Code based on the solution developed by Said Aspen, the original can be found here:
- *  https://github.com/saidaspen/aoc2019/blob/master/java/src/main/java/se/saidaspen/aoc2019/day22/Day22.java
+ * Code based on the solution developed by Said Aspen, the original can be found
+ *  <a href="https://github.com/saidaspen/aoc2019/blob/master/java/src/main/java/se/saidaspen/aoc2019/day22/Day22.java">here</a>
  */
-public final class DeckShuffle {
+class DeckShuffle {
     private static final String ERR_OP = "Unsupported shuffle operation '%s'";
-
     private static final String DEAL_INTO = "deal into new stack";
     private static final String CUT = "cut";
     private static final String DEAL_W_INC = "deal with increment";
@@ -30,8 +31,8 @@ public final class DeckShuffle {
         this.count = count;
     }
 
-    public static List<String> reverse(List<String> list) {
-        final List<String> reverse = new ArrayList<>(list);
+    public static List<String> reverse(@NotNull List<String> list) {
+        final var reverse = new ArrayList<>(list);
         Collections.reverse(reverse);
 
         return reverse;
@@ -51,7 +52,7 @@ public final class DeckShuffle {
     }
 
     public BigInteger positionOf(BigInteger in) {
-        final LinearFunction shuffle = input.stream()
+        final var shuffle = input.stream()
                 .map(s -> {
                     if (s.startsWith(DEAL_INTO))
                         return new LinearFunction(ONE.negate(), ONE.negate());
@@ -67,7 +68,7 @@ public final class DeckShuffle {
     }
 
     public BigInteger cardAt(BigInteger in) {
-        final LinearFunction shuffle = reverse(input).stream()
+        final var shuffle = reverse(input).stream()
                 .map(s -> {
                     if (s.startsWith(DEAL_INTO))
                         return new LinearFunction(ONE.negate(), ONE.negate().subtract(size));
@@ -89,7 +90,7 @@ public final class DeckShuffle {
         } else if (count.mod(TWO).equals(ZERO)) {
             return executeTimes(k.multiply(k).mod(size), k.multiply(m).add(m).mod(size), count.divide(TWO));
         } else {
-            final LinearFunction cd = executeTimes(k, m, count.subtract(ONE));
+            final var cd = executeTimes(k, m, count.subtract(ONE));
             return new LinearFunction(k.multiply(cd.k).mod(size), k.multiply(cd.m).add(m).mod(size));
         }
     }
