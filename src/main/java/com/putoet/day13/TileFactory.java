@@ -1,6 +1,6 @@
 package com.putoet.day13;
 
-public class TileFactory {
+class TileFactory {
     public static final Tile EMPTY = new Empty();
     public static final Tile WALL = new Wall();
     public static final Tile BLOCK = new Ball();

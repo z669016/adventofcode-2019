@@ -1,15 +1,17 @@
 package com.putoet.day13;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 
-public class ExtendableSurface {
+class ExtendableSurface {
     private Tile[][] surface = new Tile[][]{{TileFactory.of(0)}};
 
-    public long count(Tile tile) {
+    public long count(@NotNull Tile tile) {
         return Arrays.stream(surface).flatMap(Arrays::stream).filter(elem -> elem == tile).count();
     }
 
-    public void set(int x, int y, Tile newTile) {
+    public void set(int x, int y, @NotNull Tile newTile) {
         if (y >= surface.length) extendVertically(y);
         if (x >= surface[0].length) extendHorizontally(x);
 
@@ -17,9 +19,9 @@ public class ExtendableSurface {
     }
 
     private void extendHorizontally(int x) {
-        for (int idy = 0; idy < surface.length; idy++) {
-            final Tile[] newLine = new Tile[x + 1];
-            for (int idx = 0; idx < x + 1; idx++) {
+        for (var idy = 0; idy < surface.length; idy++) {
+            final var newLine = new Tile[x + 1];
+            for (var idx = 0; idx < x + 1; idx++) {
                 newLine[idx] = (idx < surface[idy].length ? surface[idy][idx] : TileFactory.EMPTY);
             }
             surface[idy] = newLine;
@@ -27,23 +29,23 @@ public class ExtendableSurface {
     }
 
     private void extendVertically(int y) {
-        final Tile[][] newSurface = new Tile[y + 1][];
-        for (int idy = 0; idy < y + 1; idy++)
+        final var newSurface = new Tile[y + 1][];
+        for (var idy = 0; idy < y + 1; idy++)
             newSurface[idy] = (idy < surface.length ? surface[idy] : emptyLine());
         surface = newSurface;
     }
 
     private Tile[] emptyLine() {
-        final Tile[] newLine = new Tile[surface[0].length];
+        final var newLine = new Tile[surface[0].length];
         Arrays.fill(newLine, TileFactory.EMPTY);
         return newLine;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        for (Tile[] tiles : surface) {
-            for (Tile tile : tiles) sb.append(tile.toString());
+        final var sb = new StringBuilder();
+        for (var tiles : surface) {
+            for (var tile : tiles) sb.append(tile.toString());
             sb.append('\n');
         }
         return sb.toString();

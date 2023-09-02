@@ -5,10 +5,11 @@ import com.putoet.intcode.IntCodeComputer;
 import com.putoet.intcode.IntCodeDevice;
 import com.putoet.intcode.Memory;
 import com.putoet.intcode.OutputDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class Game implements OutputDevice, Runnable {
+class Game implements OutputDevice, Runnable {
     private final ExtendableSurface surface = new ExtendableSurface();
 
     private final Memory memory;
@@ -24,12 +25,12 @@ public class Game implements OutputDevice, Runnable {
     private State state = State.X;
     private long score;
 
-    public Game(Memory memory, Joystick joystick) {
+    public Game(@NotNull Memory memory, @NotNull Joystick joystick) {
         this.memory = memory;
         this.joystick = joystick;
     }
 
-    public long count(Tile tile) {
+    public long count(@NotNull Tile tile) {
         return surface.count(tile);
     }
 
@@ -50,7 +51,7 @@ public class Game implements OutputDevice, Runnable {
                 if (x == -1 && y == 0) {
                     score = value;
                 } else {
-                    final Tile tile = TileFactory.of((int) value);
+                    final var tile = TileFactory.of((int) value);
 
                     if (tile == TileFactory.BALL) {
                         if (ball != null)

@@ -1,6 +1,6 @@
 package com.putoet.day13;
 
-public class Tile {
+class Tile {
 }
 
 class Empty extends Tile {
@@ -13,27 +13,20 @@ class Empty extends Tile {
 class Wall extends Tile {
     @Override
     public String toString() {
-        return "\u2588";
-    }
-}
-
-class Block extends Tile {
-    @Override
-    public String toString() {
-        return "\u2800";
+        return "█";
     }
 }
 
 class Ball extends Tile {
     @Override
     public String toString() {
-        return "o" /*"\u26BD" */;
+        return "o";
     }
 }
 
 class Paddle extends Tile {
     @Override
     public String toString() {
-        return "-" /*"\uD83C\uDFD3"*/;
+        return "-";
     }
 }

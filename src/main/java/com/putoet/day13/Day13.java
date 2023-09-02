@@ -2,20 +2,17 @@ package com.putoet.day13;
 
 import com.putoet.intcode.*;
 import com.putoet.resources.CSV;
-
-import java.util.List;
+import com.putoet.utils.Timer;
 
 public class Day13 {
     public static void main(String[] args) {
-        final List<Long> intCode = CSV.flatList("/day13.txt", Long::parseLong);
+        final var memory = new ExpandableMemory(CSV.flatList("/day13.txt", Long::parseLong));
+        final var joystick = new Joystick();
+        final var game = new Game(memory, joystick);
 
-        final Memory memory = new ExpandableMemory(intCode);
-        final Joystick joystick = new Joystick();
-        final Game game = new Game(memory, joystick);
-
-        part1(game);
+        Timer.run(() -> part1(game));
         System.out.println();
-        part2(memory, joystick, game);
+        Timer.run(() -> part2(memory, joystick, game));
     }
 
     private static void part1(Game game) {

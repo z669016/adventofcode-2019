@@ -1,11 +1,12 @@
 package com.putoet.day13;
 
 import com.putoet.intcode.InputDevice;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class Joystick implements InputDevice {
+class Joystick implements InputDevice {
     public static final int LEFT = -1;
     public static final int NEUTRAL = 0;
     public static final int RIGHT = 1;
@@ -18,7 +19,7 @@ public class Joystick implements InputDevice {
     }
 
     @Override
-    public OptionalLong poll(int timeout, TimeUnit timeUnit) {
+    public OptionalLong poll(int timeout, @NotNull TimeUnit timeUnit) {
         return OptionalLong.of(next);
     }
 
