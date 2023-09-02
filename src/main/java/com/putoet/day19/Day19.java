@@ -1,6 +1,5 @@
 package com.putoet.day19;
 
-import com.putoet.grid.Point;
 import com.putoet.resources.CSV;
 import com.putoet.utils.Timer;
 

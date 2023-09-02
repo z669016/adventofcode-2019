@@ -3,12 +3,10 @@ package com.putoet.day19;
 import com.putoet.grid.Point;
 import com.putoet.intcode.ExpandableMemory;
 import com.putoet.intcode.IntCodeComputer;
-import com.putoet.intcode.IntCodeDevice;
 import com.putoet.intcode.IntCodeInputOutputDevice;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.OptionalLong;
 
 class Drone {
     enum State {
