@@ -10,8 +10,8 @@ import java.util.List;
 class Calibrator {
     public static final String RIGHT_COMMAND = "R";
     public static final String LEFT_COMMAND = "L";
-    public static char SCAFFOLD = '#';
-    public static char ROBOT_UP = '^';
+    public static final char SCAFFOLD = '#';
+    public static final char ROBOT_UP = '^';
 
     private final Grid grid;
 

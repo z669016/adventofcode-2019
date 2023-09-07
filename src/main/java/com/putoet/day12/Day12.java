@@ -34,7 +34,7 @@ public class Day12 {
         System.out.println("Repeat after " + repeat(moons) + " turns.");
     }
 
-    public static long repeat(Map<String, Moon> moons) {
+    static long repeat(Map<String, Moon> moons) {
         final var xHistory = new HashSet<String>();
         final var yHistory = new HashSet<String>();
         final var zHistory = new HashSet<String>();
@@ -68,19 +68,19 @@ public class Day12 {
                 .reduce(1L, (x, y) -> x * (y / ArithmeticUtils.gcd(x, y)));
     }
 
-    private static String hashX(Map<String, Moon> moons) {
+    static String hashX(Map<String, Moon> moons) {
         return moons.values().stream()
                 .map(moon -> moon.position().x() + "_" + moon.velocity().x())
                 .collect(Collectors.joining("x"));
     }
 
-    private static String hashY(Map<String, Moon> moons) {
+    static String hashY(Map<String, Moon> moons) {
         return moons.values().stream()
                 .map(moon -> moon.position().y() + "_" + moon.velocity().y())
                 .collect(Collectors.joining("y"));
     }
 
-    private static String hashZ(Map<String, Moon> moons) {
+    static String hashZ(Map<String, Moon> moons) {
         return moons.values().stream()
                 .map(moon -> moon.position().z() + "_" + moon.velocity().z())
                 .collect(Collectors.joining("z"));

@@ -95,16 +95,9 @@ class DeckShuffle {
         }
     }
 
-    private static class LinearFunction {
-        public final BigInteger k, m;
-
-        public LinearFunction(BigInteger k, BigInteger m) {
-            this.k = k;
-            this.m = m;
-        }
-
+    private record LinearFunction(BigInteger k, BigInteger m) {
         public BigInteger apply(BigInteger x) {
-            return x.multiply(k).add(m);
+                return x.multiply(k).add(m);
+            }
         }
-    }
 }

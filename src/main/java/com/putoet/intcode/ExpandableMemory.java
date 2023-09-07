@@ -1,5 +1,7 @@
 package com.putoet.intcode;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,8 +9,8 @@ import java.util.stream.Collectors;
 public class ExpandableMemory implements Memory {
     private long[] memory;
 
-    public ExpandableMemory(List<Long> memory) {
-        if ((memory == null) || memory.size() == 0) throw new Memory.InvalidMemoryInitializer(memory);
+    public ExpandableMemory(@NotNull List<Long> memory) {
+        if (memory.isEmpty()) throw new Memory.InvalidMemoryInitializer(memory);
 
         this.memory = copy(memory);
     }

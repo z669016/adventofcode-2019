@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -41,11 +40,11 @@ class IntCodeDeviceTest {
         input.offer(7L);
         device.run();
         assertEquals(1L, output.size());
-        assertEquals(7L, output.poll().getAsLong());
+        assertEquals(7L, output.poll().orElseThrow());
     }
 
     @Test
-    void day5BlockingInOutSample() throws InterruptedException {
+    void day5BlockingInOutSample() {
         final List<Long> intCode = List.of(3L, 0L, 4L, 0L, 99L);
         final Memory memory = new FixedMemory(intCode);
         final IntCodeConcurrentInputOutputDevice input = new IntCodeConcurrentInputOutputDevice();
@@ -62,7 +61,7 @@ class IntCodeDeviceTest {
         thread.start();
 
         input.offer(7L);
-        assertEquals(7L, output.poll(100, TimeUnit.MILLISECONDS).getAsLong());
+        assertEquals(7L, output.poll(100, TimeUnit.MILLISECONDS).orElseThrow());
     }
 
     @Test
@@ -78,7 +77,7 @@ class IntCodeDeviceTest {
         input.offer(9L);
         device.run();
         assertEquals(1L, output.size());
-        assertEquals(1001L, output.poll().getAsLong());
+        assertEquals(1001L, output.poll().orElseThrow());
     }
 
     @Test
@@ -104,7 +103,7 @@ class IntCodeDeviceTest {
 
         device.run();
 
-        assertEquals(16L, String.valueOf(output.poll().getAsLong()).length());
+        assertEquals(16L, String.valueOf(output.poll().orElseThrow()).length());
     }
 
     @Test

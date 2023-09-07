@@ -19,9 +19,9 @@ public class Opcode {
     }
 
     public int opcode() { return opcode; }
-    public Mode mode1() { return mode[0]; };
-    public Mode mode2() { return mode[1]; };
-    public Mode mode3() { return mode[2]; };
+    public Mode mode1() { return mode[0]; }
+    public Mode mode2() { return mode[1]; }
+    public Mode mode3() { return mode[2]; }
 
     @Override
     public String toString() {

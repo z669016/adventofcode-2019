@@ -4,11 +4,10 @@ import com.putoet.intcode.*;
 import com.putoet.resources.CSV;
 import com.putoet.utils.Timer;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Day2 {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         final List<Long> intCode = CSV.flatList("/day2.txt", Long::parseLong);
 
         Timer.run(() -> part1(intCode));

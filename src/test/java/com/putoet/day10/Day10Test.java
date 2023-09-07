@@ -22,7 +22,7 @@ public class Day10Test {
                 "##...#..#.",
                 ".#....####"));
         final var lineOfSightMaps = spaceArea.linesOfSightMaps();
-        assertEquals(33, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).max().getAsInt());
+        assertEquals(33, lineOfSightMaps.values().stream().mapToInt(LineOfSightMap::inLineOfSightCount).max().orElseThrow());
         assertEquals("A0508", lineOfSightMaps.entrySet().stream()
                 .filter(entry -> entry.getValue().inLineOfSightCount() == 33)
                 .findFirst()
@@ -73,7 +73,7 @@ public class Day10Test {
                 "..#.....#...###..",
                 "..#.#.....#....##"));
         final var asteroid = spaceArea.asteroidAt(Point.of(8, 3));
-        final var linesOfSightMap = spaceArea.linesOfSightMapFor(asteroid.get());
+        final var linesOfSightMap = spaceArea.linesOfSightMapFor(asteroid.orElseThrow());
         final var linesOfSight = linesOfSightMap.orElseThrow().map();
 
         System.out.println(linesOfSight);

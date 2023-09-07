@@ -447,7 +447,6 @@ abstract class AbstractInstruction implements Instruction {
             case POSITION -> memory.poke(new Address(value), newValue);
             case RELATIVE -> memory.poke(relativeBase.increase((int) value), newValue);
         }
-        ;
     }
 
     @Override

@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Objects;
 
 class GridSearch {
-    public static char WALL = '#';
-    public static char OXYGEN_SYSTEM = 'O';
-    public static char OPEN = '.';
+    public static final char WALL = '#';
+    public static final char OXYGEN_SYSTEM = 'O';
+    public static final char OPEN = '.';
 
-    public record State(Point point, char element) {
+    public record State(@NotNull Point point, char element) {
         @Override
         public boolean equals(Object o) {
             if (this.element == WALL)
