@@ -294,14 +294,30 @@ devices for the intcode computer (they take commands and provide them as charact
 the droid). As the Droid will be running asynchronously the devices use locks. The Droid uses a resumable intcode 
 computer that is started on a separate thread. If no input is available, it just waits a while, and retries. 
 
-The main program (```Day25```) reads the intcode program, creates a droid and starts it. Then it runs a loop to read a 
-command, after which it sends the command to the droid, and reads the response. As both programs run on separate 
-threads, and threads need some tom eto do their work, some delays have been introduced (```Thread.sleep()```).
+The ```Game``` class implements the game and can be run separately (using the ```main(...)``` method), or it can be 
+used to ```play(...)``` a list of commands returning the output.
 
-Playing the game by hand, I found several rooms with items to take. Some will kill you or send you back to the starting 
-point (like the ```photons``` and ```molted lava```). I took some time to find out the layout of the ship by walking 
-around and then gathered the items. The combination of ```shell```, ```fixed point```, ```polygon```  and 
-```candy cane``` got me into the secured room were the pass code was to be found.
+The ```play(...)``` method benefits from feature that a series of commands can be offered to the program without waiting 
+for the output, as the output is only added to and not generated for each individual command processed.  
+
+From playing the game manually, a few specifics playing rules are known:
+* You can find the access code by entering the ```Pressure-Sensitive Floor``` next to ```Security Checkpoint``` room
+* You are accepted on the ```Pressure-Sensitive Floor``` if have the right combination of items in your inventory
+* The wrong combination of items will result in being transported back into the ```Security Checkpoint```
+* The ```infinite loop``` item must be avoided, for it will cause an infinite loop in the program when it is added to your the inventory
+
+The main program (```Day25```) reads the intcode program, and searches for the access code. The search actually finds 
+possible paths using the doors while picking up all items it finds along the way. 
+The ```Location``` record extracts the last location and the available doors and items at that location/room (removing 
+the items already picked up). The ```State``` record is used to keep track on the visited rooms/states. 
+```State.commands()``` returns the commands to get to the current state, while ```take(...)```, ```drop(...)```, and 
+```move(...)``` return possible next states without duplicates (so, it checks if a command is already in the current 
+command-chain). The State.enter(...) method is similar to ```State.move(...)``` but it doesn't checks for duplicates
+(which is required to access the ```Pressure-Sensitive Floor``` with different combinations of items).
+When it enters the ```Security Checkpoint``` it will try all possible (not yet tried) combinations of items in your 
+inventory. In order to do so, a priority queue used for the search, which prioritizes any step from the 
+```Security Checkpoint```over steps on any other room, and shorter command chains are prioritized over longer ones (so 
+it will be a BSF).  
 
 ## intcode
 An ```Address``` class is used to represent a memory address. 
