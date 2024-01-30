@@ -1,61 +1,78 @@
 package com.putoet.day25;
 
 import com.putoet.resources.CSV;
+import com.putoet.utils.Timer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.*;
+
 
 public class Day25 {
+
     public static void main(String[] args) {
         final var intCode = CSV.flatList("/day25.txt", Long::parseLong);
-        final var droid = new Droid(intCode);
-        final var reader = new BufferedReader(new InputStreamReader(System.in));
+        Timer.run(() -> System.out.println("Passcode: " + findAccessCode(intCode).orElse("not found")));
+    }
 
-        var command = "";
-        droid.start();
-        showDroidResponse(droid);
+    private static Optional<String> findAccessCode(List<Long> intCode) {
+        final Set<Set<String>> visitedItems = new HashSet<>();
+        final Queue<State> queue = new PriorityQueue<>();
+        Optional<String> finalDirection = Optional.empty();
+        int attempts = 0;
 
-        while (!"exit".equals(command)) {
-            System.out.print("=> ");
-            command = readCommand(reader);
-            System.out.println(command);
+        queue.offer(new State("START"));
+        Optional<String> passcode = Optional.empty();
+        while (!queue.isEmpty()) {
+            final var current = queue.poll();
+            if (current.room().equals(State.CHECKPOINT) && !current.command().startsWith(State.DROP)) {
+                System.out.println("Attempt " + ++attempts + " with " + current.items() + " ");
+            }
 
-            if (!"exit".equals(command)) {
-                if ("help".equals(command)) {
-                    System.out.println("Available commands:");
-                    System.out.println("north - move north");
-                    System.out.println("south - move south");
-                    System.out.println("east - move east");
-                    System.out.println("west - move west");
-                    System.out.println("inv - show an overview of the inventory");
-                    System.out.println("take <item> - pick up the named item");
-                    System.out.println("drop <item> - drop the named item");
-                    System.out.println();
+            final var response = Game.play(intCode, current.commands());
+            if (response.isEmpty()) {
+                System.out.println("No response");
+                continue;
+            }
+
+            passcode = passCode(response);
+            if (passcode.isPresent()) {
+                break;
+            }
+
+            final var location = Location.of(response);
+            if (location.room().equals(State.CHECKPOINT)) {
+                if (finalDirection.isEmpty()) {
+                    finalDirection = Optional.of(current.command());
+                }
+
+                if (!current.room().equals(State.CHECKPOINT) || current.command().startsWith(State.DROP)) {
+                    final var next = current.enter(location.room(), finalDirection.get());
+                    if (visitedItems.add(next.items()))
+                        queue.offer(next);
                 } else {
-                    droid.offer(command);
+                    current.items().forEach(item -> current.drop(location.room(), item).ifPresent(queue::offer));
+                }
+            } else {
+                location.items().forEach(item -> {
+                    if (!Game.AVOID.contains(item)) {
+                        final var next = current.take(location.room(), item);
+                        next.ifPresent(queue::offer);
+                    }
+                });
+
+                if (location.items().isEmpty()) {
+                    location.doors().forEach(door -> {
+                        final var next = current.move(location.room(), door);
+                        next.ifPresent(queue::offer);
+                    });
                 }
             }
-            showDroidResponse(droid);
         }
-        droid.stop();
+        return passcode;
     }
 
-    private static void showDroidResponse(Droid droid) {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException ignored) {
-        }
-
-        droid.poll().forEach(System.out::println);
-    }
-
-    private static String readCommand(BufferedReader reader) {
-        try {
-            return reader.readLine().toLowerCase();
-        } catch (IOException ignored) {
-        }
-
-        return "";
+    private static Optional<String> passCode(List<String> output) {
+        return output.stream()
+                .filter(line -> line.contains(" typing "))
+                .findFirst();
     }
 }
